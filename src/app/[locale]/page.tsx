@@ -799,42 +799,32 @@ export default function LocalePage() {
               </motion.div>
             </motion.div>
 
-            {/* Right Column: Dynamic Circular Portrait Card Elevated */}
+            {/* Right Column: Dynamic Circular Portrait Card */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative mx-auto w-full max-w-xs sm:max-w-sm lg:max-w-md lg:-mt-10 lg:-translate-y-4"
+              className="relative mx-auto w-full max-w-xs sm:max-w-sm lg:max-w-md"
             >
               <div
                 aria-hidden="true"
-                className="absolute -inset-4 rounded-full bg-gradient-to-r from-cyan-500/25 via-blue-600/20 to-emerald-500/25 blur-2xl opacity-80 neon-glow"
+                className="absolute -inset-4 rounded-full bg-gradient-to-r from-cyan-500/20 via-blue-600/15 to-emerald-500/20 blur-2xl opacity-60 neon-glow"
               />
 
-              <div className="glow-card relative aspect-square w-full overflow-hidden rounded-full border-2 border-cyan-400/40 p-3 shadow-2xl">
-                <div className="relative h-full w-full overflow-hidden rounded-full border border-cyan-500/30 bg-slate-950">
-                  <Image
-                    src="/image/profile/jqcDP.jpg"
-                    alt="O'Nell Luciano Rasamiarison - Full-Stack & AI Developer"
-                    fill
-                    priority
-                    sizes="(max-width: 1023px) 90vw, 40vw"
-                    className="object-cover object-top contrast-[1.05] brightness-[0.98]"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/70 via-transparent to-transparent opacity-70" />
+              <div className="relative aspect-square w-full overflow-hidden rounded-full shadow-2xl">
+                <Image
+                  src="/image/profile/jqcDP.jpg"
+                  alt="O'Nell Luciano Rasamiarison - Full-Stack & AI Developer"
+                  fill
+                  priority
+                  sizes="(max-width: 1023px) 90vw, 40vw"
+                  className="object-cover object-center contrast-[1.05] brightness-[0.98]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/60 via-transparent to-transparent opacity-50" />
 
-                  {/* Floating Live Telemetry Badge inside circular image */}
-                  <div className="absolute top-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-[#020617]/85 px-3 py-1 backdrop-blur-md">
-                    <Sparkles size={12} className="text-cyan-300" />
-                    <span className="font-mono text-[0.6rem] uppercase tracking-[0.18em] text-slate-200 font-semibold whitespace-nowrap">
-                      Full-Stack · AI · SIG
-                    </span>
-                  </div>
-
-                  <div className="absolute bottom-4 left-4 right-4 text-center rounded-xl border border-cyan-500/30 bg-[#020617]/90 px-3 py-2 backdrop-blur-md">
-                    <p className="text-xs font-bold text-white tracking-wide">O&apos;Nell Luciano Rasamiarison</p>
-                    <p className="text-[0.65rem] text-cyan-300 font-mono mt-0.5">Software Engineer & Data Specialist</p>
-                  </div>
+                <div className="absolute bottom-4 left-4 right-4 text-center rounded-xl border border-cyan-500/20 bg-[#020617]/80 px-3 py-2 backdrop-blur-md">
+                  <p className="text-xs font-bold text-white tracking-wide">O&apos;Nell Luciano Rasamiarison</p>
+                  <p className="text-[0.65rem] text-cyan-300 font-mono mt-0.5">Software Engineer & Data Specialist</p>
                 </div>
               </div>
             </motion.div>
