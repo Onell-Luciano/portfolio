@@ -808,10 +808,10 @@ export default function LocalePage() {
             >
               <div
                 aria-hidden="true"
-                className="absolute -inset-4 rounded-full bg-gradient-to-r from-cyan-500/20 via-blue-600/15 to-emerald-500/20 blur-2xl opacity-60 neon-glow"
+                className="absolute -inset-4 rounded-full bg-gradient-to-r from-cyan-500/20 via-blue-600/15 to-emerald-500/20 blur-2xl opacity-50 dark:opacity-60 neon-glow"
               />
 
-              <div className="relative aspect-square w-full overflow-hidden rounded-full shadow-2xl">
+              <div className="relative aspect-square w-full overflow-hidden rounded-full border-4 border-white dark:border-transparent shadow-xl dark:shadow-2xl">
                 <Image
                   src="/image/profile/jqcDP.jpg"
                   alt="O'Nell Luciano Rasamiarison - Full-Stack & AI Developer"
@@ -820,11 +820,11 @@ export default function LocalePage() {
                   sizes="(max-width: 1023px) 90vw, 40vw"
                   className="object-cover object-center contrast-[1.05] brightness-[0.98]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/60 via-transparent to-transparent opacity-50" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-60 dark:opacity-70" />
 
-                <div className="absolute bottom-4 left-4 right-4 text-center rounded-xl border border-cyan-500/20 bg-[#020617]/80 px-3 py-2 backdrop-blur-md">
-                  <p className="text-xs font-bold text-white tracking-wide">O&apos;Nell Luciano Rasamiarison</p>
-                  <p className="text-[0.65rem] text-cyan-300 font-mono mt-0.5">Software Engineer & Data Specialist</p>
+                <div className="absolute bottom-4 left-4 right-4 text-center rounded-xl border border-slate-200/80 dark:border-cyan-500/20 bg-white/90 dark:bg-[#020617]/85 px-3 py-2 backdrop-blur-md shadow-md dark:shadow-none">
+                  <p className="text-xs font-bold text-slate-900 dark:text-white tracking-wide">O&apos;Nell Luciano Rasamiarison</p>
+                  <p className="text-[0.65rem] text-cyan-600 dark:text-cyan-300 font-mono mt-0.5">Software Engineer & Data Specialist</p>
                 </div>
               </div>
             </motion.div>
@@ -845,7 +845,7 @@ export default function LocalePage() {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-2xl border border-cyan-500/20 bg-white/70 dark:bg-slate-900/40 p-5 backdrop-blur-md transition duration-300 hover:border-cyan-400/40 hover:bg-white dark:hover:bg-slate-900/70"
+                className="rounded-2xl border border-slate-200 dark:border-cyan-500/20 bg-white dark:bg-slate-900/40 p-5 backdrop-blur-md shadow-sm dark:shadow-none transition duration-300 hover:border-cyan-400/40 hover:bg-slate-50 dark:hover:bg-slate-900/70"
               >
                 <p className="text-xl font-extrabold tracking-tight text-cyan-600 dark:text-cyan-300 sm:text-2xl">{stat.label}</p>
                 <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">{stat.desc}</p>
@@ -856,7 +856,7 @@ export default function LocalePage() {
       </section>
 
       {/* Capabilities / Bento Grid Section */}
-      <section id="about" className="relative z-10 border-t border-cyan-500/15 bg-slate-100/60 dark:bg-slate-950/60 py-24 backdrop-blur-sm">
+      <section id="about" className="relative z-10 border-t border-slate-200 dark:border-cyan-500/15 bg-slate-50/70 dark:bg-slate-950/60 py-24 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
             <div>
@@ -899,10 +899,10 @@ export default function LocalePage() {
                   return (
                     <div
                       key={item.title}
-                      className="glow-card group p-6 border border-cyan-500/20 bg-white/80 dark:bg-slate-900/50"
+                      className="glow-card group p-6 border border-slate-200 dark:border-cyan-500/20 bg-white dark:bg-slate-900/50 shadow-sm dark:shadow-none"
                     >
                       <div className="flex items-center justify-between">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 text-cyan-600 dark:text-cyan-300 transition group-hover:scale-110">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-500/20 dark:border-cyan-400/30 bg-cyan-50 dark:bg-cyan-400/10 text-cyan-600 dark:text-cyan-300 transition group-hover:scale-110">
                           <Icon size={20} />
                         </div>
                         <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400/80">
@@ -917,13 +917,13 @@ export default function LocalePage() {
               </div>
 
               {/* Soft skills & Languages summary */}
-              <div className="rounded-2xl border border-cyan-500/20 bg-white/80 dark:bg-slate-900/40 p-6 backdrop-blur-md">
+              <div className="rounded-2xl border border-slate-200 dark:border-cyan-500/20 bg-white dark:bg-slate-900/40 p-6 backdrop-blur-md shadow-sm dark:shadow-none">
                 <p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-600 dark:text-cyan-400 font-semibold mb-4">
                   {t("skills.heading")}
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {["learning", "curiosity", "adaptability", "communication", "time", "initiative"].map((skill) => (
-                    <div key={skill} className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-300">
+                    <div key={skill} className="flex items-center gap-2.5 text-xs text-slate-800 dark:text-slate-300 font-medium">
                       <Check size={14} className="text-cyan-600 dark:text-cyan-400" />
                       <span>{t(`skills.soft.${skill}`)}</span>
                     </div>
