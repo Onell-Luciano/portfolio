@@ -215,7 +215,11 @@ export default function LocalePage() {
         categoryGroup: "Full-Stack",
         description: t("projects.items.construction.description"),
         technologies: ["FastAPI", "Python", "React", "PostgreSQL", "Ordonnancement"],
-        images: [],
+        images: [
+          { src: "/projets/titan/Titan0.png", alt: "Interactive construction planning interface" },
+          { src: "/projets/titan/Titan1.png", alt: "Advanced construction planning interface" },
+          { src: "/projets/titan/Titan2.png", alt: "Section construction planning interface" },
+        ],
         highlights: [
           t("projects.items.construction.highlights.0"),
           t("projects.items.construction.highlights.1"),
