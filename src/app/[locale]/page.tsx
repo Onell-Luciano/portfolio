@@ -6,16 +6,13 @@ import {
   ArrowRight,
   BarChart3,
   Check,
-  Clock,
   Code2,
   Copy,
   Database,
   Download,
-  ExternalLink,
   Globe,
   Layers,
   Mail,
-  MapPin,
   Menu,
   Search,
   Sparkles,
@@ -51,6 +48,18 @@ const reveal = {
   },
 } as const;
 
+type Project = {
+  id: string;
+  number: string;
+  title: string;
+  category: string;
+  categoryGroup: string;
+  description: string;
+  technologies: string[];
+  images: { src: string; alt: string }[];
+  highlights: string[];
+};
+
 export default function LocalePage() {
   const t = useTranslations();
   const router = useRouter();
@@ -68,7 +77,7 @@ export default function LocalePage() {
   const [selectedProjectCategory, setSelectedProjectCategory] = useState("All");
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [projectImageIndex, setProjectImageIndex] = useState(0);
-  const [activeModalProject, setActiveModalProject] = useState<any | null>(null);
+  const [activeModalProject, setActiveModalProject] = useState<Project | null>(null);
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -505,7 +514,7 @@ export default function LocalePage() {
   }, [reduceMotion]);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-cyan-500/30 selection:text-white">
+    <main className="site-shell relative min-h-screen overflow-x-hidden selection:bg-cyan-500/30 selection:text-white">
       {/* Interactive Particle Canvas */}
       {!reduceMotion && (
         <canvas ref={canvasRef} className="particle-canvas" aria-hidden="true" />
@@ -651,7 +660,9 @@ export default function LocalePage() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative z-10 min-h-screen overflow-hidden pb-16 pt-28 lg:pt-32">
+      <section id="home" className="relative z-10 min-h-[92vh] overflow-hidden pb-20 pt-32 lg:pt-40">
+        <div className="ambient-orb -left-48 top-12" aria-hidden="true" />
+        <div className="ambient-orb ambient-orb-cyan -right-56 top-56" aria-hidden="true" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-start gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
             {/* Left Column: Headlines & Statements */}
@@ -660,17 +671,17 @@ export default function LocalePage() {
               animate="show"
               variants={{ hidden: {}, show: { transition: { staggerChildren: reduceMotion ? 0 : 0.08 } } }}
             >
-              <motion.p variants={reveal} className="mb-4 text-xs font-mono font-semibold uppercase tracking-[0.28em] text-cyan-600 dark:text-cyan-400">
+              <motion.p variants={reveal} className="eyebrow mb-6">
                 {t("hero.eyebrow")} <span className="mx-2 text-slate-400 dark:text-slate-600">/</span> {t("hero.discipline")}
               </motion.p>
 
-              <h1 className="max-w-4xl text-[clamp(2.8rem,7vw,7.2rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.05em] text-slate-900 dark:text-white">
+              <h1 className="hero-display max-w-5xl text-white">
                 {["lineOne", "lineTwo", "lineThree", "lineFour", "lineFive"].map((line, index) => (
                   <motion.span
                     key={line}
                     variants={reveal}
-                    className={`block ${index === 2 ? "text-slate-500 dark:text-slate-400" : ""} ${
-                      index === 3 ? "text-cyan-600 dark:text-cyan-300 shimmer-text font-normal" : ""
+                    className={`block ${index === 2 ? "text-slate-500" : ""} ${
+                      index === 3 ? "text-cyan-300" : ""
                     }`}
                   >
                     {t(`hero.headline.${line}`)}
@@ -678,11 +689,11 @@ export default function LocalePage() {
                 ))}
               </h1>
 
-              <motion.div variants={reveal} className="mt-8 max-w-xl border-l-2 border-cyan-500/60 dark:border-cyan-400/60 pl-5">
-                <p className="text-base font-medium leading-relaxed text-slate-800 dark:text-slate-200 sm:text-lg">
+              <motion.div variants={reveal} className="mt-10 max-w-xl border-l border-violet-400/70 pl-5">
+                <p className="text-base font-medium leading-relaxed text-slate-200 sm:text-lg">
                   {t("hero.statement")}
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                <p className="mt-3 text-sm leading-relaxed text-slate-400">
                   {t("hero.description")}
                 </p>
               </motion.div>
@@ -723,25 +734,36 @@ export default function LocalePage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative mx-auto w-full max-w-xs sm:max-w-sm lg:max-w-md"
             >
+              {/* Glow : reste derrière et ne déborde pas vers le titre */}
               <div
                 aria-hidden="true"
-                className="absolute -inset-4 rounded-full bg-gradient-to-r from-cyan-500/20 via-blue-600/15 to-emerald-500/20 blur-2xl opacity-50 dark:opacity-60 neon-glow"
+                className="pointer-events-none absolute -inset-4 rounded-full bg-gradient-to-r from-violet-500/25 via-blue-600/20 to-cyan-400/20 blur-3xl opacity-70 neon-glow"
               />
 
-              <div className="relative aspect-square w-full overflow-hidden rounded-full border-4 border-white dark:border-transparent shadow-xl dark:shadow-2xl">
-                <Image
-                  src="/image/profile/jqcDP.jpg"
-                  alt="O'Nell Luciano Rasamiarison - Full-Stack & AI Developer"
-                  fill
-                  priority
-                  sizes="(max-width: 1023px) 90vw, 40vw"
-                  className="object-cover object-center contrast-[1.05] brightness-[0.98]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-60 dark:opacity-70" />
+              {/* Zone réservée uniquement au portrait */}
+              <div className="relative mx-auto aspect-square w-full max-w-[420px]">
+                <div className="hero-stage relative h-full w-full overflow-hidden rounded-full">
+                  <Image
+                    src="/image/profile/jqcDP.jpg"
+                    alt="O'Nell Luciano Rasamiarison - Full-Stack & AI Developer"
+                    fill
+                    priority
+                    sizes="(max-width: 1080px) 90vw, 50vw"
+                    className="object-cover object-center contrast-[1.05] brightness-[0.98]"
+                  />
 
-                <div className="absolute bottom-4 left-4 right-4 text-center rounded-xl border border-slate-200/80 dark:border-cyan-500/20 bg-white/90 dark:bg-[#020617]/85 px-3 py-2 backdrop-blur-md shadow-md dark:shadow-none">
-                  <p className="text-xs font-bold text-slate-900 dark:text-white tracking-wide">O&apos;Nell Luciano Rasamiarison</p>
-                  <p className="text-[0.65rem] text-cyan-600 dark:text-cyan-300 font-mono mt-0.5">Software Engineer & Data Specialist</p>
+                  <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-80" />
+
+                  {/* Infos DANS le cercle */}
+                  <div className="absolute bottom-6 left-1/2 w-[85%] -translate-x-1/2 border border-white/15 bg-black/65 px-4 py-3 text-center backdrop-blur-md">
+                    <p className="text-xs font-bold tracking-wide text-white">
+                      O&apos;Nell Luciano Rasamiarison
+                    </p>
+
+                    <p className="mt-1 font-mono text-[0.6rem] text-cyan-300">
+                      Software Engineer & Data Specialist
+                    </p>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -752,7 +774,7 @@ export default function LocalePage() {
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="mt-16 grid grid-cols-2 gap-4 md:grid-cols-4"
+            className="metadata-grid mt-16"
           >
             {[
               { label: t("stats.experience"), desc: "Full-Stack & Systems" },
@@ -762,7 +784,7 @@ export default function LocalePage() {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="theme-surface rounded-2xl border border-slate-200 dark:border-cyan-500/20 p-5 backdrop-blur-md shadow-sm dark:shadow-none transition duration-300 hover:border-cyan-400/40 hover:bg-slate-50 dark:hover:bg-slate-900/70"
+                className="theme-surface border-0 p-5 backdrop-blur-md transition duration-300 hover:bg-slate-900"
               >
                 <p className="text-xl font-extrabold tracking-tight text-cyan-600 dark:text-cyan-300 sm:text-2xl">{stat.label}</p>
                 <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">{stat.desc}</p>
@@ -773,12 +795,12 @@ export default function LocalePage() {
       </section>
 
       {/* Capabilities / Bento Grid Section */}
-      <section id="about" className="relative z-10 border-t border-slate-200 dark:border-cyan-500/15 bg-slate-50/70 dark:bg-slate-950/60 py-24 backdrop-blur-sm">
+      <section id="about" className="editorial-section relative z-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
             <div>
-              <p className="section-tag">01 / {t("capabilities.sectionLabel")}</p>
-              <h2 className="mt-6 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl leading-tight">
+              <p className="section-number">01 / {t("capabilities.sectionLabel")}</p>
+              <h2 className="section-title mt-6">
                 {t("capabilities.heading")}
               </h2>
             </div>
@@ -856,12 +878,12 @@ export default function LocalePage() {
       </section>
 
       {/* Tech Stack Directory with Search & Filters */}
-      <section id="stack" className="relative z-10 border-t border-cyan-500/15 py-24">
+      <section id="stack" className="editorial-section relative z-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="section-tag">02 / {t("stack.sectionLabel")}</p>
-              <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+              <p className="section-number">02 / {t("stack.sectionLabel")}</p>
+              <h2 className="section-title mt-4">
                 {t("stack.heading")}
               </h2>
             </div>
@@ -908,7 +930,7 @@ export default function LocalePage() {
           </div>
 
           {/* Technology Cards Grid */}
-          <div className="mt-8 grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+          <div className="glass-list mt-10 grid gap-px grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {filteredTechnologies.map((tech) => {
               const Icon = tech.icon;
               return (
@@ -919,7 +941,7 @@ export default function LocalePage() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
-                  className="glow-card theme-surface group flex flex-col justify-between p-4 border border-cyan-500/20"
+                  className="theme-surface group flex min-h-36 flex-col justify-between rounded-none border-0 p-4 transition hover:bg-slate-900"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/10 text-cyan-600 dark:text-cyan-300 transition group-hover:scale-110">
@@ -941,12 +963,12 @@ export default function LocalePage() {
       </section>
 
       {/* Selected Work Showcase */}
-      <section id="projects" className="relative z-10 border-t border-cyan-500/15 bg-slate-100/60 dark:bg-slate-950/60 py-24">
+      <section id="projects" className="editorial-section relative z-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="section-tag">03 / {t("projects.sectionLabel")}</p>
-              <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+              <p className="section-number">03 / {t("projects.sectionLabel")}</p>
+              <h2 className="section-title mt-4">
                 {t("projects.heading")}
               </h2>
             </div>
@@ -972,7 +994,7 @@ export default function LocalePage() {
           </div>
 
           {/* Project Cards Grid */}
-          <div className="mt-12 grid gap-8 lg:grid-cols-2">
+          <div className="mt-20 space-y-24 lg:space-y-36">
             {filteredProjects.map((project, index) => (
               <motion.article
                 key={project.title}
@@ -990,7 +1012,7 @@ export default function LocalePage() {
                   setHoveredProject(null);
                   setProjectImageIndex(0);
                 }}
-                className="glow-card theme-surface group overflow-hidden rounded-3xl border border-cyan-500/20 p-6"
+                className="project-feature group"
               >
                 <div className="mb-4 flex items-center justify-between font-mono text-[0.62rem] uppercase tracking-[0.24em] text-cyan-600 dark:text-cyan-400">
                   <span>{project.number}</span>
@@ -1001,7 +1023,7 @@ export default function LocalePage() {
 
                 {/* Project Image Preview / Fallback */}
                 {project.images.length > 0 ? (
-                  <div className="relative h-60 w-full overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950">
+                  <div className="project-visual relative h-60 w-full">
                     <motion.div
                       key={`${project.title}-${projectImageIndex}`}
                       initial={{ opacity: 0.4 }}
@@ -1029,7 +1051,7 @@ export default function LocalePage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="theme-surface-muted relative flex h-60 w-full items-center justify-center rounded-2xl border border-slate-200 dark:border-slate-800/80 p-6 text-center">
+                  <div className="project-visual theme-surface-muted relative flex h-60 w-full items-center justify-center p-6 text-center">
                     <div>
                       <Layers size={32} className="mx-auto text-cyan-600 dark:text-cyan-400/60" />
                       <p className="mt-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">
@@ -1116,7 +1138,7 @@ export default function LocalePage() {
                   />
                   {activeModalProject.images.length > 1 && (
                     <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 px-3 py-1.5 backdrop-blur-md">
-                      {activeModalProject.images.map((_: any, idx: number) => (
+                      {activeModalProject.images.map((image, idx) => (
                         <button
                           key={idx}
                           type="button"
@@ -1185,36 +1207,28 @@ export default function LocalePage() {
       </AnimatePresence>
 
       {/* Experience & Career Timeline */}
-      <section id="experience" className="relative z-10 border-t border-cyan-500/15 py-24">
+      <section id="experience" className="editorial-section relative z-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
-            <p className="section-tag">04 / {t("experience.sectionLabel")}</p>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+            <p className="section-number">04 / {t("experience.sectionLabel")}</p>
+            <h2 className="section-title mt-4">
               {t("experience.heading")}
             </h2>
           </div>
 
           <div className="relative">
-            {/* Timeline center line */}
-            <div
-              aria-hidden="true"
-              className="absolute bottom-0 left-4 top-0 w-0.5 bg-gradient-to-b from-cyan-400/0 via-cyan-400/40 to-cyan-400/0 md:left-1/2 md:-translate-x-1/2"
-            />
-
-            <div className="space-y-12">
-              {experiences.map((exp, index) => (
-                <div key={`${exp.company}-${exp.role}`} className="relative grid md:grid-cols-[1fr_60px_1fr] md:items-center">
+            <div>
+              {experiences.map((exp) => (
+                <div key={`${exp.company}-${exp.role}`} className="timeline-item">
                   <motion.article
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.15 }}
                     transition={{ duration: 0.5 }}
-                    className={`relative ml-10 rounded-2xl border p-6 backdrop-blur-md md:ml-0 ${
-                      index % 2 === 0 ? "md:col-start-1" : "md:col-start-3"
-                    } ${
+                    className={`relative col-start-3 border-0 bg-transparent p-0 ${
                       exp.highlight
-                        ? "border-cyan-400/40 bg-gradient-to-br from-cyan-50/80 to-blue-50/60 dark:from-cyan-950/40 dark:to-blue-950/20 shadow-[0_0_30px_rgba(34,211,238,0.15)]"
-                        : "theme-surface border-slate-200 dark:border-cyan-500/20"
+                        ? "text-cyan-100"
+                        : "text-white"
                     }`}
                   >
                     <span className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-300 font-bold">
@@ -1236,11 +1250,7 @@ export default function LocalePage() {
                     </div>
                   </motion.article>
 
-                  {/* Node point */}
-                  <div
-                    aria-hidden="true"
-                    className="absolute left-1.5 top-6 z-10 h-5 w-5 rounded-full border-2 border-white dark:border-slate-950 bg-cyan-400 dark:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.8)] md:relative md:left-auto md:top-auto md:col-start-2 md:row-start-1 md:mx-auto"
-                  />
+                  <div aria-hidden="true" className="col-start-2 row-start-1 h-full w-px bg-gradient-to-b from-violet-400 to-cyan-400" />
                 </div>
               ))}
             </div>
@@ -1249,16 +1259,16 @@ export default function LocalePage() {
       </section>
 
       {/* Education & Academic Credentials */}
-      <section id="education" className="relative z-10 border-t border-cyan-500/15 bg-slate-100/60 dark:bg-slate-950/60 py-24">
+      <section id="education" className="editorial-section relative z-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
-            <p className="section-tag">05 / {t("education.sectionLabel")}</p>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+            <p className="section-number">05 / {t("education.sectionLabel")}</p>
+            <h2 className="section-title mt-4">
               {t("education.heading")}
             </h2>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="glass-list grid gap-px md:grid-cols-2 lg:grid-cols-3">
             {education.map((edu, idx) => (
               <motion.div
                 key={edu.title}
@@ -1266,7 +1276,7 @@ export default function LocalePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.15 }}
                 transition={{ duration: 0.4, delay: idx * 0.05 }}
-                className="glow-card theme-surface p-6 border border-cyan-500/20"
+                className="theme-surface rounded-none border-0 p-6 transition hover:bg-slate-900"
               >
                 <div className="flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400">
                   <span>{edu.period}</span>
@@ -1283,14 +1293,15 @@ export default function LocalePage() {
       </section>
 
       {/* High-Conversion Recruiter Contact Section */}
-      <section id="contact" className="relative z-10 border-t border-cyan-500/15 py-24">
+      <section id="contact" className="editorial-section relative z-10 overflow-hidden">
+        <div className="ambient-orb ambient-orb-cyan -right-48 top-24 opacity-20" aria-hidden="true" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="theme-surface relative overflow-hidden rounded-3xl border border-cyan-400/40 bg-gradient-to-br from-white via-slate-50 to-cyan-50/60 dark:from-slate-900 dark:via-slate-950 dark:to-cyan-950/40 p-8 sm:p-14 shadow-[0_0_50px_rgba(34,211,238,0.1)]">
-            <p className="section-tag">06 / {t("contact.sectionLabel")}</p>
-            <h2 className="mt-6 max-w-3xl text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+          <div className="relative overflow-hidden border border-white/15 bg-white/[0.03] p-8 sm:p-14">
+            <p className="section-number">06 / {t("contact.sectionLabel")}</p>
+            <h2 className="section-title mt-6">
               {t("contact.heading")}
             </h2>
-            <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300">
+            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
               {t("contact.subheading")}
             </p>
 
@@ -1324,7 +1335,7 @@ export default function LocalePage() {
             </div>
 
             <div className="mt-12 grid gap-4 sm:grid-cols-2">
-              <div className="theme-surface-muted rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+              <div className="border-t border-white/15 p-5 pl-0">
                 <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 font-semibold">
                   {t("contact.email")}
                 </p>
@@ -1333,7 +1344,7 @@ export default function LocalePage() {
                 </p>
               </div>
 
-              <div className="theme-surface-muted rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
+              <div className="border-t border-white/15 p-5 pl-0">
                 <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 font-semibold">
                   {t("contact.github")}
                 </p>
@@ -1347,7 +1358,7 @@ export default function LocalePage() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-8">
+      <footer className="relative z-10 border-t border-white/10 bg-black py-8">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 md:flex-row">
           <div className="flex items-center gap-2 font-mono text-xs text-slate-600 dark:text-slate-300">
             <span className="font-bold text-slate-900 dark:text-white">O&apos;NELL RASAMIARISON</span>
