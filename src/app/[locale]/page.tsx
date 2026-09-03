@@ -235,7 +235,10 @@ export default function LocalePage() {
         categoryGroup: "AI",
         description: t("projects.items.nlp.description"),
         technologies: ["Python", "BERT", "LLMs", "NLP", "Dashboarding"],
-        images: [],
+        images: [
+          { src: "/projets/nlp-llm/nlp0.png", alt: "Interactive construction planning interface" },
+          { src: "/projets/nlp-llm/nlp1.png", alt: "Advanced construction planning interface" },
+          { src: "/projets/nlp-llm/nlp2.png", alt: "Section construction planning interface" },],
         highlights: [
           t("projects.items.nlp.highlights.0"),
           t("projects.items.nlp.highlights.1"),
