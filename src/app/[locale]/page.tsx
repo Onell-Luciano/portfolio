@@ -17,8 +17,10 @@ import {
   Mail,
   MapPin,
   Menu,
+  Moon,
   Search,
   Sparkles,
+  Sun,
   X,
 } from "lucide-react";
 import {
@@ -60,6 +62,7 @@ export default function LocalePage() {
   const reduceMotion = useReducedMotion();
 
   // State management
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -73,27 +76,35 @@ export default function LocalePage() {
   const [activeModalProject, setActiveModalProject] = useState<any | null>(null);
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [currentTime, setCurrentTime] = useState("");
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Live Local Time Counter (Madagascar UTC+3)
+  // Sync theme with localStorage and document element
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: "Indian/Antananarivo",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      };
-      setCurrentTime(new Intl.DateTimeFormat("fr-FR", options).format(now));
-    };
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
+    const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
+    const initialTheme = savedTheme || "dark";
+    setTheme(initialTheme);
+    if (initialTheme === "light") {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+      document.documentElement.classList.add("dark");
+    }
   }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("theme", nextTheme);
+    if (nextTheme === "light") {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.add("light");
+    } else {
+      document.documentElement.classList.remove("light");
+      document.documentElement.classList.add("dark");
+    }
+  };
 
   // Navigation Items
   const navItems = useMemo(
@@ -498,7 +509,7 @@ export default function LocalePage() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(34, 211, 238, ${p.alpha})`;
+        ctx.fillStyle = theme === "dark" ? `rgba(34, 211, 238, ${p.alpha})` : `rgba(2, 132, 199, ${p.alpha})`;
         ctx.fill();
 
         for (let j = i + 1; j < particles.length; j++) {
@@ -511,7 +522,7 @@ export default function LocalePage() {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(34, 211, 238, ${0.15 * (1 - dist / 110)})`;
+            ctx.strokeStyle = theme === "dark" ? `rgba(34, 211, 238, ${0.15 * (1 - dist / 110)})` : `rgba(2, 132, 199, ${0.2 * (1 - dist / 110)})`;
             ctx.lineWidth = 0.6;
             ctx.stroke();
           }
@@ -527,7 +538,7 @@ export default function LocalePage() {
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [reduceMotion]);
+  }, [reduceMotion, theme]);
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-cyan-500/30 selection:text-white">
@@ -557,7 +568,7 @@ export default function LocalePage() {
       <nav
         className={`fixed inset-x-0 top-0 z-40 border-b transition-all duration-300 ${
           isScrolled
-            ? "border-cyan-500/20 bg-[#020617]/85 backdrop-blur-xl shadow-[0_10px_30px_rgba(2,6,23,0.8)]"
+            ? "border-cyan-500/20 bg-white/85 dark:bg-[#020617]/85 backdrop-blur-xl shadow-[0_10px_30px_rgba(2,6,23,0.15)]"
             : "border-transparent bg-transparent"
         }`}
       >
@@ -566,9 +577,9 @@ export default function LocalePage() {
             href="#home"
             onMouseEnter={() => setCursorHovered(true)}
             onMouseLeave={() => setCursorHovered(false)}
-            className="group flex items-center gap-2 text-lg font-bold tracking-[0.2em] text-white transition hover:text-cyan-300"
+            className="group flex items-center gap-2 text-lg font-bold tracking-[0.2em] text-slate-900 dark:text-white transition hover:text-cyan-600 dark:hover:text-cyan-300"
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-cyan-400/30 bg-cyan-400/10 text-xs font-mono text-cyan-300 transition group-hover:border-cyan-300 group-hover:bg-cyan-400/25">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-cyan-400/30 bg-cyan-400/10 text-xs font-mono text-cyan-600 dark:text-cyan-300 transition group-hover:border-cyan-300 group-hover:bg-cyan-400/25">
               O
             </span>
             <span>O&apos;NELL</span>
@@ -583,7 +594,9 @@ export default function LocalePage() {
                 onMouseEnter={() => setCursorHovered(true)}
                 onMouseLeave={() => setCursorHovered(false)}
                 className={`nav-link text-[0.72rem] font-medium tracking-[0.22em] transition ${
-                  activeSection === item.id ? "text-cyan-300 font-semibold" : "text-slate-300"
+                  activeSection === item.id
+                    ? "text-cyan-600 dark:text-cyan-300 font-semibold"
+                    : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
                 {item.label}
@@ -591,8 +604,8 @@ export default function LocalePage() {
             ))}
           </div>
 
-          {/* Actions: Download CV + Language Switcher */}
-          <div className="hidden items-center gap-4 md:flex">
+          {/* Actions: Download CV + Theme Switcher + Language Switcher */}
+          <div className="hidden items-center gap-3 md:flex">
             <a
               href="/cv/CV.pdf"
               download="CV_ONell_Luciano_Rasamiarison.pdf"
@@ -600,15 +613,28 @@ export default function LocalePage() {
               rel="noreferrer"
               onMouseEnter={() => setCursorHovered(true)}
               onMouseLeave={() => setCursorHovered(false)}
-              className="group inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-[0.68rem] font-semibold tracking-[0.18em] text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.15)] transition duration-200 hover:border-cyan-300 hover:bg-cyan-400/20 hover:text-white"
+              className="group inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-[0.68rem] font-semibold tracking-[0.18em] text-cyan-600 dark:text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.15)] transition duration-200 hover:border-cyan-300 hover:bg-cyan-400/20 hover:text-cyan-700 dark:hover:text-white"
             >
               <Download size={13} className="transition-transform duration-200 group-hover:-translate-y-0.5" />
               <span>{t("common.downloadCv")}</span>
             </a>
 
+            {/* Theme Toggle Button */}
+            <button
+              type="button"
+              aria-label="Switch Theme Mode"
+              onClick={toggleTheme}
+              onMouseEnter={() => setCursorHovered(true)}
+              onMouseLeave={() => setCursorHovered(false)}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-cyan-500/20 bg-slate-100/90 dark:bg-slate-900/60 text-cyan-600 dark:text-cyan-300 backdrop-blur-md transition hover:scale-105 hover:border-cyan-400"
+            >
+              {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+
+            {/* Language Switcher */}
             <div
               aria-label={t("common.ariaLanguage")}
-              className="inline-flex rounded-full border border-cyan-500/20 bg-slate-900/60 p-1 backdrop-blur-md"
+              className="inline-flex rounded-full border border-cyan-500/20 bg-slate-100/90 dark:bg-slate-900/60 p-1 backdrop-blur-md"
             >
               {["en", "fr"].map((option) => (
                 <button
@@ -620,8 +646,8 @@ export default function LocalePage() {
                   onMouseLeave={() => setCursorHovered(false)}
                   className={`rounded-full px-3 py-1 text-[0.65rem] font-bold tracking-[0.18em] transition ${
                     locale === option
-                      ? "bg-cyan-500/25 text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.3)]"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-cyan-500/25 text-cyan-700 dark:text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.3)]"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
                   {option.toUpperCase()}
@@ -631,24 +657,34 @@ export default function LocalePage() {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="flex items-center gap-3 md:hidden">
+          <div className="flex items-center gap-2 md:hidden">
+            {/* Mobile Theme Toggle */}
+            <button
+              type="button"
+              aria-label="Switch Theme Mode"
+              onClick={toggleTheme}
+              className="flex h-7 w-7 items-center justify-center rounded-full border border-cyan-500/20 bg-slate-100 dark:bg-slate-900/80 text-cyan-600 dark:text-cyan-300"
+            >
+              {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+            </button>
+
             <a
               href="/cv/CV.pdf"
               download
-              className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[0.6rem] font-semibold tracking-[0.12em] text-cyan-200"
+              className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[0.6rem] font-semibold tracking-[0.12em] text-cyan-600 dark:text-cyan-200"
             >
               <Download size={12} />
               <span>CV</span>
             </a>
 
-            <div className="inline-flex rounded-full border border-cyan-500/20 bg-slate-900/60 p-0.5">
+            <div className="inline-flex rounded-full border border-cyan-500/20 bg-slate-100 dark:bg-slate-900/60 p-0.5">
               {["en", "fr"].map((option) => (
                 <button
                   key={option}
                   type="button"
                   onClick={() => switchLanguage(option)}
                   className={`rounded-full px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.1em] transition ${
-                    locale === option ? "bg-cyan-500/25 text-cyan-200" : "text-slate-400"
+                    locale === option ? "bg-cyan-500/25 text-cyan-700 dark:text-cyan-200" : "text-slate-600 dark:text-slate-400"
                   }`}
                 >
                   {option.toUpperCase()}
@@ -659,7 +695,7 @@ export default function LocalePage() {
             <button
               type="button"
               aria-expanded={mobileOpen}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900/80 p-2 text-slate-200"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-900/80 p-2 text-slate-800 dark:text-slate-200"
               onClick={() => setMobileOpen((open) => !open)}
             >
               {mobileOpen ? <X size={18} /> : <Menu size={18} />}
@@ -669,19 +705,19 @@ export default function LocalePage() {
 
         {/* Mobile Navigation Drawer */}
         {mobileOpen && (
-          <div className="border-t border-cyan-500/20 bg-[#020617] px-4 py-5 md:hidden">
+          <div className="border-t border-cyan-500/20 bg-white dark:bg-[#020617] px-4 py-5 md:hidden">
             <div className="flex flex-col gap-3">
               {navItems.map((item) => (
                 <a
                   key={item.label}
                   href={item.href}
-                  className="rounded-lg border border-transparent px-3 py-2.5 text-sm font-medium tracking-[0.2em] text-slate-200 hover:border-cyan-500/20 hover:bg-cyan-500/10 hover:text-cyan-200"
+                  className="rounded-lg border border-transparent px-3 py-2.5 text-sm font-medium tracking-[0.2em] text-slate-800 dark:text-slate-200 hover:border-cyan-500/20 hover:bg-cyan-500/10 hover:text-cyan-600 dark:hover:text-cyan-200"
                   onClick={() => setMobileOpen(false)}
                 >
                   {item.label}
                 </a>
               ))}
-              <div className="mt-2 border-t border-slate-800 pt-3">
+              <div className="mt-2 border-t border-slate-200 dark:border-slate-800 pt-3 flex flex-col gap-2">
                 <a
                   href="/cv/CV.pdf"
                   download
@@ -698,48 +734,26 @@ export default function LocalePage() {
       </nav>
 
       {/* Hero Section */}
-      <section id="home" className="relative z-10 min-h-screen overflow-hidden pb-16 pt-32 lg:pt-36">
+      <section id="home" className="relative z-10 min-h-screen overflow-hidden pb-16 pt-28 lg:pt-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Live Recruiter Status Telemetry Bar */}
-          <motion.div
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-8 inline-flex flex-wrap items-center gap-3 rounded-full border border-cyan-500/25 bg-cyan-950/30 px-4 py-1.5 text-xs backdrop-blur-md shadow-[0_0_25px_rgba(34,211,238,0.1)]"
-          >
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
-            </span>
-            <span className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-emerald-300 font-medium">
-              {t("hero.status")}
-            </span>
-            <span className="hidden text-slate-600 sm:inline">•</span>
-            <span className="hidden items-center gap-1.5 font-mono text-[0.68rem] tracking-[0.16em] text-slate-400 sm:inline-flex">
-              <Clock size={12} className="text-cyan-400" />
-              <span>{t("hero.timezone")}</span>
-              {currentTime && <span className="ml-1 text-cyan-200 font-semibold">({currentTime})</span>}
-            </span>
-          </motion.div>
-
-          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
+          <div className="grid items-start gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
             {/* Left Column: Headlines & Statements */}
             <motion.div
               initial="hidden"
               animate="show"
               variants={{ hidden: {}, show: { transition: { staggerChildren: reduceMotion ? 0 : 0.08 } } }}
             >
-              <motion.p variants={reveal} className="mb-4 text-xs font-mono font-semibold uppercase tracking-[0.28em] text-cyan-400">
-                {t("hero.eyebrow")} <span className="mx-2 text-slate-600">/</span> {t("hero.discipline")}
+              <motion.p variants={reveal} className="mb-4 text-xs font-mono font-semibold uppercase tracking-[0.28em] text-cyan-600 dark:text-cyan-400">
+                {t("hero.eyebrow")} <span className="mx-2 text-slate-400 dark:text-slate-600">/</span> {t("hero.discipline")}
               </motion.p>
 
-              <h1 className="max-w-4xl text-[clamp(2.8rem,7vw,7.2rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.05em] text-white">
+              <h1 className="max-w-4xl text-[clamp(2.8rem,7vw,7.2rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.05em] text-slate-900 dark:text-white">
                 {["lineOne", "lineTwo", "lineThree", "lineFour", "lineFive"].map((line, index) => (
                   <motion.span
                     key={line}
                     variants={reveal}
-                    className={`block ${index === 2 ? "text-slate-400" : ""} ${
-                      index === 3 ? "text-cyan-300 shimmer-text font-normal" : ""
+                    className={`block ${index === 2 ? "text-slate-500 dark:text-slate-400" : ""} ${
+                      index === 3 ? "text-cyan-600 dark:text-cyan-300 shimmer-text font-normal" : ""
                     }`}
                   >
                     {t(`hero.headline.${line}`)}
@@ -747,11 +761,11 @@ export default function LocalePage() {
                 ))}
               </h1>
 
-              <motion.div variants={reveal} className="mt-8 max-w-xl border-l-2 border-cyan-400/60 pl-5">
-                <p className="text-base font-medium leading-relaxed text-slate-200 sm:text-lg">
+              <motion.div variants={reveal} className="mt-8 max-w-xl border-l-2 border-cyan-500/60 dark:border-cyan-400/60 pl-5">
+                <p className="text-base font-medium leading-relaxed text-slate-800 dark:text-slate-200 sm:text-lg">
                   {t("hero.statement")}
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                   {t("hero.description")}
                 </p>
               </motion.div>
@@ -777,55 +791,49 @@ export default function LocalePage() {
                 <button
                   type="button"
                   onClick={handleCopyEmail}
-                  className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/60 px-4 py-3 text-xs font-semibold tracking-[0.16em] text-slate-300 hover:border-cyan-400/40 hover:text-white"
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white/80 dark:border-slate-700 dark:bg-slate-900/60 px-4 py-3 text-xs font-semibold tracking-[0.16em] text-slate-800 dark:text-slate-300 hover:border-cyan-500 dark:hover:border-cyan-400/40 hover:text-cyan-700 dark:hover:text-white transition"
                 >
-                  <Copy size={14} className="text-cyan-400" />
+                  <Copy size={14} className="text-cyan-600 dark:text-cyan-400" />
                   <span>{t("hero.copyEmail")}</span>
                 </button>
               </motion.div>
             </motion.div>
 
-            {/* Right Column: Dynamic Portrait Card with Halo */}
+            {/* Right Column: Dynamic Circular Portrait Card Elevated */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative mx-auto w-full max-w-md"
+              className="relative mx-auto w-full max-w-xs sm:max-w-sm lg:max-w-md lg:-mt-10 lg:-translate-y-4"
             >
               <div
                 aria-hidden="true"
-                className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-cyan-500/20 via-blue-600/15 to-emerald-500/20 blur-2xl opacity-70 neon-glow"
+                className="absolute -inset-4 rounded-full bg-gradient-to-r from-cyan-500/25 via-blue-600/20 to-emerald-500/25 blur-2xl opacity-80 neon-glow"
               />
 
-              <div className="glow-card relative overflow-hidden rounded-3xl border border-cyan-400/30 p-3 shadow-2xl">
-                <div className="relative aspect-[0.88] w-full overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-950">
+              <div className="glow-card relative aspect-square w-full overflow-hidden rounded-full border-2 border-cyan-400/40 p-3 shadow-2xl">
+                <div className="relative h-full w-full overflow-hidden rounded-full border border-cyan-500/30 bg-slate-950">
                   <Image
                     src="/image/profile/jqcDP.jpg"
                     alt="O'Nell Luciano Rasamiarison - Full-Stack & AI Developer"
                     fill
                     priority
                     sizes="(max-width: 1023px) 90vw, 40vw"
-                    className="object-cover object-top contrast-[1.05] brightness-[0.95]"
+                    className="object-cover object-top contrast-[1.05] brightness-[0.98]"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/70 via-transparent to-transparent opacity-70" />
 
-                  {/* Floating Live Telemetry Badges on Image */}
-                  <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-[#020617]/80 px-3 py-1 backdrop-blur-md">
-                    <Sparkles size={13} className="text-cyan-300" />
-                    <span className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-slate-200 font-semibold">
+                  {/* Floating Live Telemetry Badge inside circular image */}
+                  <div className="absolute top-4 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-[#020617]/85 px-3 py-1 backdrop-blur-md">
+                    <Sparkles size={12} className="text-cyan-300" />
+                    <span className="font-mono text-[0.6rem] uppercase tracking-[0.18em] text-slate-200 font-semibold whitespace-nowrap">
                       Full-Stack · AI · SIG
                     </span>
                   </div>
 
-                  <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-cyan-500/30 bg-[#020617]/90 p-3.5 backdrop-blur-md">
+                  <div className="absolute bottom-4 left-4 right-4 text-center rounded-xl border border-cyan-500/30 bg-[#020617]/90 px-3 py-2 backdrop-blur-md">
                     <p className="text-xs font-bold text-white tracking-wide">O&apos;Nell Luciano Rasamiarison</p>
-                    <p className="text-[0.7rem] text-cyan-300 font-mono mt-0.5">Software Engineer & Data Specialist</p>
-                    <div className="mt-2 flex items-center justify-between border-t border-slate-800 pt-2 text-[0.62rem] text-slate-400">
-                      <span className="flex items-center gap-1">
-                        <MapPin size={11} className="text-cyan-400" /> Madagascar
-                      </span>
-                      <span className="text-emerald-400 font-mono">Open to Worldwide Opportunities</span>
-                    </div>
+                    <p className="text-[0.65rem] text-cyan-300 font-mono mt-0.5">Software Engineer & Data Specialist</p>
                   </div>
                 </div>
               </div>
@@ -844,13 +852,13 @@ export default function LocalePage() {
               { label: t("stats.projects"), desc: "Production Ready" },
               { label: t("stats.tech"), desc: "Languages & Frameworks" },
               { label: t("stats.focus"), desc: "Core Specialization" },
-            ].map((stat, i) => (
+            ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-2xl border border-cyan-500/20 bg-slate-900/40 p-5 backdrop-blur-md transition duration-300 hover:border-cyan-400/40 hover:bg-slate-900/70"
+                className="rounded-2xl border border-cyan-500/20 bg-white/70 dark:bg-slate-900/40 p-5 backdrop-blur-md transition duration-300 hover:border-cyan-400/40 hover:bg-white dark:hover:bg-slate-900/70"
               >
-                <p className="text-xl font-extrabold tracking-tight text-cyan-300 sm:text-2xl">{stat.label}</p>
-                <p className="mt-1 text-xs text-slate-400">{stat.desc}</p>
+                <p className="text-xl font-extrabold tracking-tight text-cyan-600 dark:text-cyan-300 sm:text-2xl">{stat.label}</p>
+                <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">{stat.desc}</p>
               </div>
             ))}
           </motion.div>
@@ -858,12 +866,12 @@ export default function LocalePage() {
       </section>
 
       {/* Capabilities / Bento Grid Section */}
-      <section id="about" className="relative z-10 border-t border-cyan-500/15 bg-slate-950/60 py-24 backdrop-blur-sm">
+      <section id="about" className="relative z-10 border-t border-cyan-500/15 bg-slate-100/60 dark:bg-slate-950/60 py-24 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
             <div>
               <p className="section-tag">01 / {t("capabilities.sectionLabel")}</p>
-              <h2 className="mt-6 text-3xl font-bold tracking-tight text-white sm:text-5xl leading-tight">
+              <h2 className="mt-6 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl leading-tight">
                 {t("capabilities.heading")}
               </h2>
             </div>
@@ -901,37 +909,37 @@ export default function LocalePage() {
                   return (
                     <div
                       key={item.title}
-                      className="glow-card group p-6 border border-cyan-500/20 bg-slate-900/50"
+                      className="glow-card group p-6 border border-cyan-500/20 bg-white/80 dark:bg-slate-900/50"
                     >
                       <div className="flex items-center justify-between">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 transition group-hover:scale-110">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 text-cyan-600 dark:text-cyan-300 transition group-hover:scale-110">
                           <Icon size={20} />
                         </div>
-                        <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cyan-400/80">
+                        <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400/80">
                           {item.tag}
                         </span>
                       </div>
-                      <h3 className="mt-5 text-lg font-bold text-white">{item.title}</h3>
-                      <p className="mt-2 text-xs leading-relaxed text-slate-300">{item.desc}</p>
+                      <h3 className="mt-5 text-lg font-bold text-slate-900 dark:text-white">{item.title}</h3>
+                      <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">{item.desc}</p>
                     </div>
                   );
                 })}
               </div>
 
               {/* Soft skills & Languages summary */}
-              <div className="rounded-2xl border border-cyan-500/20 bg-slate-900/40 p-6 backdrop-blur-md">
-                <p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-400 font-semibold mb-4">
+              <div className="rounded-2xl border border-cyan-500/20 bg-white/80 dark:bg-slate-900/40 p-6 backdrop-blur-md">
+                <p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-600 dark:text-cyan-400 font-semibold mb-4">
                   {t("skills.heading")}
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {["learning", "curiosity", "adaptability", "communication", "time", "initiative"].map((skill) => (
-                    <div key={skill} className="flex items-center gap-2.5 text-xs text-slate-300">
-                      <Check size={14} className="text-cyan-400" />
+                    <div key={skill} className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-300">
+                      <Check size={14} className="text-cyan-600 dark:text-cyan-400" />
                       <span>{t(`skills.soft.${skill}`)}</span>
                     </div>
                   ))}
                 </div>
-                <p className="mt-4 border-t border-slate-800 pt-3 font-mono text-xs text-slate-400">
+                <p className="mt-4 border-t border-slate-200 dark:border-slate-800 pt-3 font-mono text-xs text-slate-600 dark:text-slate-400">
                   🌐 {t("skills.languages")}
                 </p>
               </div>
@@ -946,26 +954,26 @@ export default function LocalePage() {
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="section-tag">02 / {t("stack.sectionLabel")}</p>
-              <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
                 {t("stack.heading")}
               </h2>
             </div>
 
             {/* Live Search Input */}
             <div className="relative w-full max-w-md">
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-cyan-400" />
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-cyan-600 dark:text-cyan-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t("stack.searchPlaceholder")}
-                className="w-full rounded-full border border-cyan-500/30 bg-slate-900/80 py-2.5 pl-10 pr-4 text-xs text-slate-200 placeholder-slate-500 outline-none backdrop-blur-md transition focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
+                className="w-full rounded-full border border-slate-300 dark:border-cyan-500/30 bg-white/90 dark:bg-slate-900/80 py-2.5 pl-10 pr-4 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 outline-none backdrop-blur-md transition focus:border-cyan-500 dark:focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-900 dark:hover:text-white"
                 >
                   <X size={14} />
                 </button>
@@ -982,8 +990,8 @@ export default function LocalePage() {
                 onClick={() => setSelectedTechCategory(cat)}
                 className={`rounded-full px-4 py-1.5 text-[0.68rem] font-semibold tracking-[0.16em] uppercase transition ${
                   selectedTechCategory === cat
-                    ? "border border-cyan-400 bg-cyan-400/20 text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.25)]"
-                    : "border border-slate-800 bg-slate-900/50 text-slate-400 hover:border-slate-700 hover:text-white"
+                    ? "border border-cyan-500 dark:border-cyan-400 bg-cyan-400/20 text-cyan-700 dark:text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.25)]"
+                    : "border border-slate-300 dark:border-slate-800 bg-white/70 dark:bg-slate-900/50 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-white"
                 }`}
               >
                 {cat === "All" ? t("stack.all") : cat}
@@ -1003,19 +1011,19 @@ export default function LocalePage() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
-                  className="glow-card group flex flex-col justify-between p-4 border border-cyan-500/20 bg-slate-900/40"
+                  className="glow-card group flex flex-col justify-between p-4 border border-cyan-500/20 bg-white/80 dark:bg-slate-900/40"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/10 text-cyan-300 transition group-hover:scale-110">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/10 text-cyan-600 dark:text-cyan-300 transition group-hover:scale-110">
                       <Icon size={18} />
                     </div>
-                    <span className="font-mono text-[0.55rem] uppercase tracking-[0.14em] text-cyan-400/70">
+                    <span className="font-mono text-[0.55rem] uppercase tracking-[0.14em] text-cyan-600 dark:text-cyan-400/70">
                       {tech.level}
                     </span>
                   </div>
                   <div className="mt-4">
-                    <h3 className="text-xs font-bold text-white">{tech.name}</h3>
-                    <p className="text-[0.62rem] text-slate-400 mt-0.5">{tech.category}</p>
+                    <h3 className="text-xs font-bold text-slate-900 dark:text-white">{tech.name}</h3>
+                    <p className="text-[0.62rem] text-slate-500 dark:text-slate-400 mt-0.5">{tech.category}</p>
                   </div>
                 </motion.div>
               );
@@ -1025,12 +1033,12 @@ export default function LocalePage() {
       </section>
 
       {/* Selected Work Showcase */}
-      <section id="projects" className="relative z-10 border-t border-cyan-500/15 bg-slate-950/60 py-24">
+      <section id="projects" className="relative z-10 border-t border-cyan-500/15 bg-slate-100/60 dark:bg-slate-950/60 py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="section-tag">03 / {t("projects.sectionLabel")}</p>
-              <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
                 {t("projects.heading")}
               </h2>
             </div>
@@ -1044,8 +1052,8 @@ export default function LocalePage() {
                   onClick={() => setSelectedProjectCategory(groupKey)}
                   className={`rounded-full px-4 py-1.5 text-[0.65rem] font-semibold tracking-[0.16em] uppercase transition ${
                     selectedProjectCategory === groupKey
-                      ? "border border-cyan-400 bg-cyan-400/20 text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.25)]"
-                      : "border border-slate-800 bg-slate-900/50 text-slate-400 hover:border-slate-700 hover:text-white"
+                      ? "border border-cyan-500 dark:border-cyan-400 bg-cyan-400/20 text-cyan-700 dark:text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.25)]"
+                      : "border border-slate-300 dark:border-slate-800 bg-white/70 dark:bg-slate-900/50 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
                   {groupKey === "All" ? t("projects.all") : groupKey}
@@ -1073,9 +1081,9 @@ export default function LocalePage() {
                   setHoveredProject(null);
                   setProjectImageIndex(0);
                 }}
-                className="glow-card group overflow-hidden rounded-3xl border border-cyan-500/20 bg-slate-900/60 p-6"
+                className="glow-card group overflow-hidden rounded-3xl border border-cyan-500/20 bg-white/80 dark:bg-slate-900/60 p-6"
               >
-                <div className="mb-4 flex items-center justify-between font-mono text-[0.62rem] uppercase tracking-[0.24em] text-cyan-400">
+                <div className="mb-4 flex items-center justify-between font-mono text-[0.62rem] uppercase tracking-[0.24em] text-cyan-600 dark:text-cyan-400">
                   <span>{project.number}</span>
                   <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-0.5">
                     {project.category}
@@ -1084,7 +1092,7 @@ export default function LocalePage() {
 
                 {/* Project Image Preview / Fallback */}
                 {project.images.length > 0 ? (
-                  <div className="relative h-60 w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
+                  <div className="relative h-60 w-full overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950">
                     <motion.div
                       key={`${project.title}-${projectImageIndex}`}
                       initial={{ opacity: 0.4 }}
@@ -1105,34 +1113,34 @@ export default function LocalePage() {
                         <span
                           key={img.src}
                           className={`h-1.5 w-1.5 rounded-full transition-all ${
-                            imgIdx === projectImageIndex ? "w-4 bg-cyan-300" : "bg-white/40"
+                            imgIdx === projectImageIndex ? "w-4 bg-cyan-500 dark:bg-cyan-300" : "bg-black/30 dark:bg-white/40"
                           }`}
                         />
                       ))}
                     </div>
                   </div>
                 ) : (
-                  <div className="relative flex h-60 w-full items-center justify-center rounded-2xl border border-slate-800/80 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/30 p-6 text-center">
+                  <div className="relative flex h-60 w-full items-center justify-center rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-gradient-to-br from-slate-100 via-slate-50 to-cyan-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-cyan-950/30 p-6 text-center">
                     <div>
-                      <Layers size={32} className="mx-auto text-cyan-400/60" />
-                      <p className="mt-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-slate-400">
+                      <Layers size={32} className="mx-auto text-cyan-600 dark:text-cyan-400/60" />
+                      <p className="mt-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">
                         {t("projects.preview")}
                       </p>
-                      <p className="mt-1 text-xl font-bold text-white">{project.title}</p>
+                      <p className="mt-1 text-xl font-bold text-slate-900 dark:text-white">{project.title}</p>
                     </div>
                   </div>
                 )}
 
                 <div className="mt-6">
-                  <h3 className="text-2xl font-bold text-white tracking-tight">{project.title}</h3>
-                  <p className="mt-2 text-xs leading-relaxed text-slate-300">{project.description}</p>
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{project.title}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">{project.description}</p>
                 </div>
 
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {project.technologies.map((tech) => (
                     <span
                       key={tech}
-                      className="rounded-full border border-slate-800 bg-slate-950/60 px-3 py-1 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-slate-300"
+                      className="rounded-full border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/60 px-3 py-1 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-slate-700 dark:text-slate-300"
                     >
                       {tech}
                     </span>
@@ -1145,7 +1153,7 @@ export default function LocalePage() {
                     setActiveModalProject(project);
                     setModalImageIndex(0);
                   }}
-                  className="mt-6 inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan-300 transition group-hover:text-white"
+                  className="mt-6 inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-300 transition group-hover:text-slate-900 dark:group-hover:text-white"
                 >
                   <span>{t("projects.viewProject")}</span>
                   <ArrowRight size={15} />
@@ -1163,34 +1171,34 @@ export default function LocalePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-[#020617]/90 p-4 backdrop-blur-xl"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 dark:bg-[#020617]/90 p-4 backdrop-blur-xl"
             onClick={() => setActiveModalProject(null)}
           >
             <motion.div
               initial={{ scale: 0.92, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.92, y: 20 }}
-              className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-cyan-500/30 bg-slate-900 p-6 sm:p-8 shadow-2xl"
+              className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-slate-200 dark:border-cyan-500/30 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 type="button"
                 onClick={() => setActiveModalProject(null)}
-                className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full border border-slate-700 bg-slate-800 text-slate-300 hover:text-white"
+                className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
               >
                 <X size={18} />
               </button>
 
-              <p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-400">
+              <p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-600 dark:text-cyan-400">
                 {activeModalProject.number} / {activeModalProject.category}
               </p>
 
-              <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-white">
+              <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
                 {activeModalProject.title}
               </h2>
 
               {activeModalProject.images.length > 0 && (
-                <div className="relative mt-6 h-64 sm:h-80 w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
+                <div className="relative mt-6 h-64 sm:h-80 w-full overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950">
                   <Image
                     src={activeModalProject.images[modalImageIndex].src}
                     alt={activeModalProject.images[modalImageIndex].alt}
@@ -1198,14 +1206,14 @@ export default function LocalePage() {
                     className="object-cover"
                   />
                   {activeModalProject.images.length > 1 && (
-                    <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 rounded-full border border-slate-800 bg-slate-950/80 px-3 py-1.5 backdrop-blur-md">
+                    <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 px-3 py-1.5 backdrop-blur-md">
                       {activeModalProject.images.map((_: any, idx: number) => (
                         <button
                           key={idx}
                           type="button"
                           onClick={() => setModalImageIndex(idx)}
                           className={`h-2 rounded-full transition-all ${
-                            idx === modalImageIndex ? "w-6 bg-cyan-300" : "w-2 bg-slate-600"
+                            idx === modalImageIndex ? "w-6 bg-cyan-500 dark:bg-cyan-300" : "w-2 bg-slate-400 dark:bg-slate-600"
                           }`}
                         />
                       ))}
@@ -1214,38 +1222,38 @@ export default function LocalePage() {
                 </div>
               )}
 
-              <div className="mt-6 border-t border-slate-800 pt-6">
-                <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-400">
+              <div className="mt-6 border-t border-slate-200 dark:border-slate-800 pt-6">
+                <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400">
                   {t("projects.modal.architecture")}
                 </h4>
-                <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
                   {activeModalProject.description}
                 </p>
               </div>
 
-              <div className="mt-6 border-t border-slate-800 pt-6">
-                <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-400">
+              <div className="mt-6 border-t border-slate-200 dark:border-slate-800 pt-6">
+                <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400">
                   {t("projects.modal.highlights")}
                 </h4>
                 <ul className="mt-3 space-y-2">
                   {activeModalProject.highlights.map((item: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-3 text-xs leading-relaxed text-slate-300">
-                      <Check size={14} className="mt-0.5 shrink-0 text-cyan-400" />
+                    <li key={idx} className="flex items-start gap-3 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                      <Check size={14} className="mt-0.5 shrink-0 text-cyan-600 dark:text-cyan-400" />
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="mt-6 border-t border-slate-800 pt-6">
-                <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-400 mb-3">
+              <div className="mt-6 border-t border-slate-200 dark:border-slate-800 pt-6">
+                <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 mb-3">
                   {t("projects.modal.technologies")}
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {activeModalProject.technologies.map((tName: string) => (
                     <span
                       key={tName}
-                      className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-cyan-200"
+                      className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-cyan-700 dark:text-cyan-200"
                     >
                       {tName}
                     </span>
@@ -1272,7 +1280,7 @@ export default function LocalePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <p className="section-tag">04 / {t("experience.sectionLabel")}</p>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
               {t("experience.heading")}
             </h2>
           </div>
@@ -1296,22 +1304,22 @@ export default function LocalePage() {
                       index % 2 === 0 ? "md:col-start-1" : "md:col-start-3"
                     } ${
                       exp.highlight
-                        ? "border-cyan-400/40 bg-gradient-to-br from-cyan-950/40 to-blue-950/20 shadow-[0_0_30px_rgba(34,211,238,0.15)]"
-                        : "border-cyan-500/20 bg-slate-900/50"
+                        ? "border-cyan-400/40 bg-gradient-to-br from-cyan-50/80 to-blue-50/60 dark:from-cyan-950/40 dark:to-blue-950/20 shadow-[0_0_30px_rgba(34,211,238,0.15)]"
+                        : "border-slate-200 dark:border-cyan-500/20 bg-white/80 dark:bg-slate-900/50"
                     }`}
                   >
-                    <span className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-300 font-bold">
+                    <span className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-300 font-bold">
                       {exp.period}
                     </span>
-                    <h3 className="mt-1 text-xl font-bold text-white">{exp.role}</h3>
-                    <p className="text-xs font-medium text-slate-400 mt-0.5">{exp.company}</p>
-                    <p className="mt-3 text-xs leading-relaxed text-slate-300">{exp.description}</p>
+                    <h3 className="mt-1 text-xl font-bold text-slate-900 dark:text-white">{exp.role}</h3>
+                    <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mt-0.5">{exp.company}</p>
+                    <p className="mt-3 text-xs leading-relaxed text-slate-700 dark:text-slate-300">{exp.description}</p>
 
                     <div className="mt-4 flex flex-wrap gap-1.5">
                       {exp.technologies.map((tech) => (
                         <span
                           key={tech}
-                          className="rounded border border-slate-800 bg-slate-950/60 px-2 py-0.5 font-mono text-[0.58rem] uppercase tracking-[0.12em] text-slate-400"
+                          className="rounded border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/60 px-2 py-0.5 font-mono text-[0.58rem] uppercase tracking-[0.12em] text-slate-600 dark:text-slate-400"
                         >
                           {tech}
                         </span>
@@ -1322,7 +1330,7 @@ export default function LocalePage() {
                   {/* Node point */}
                   <div
                     aria-hidden="true"
-                    className="absolute left-1.5 top-6 z-10 h-5 w-5 rounded-full border-2 border-slate-950 bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.8)] md:relative md:left-auto md:top-auto md:col-start-2 md:row-start-1 md:mx-auto"
+                    className="absolute left-1.5 top-6 z-10 h-5 w-5 rounded-full border-2 border-white dark:border-slate-950 bg-cyan-400 dark:bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.8)] md:relative md:left-auto md:top-auto md:col-start-2 md:row-start-1 md:mx-auto"
                   />
                 </div>
               ))}
@@ -1332,11 +1340,11 @@ export default function LocalePage() {
       </section>
 
       {/* Education & Academic Credentials */}
-      <section id="education" className="relative z-10 border-t border-cyan-500/15 bg-slate-950/60 py-24">
+      <section id="education" className="relative z-10 border-t border-cyan-500/15 bg-slate-100/60 dark:bg-slate-950/60 py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <p className="section-tag">05 / {t("education.sectionLabel")}</p>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
               {t("education.heading")}
             </h2>
           </div>
@@ -1349,16 +1357,16 @@ export default function LocalePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.15 }}
                 transition={{ duration: 0.4, delay: idx * 0.05 }}
-                className="glow-card p-6 border border-cyan-500/20 bg-slate-900/50"
+                className="glow-card p-6 border border-cyan-500/20 bg-white/80 dark:bg-slate-900/50"
               >
-                <div className="flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cyan-400">
+                <div className="flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400">
                   <span>{edu.period}</span>
                   <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-0.5">
                     {edu.badge}
                   </span>
                 </div>
-                <h3 className="mt-4 text-lg font-bold text-white">{edu.title}</h3>
-                <p className="mt-2 text-xs leading-relaxed text-slate-300">{edu.institution}</p>
+                <h3 className="mt-4 text-lg font-bold text-slate-900 dark:text-white">{edu.title}</h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">{edu.institution}</p>
               </motion.div>
             ))}
           </div>
@@ -1368,12 +1376,12 @@ export default function LocalePage() {
       {/* High-Conversion Recruiter Contact Section */}
       <section id="contact" className="relative z-10 border-t border-cyan-500/15 py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl border border-cyan-400/40 bg-gradient-to-br from-slate-900 via-slate-950 to-cyan-950/40 p-8 sm:p-14 shadow-[0_0_50px_rgba(34,211,238,0.15)]">
+          <div className="relative overflow-hidden rounded-3xl border border-cyan-400/40 bg-gradient-to-br from-white via-slate-50 to-cyan-50/60 dark:from-slate-900 dark:via-slate-950 dark:to-cyan-950/40 p-8 sm:p-14 shadow-[0_0_50px_rgba(34,211,238,0.1)]">
             <p className="section-tag">06 / {t("contact.sectionLabel")}</p>
-            <h2 className="mt-6 max-w-3xl text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+            <h2 className="mt-6 max-w-3xl text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
               {t("contact.heading")}
             </h2>
-            <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-slate-300">
+            <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300">
               {t("contact.subheading")}
             </p>
 
@@ -1407,20 +1415,20 @@ export default function LocalePage() {
             </div>
 
             <div className="mt-12 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
-                <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-400 font-semibold">
+              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/60 p-5">
+                <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 font-semibold">
                   {t("contact.email")}
                 </p>
-                <p className="mt-2 text-base font-bold text-white font-mono">
+                <p className="mt-2 text-base font-bold text-slate-900 dark:text-white font-mono">
                   rasamiarisonluciano@gmail.com
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
-                <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-400 font-semibold">
+              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/60 p-5">
+                <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 font-semibold">
                   {t("contact.github")}
                 </p>
-                <p className="mt-2 text-base font-bold text-white font-mono">
+                <p className="mt-2 text-base font-bold text-slate-900 dark:text-white font-mono">
                   {t("contact.githubTitle")}
                 </p>
               </div>
@@ -1430,32 +1438,32 @@ export default function LocalePage() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-slate-800 bg-slate-950 py-8">
+      <footer className="relative z-10 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-8">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 md:flex-row">
-          <div className="flex items-center gap-2 font-mono text-xs text-slate-300">
-            <span className="font-bold text-white">O&apos;NELL RASAMIARISON</span>
-            <span className="text-slate-600">•</span>
+          <div className="flex items-center gap-2 font-mono text-xs text-slate-600 dark:text-slate-300">
+            <span className="font-bold text-slate-900 dark:text-white">O&apos;NELL RASAMIARISON</span>
+            <span className="text-slate-400 dark:text-slate-600">•</span>
             <span>{t("footer.description")}</span>
           </div>
 
-          <div className="flex items-center gap-6 font-mono text-xs text-slate-400">
+          <div className="flex items-center gap-6 font-mono text-xs text-slate-600 dark:text-slate-400">
             <a
               href="https://github.com/ONell-Luciano"
               target="_blank"
               rel="noreferrer"
-              className="hover:text-cyan-300"
+              className="hover:text-cyan-600 dark:hover:text-cyan-300"
             >
               GitHub
             </a>
-            <a href="mailto:rasamiarisonluciano@gmail.com" className="hover:text-cyan-300">
+            <a href="mailto:rasamiarisonluciano@gmail.com" className="hover:text-cyan-600 dark:hover:text-cyan-300">
               Email
             </a>
-            <a href="/cv/CV.pdf" download className="hover:text-cyan-300">
+            <a href="/cv/CV.pdf" download className="hover:text-cyan-600 dark:hover:text-cyan-300">
               CV (PDF)
             </a>
           </div>
         </div>
-        <div className="mx-auto max-w-7xl mt-4 border-t border-slate-900 px-4 pt-4 text-center font-mono text-[0.65rem] text-slate-600 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl mt-4 border-t border-slate-200 dark:border-slate-900 px-4 pt-4 text-center font-mono text-[0.65rem] text-slate-500 dark:text-slate-600 sm:px-6 lg:px-8">
           © {new Date().getFullYear()} O&apos;NELL LUCIANO RASAMIARISON. {t("footer.rights")}
         </div>
       </footer>
@@ -1467,12 +1475,12 @@ export default function LocalePage() {
             initial={{ opacity: 0, y: 30, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.9 }}
-            className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-2xl border border-cyan-400/40 bg-slate-900/95 px-5 py-3.5 shadow-2xl backdrop-blur-xl"
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-2xl border border-cyan-400/40 bg-white/95 dark:bg-slate-900/95 px-5 py-3.5 shadow-2xl backdrop-blur-xl text-slate-900 dark:text-white"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-cyan-400/20 text-cyan-300">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-cyan-400/20 text-cyan-600 dark:text-cyan-300">
               <Check size={16} />
             </div>
-            <span className="text-xs font-semibold text-white font-mono">{toastMessage}</span>
+            <span className="text-xs font-semibold font-mono">{toastMessage}</span>
           </motion.div>
         )}
       </AnimatePresence>
