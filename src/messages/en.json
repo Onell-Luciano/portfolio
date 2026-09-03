@@ -1,0 +1,157 @@
+{
+  "nav": {
+    "about": "ABOUT",
+    "work": "WORK",
+    "experience": "EXPERIENCE",
+    "stack": "STACK",
+    "contact": "CONTACT"
+  },
+  "hero": {
+    "eyebrow": "FULL-STACK DEVELOPER",
+    "discipline": "AI · DATA · GIS",
+    "headline": {
+      "lineOne": "I BUILD",
+      "lineTwo": "SOFTWARE",
+      "lineThree": "THAT SOLVES",
+      "lineFour": "REAL",
+      "lineFive": "PROBLEMS."
+    },
+    "description": "Full-stack developer focused on building modern web applications, intelligent systems, data-driven solutions and interactive geospatial experiences.",
+    "statement": "Building software for real-world problems.",
+    "viewWork": "VIEW MY WORK",
+    "letsTalk": "CONTACT ME",
+    "scroll": "SCROLL TO EXPLORE"
+  },
+  "capabilities": {
+    "sectionLabel": "01 / CAPABILITIES",
+    "heading": "I design and build modern systems that turn ideas into dependable digital products.",
+    "fullStack": "FULL-STACK",
+    "ai": "AI / NLP",
+    "data": "DATA",
+    "gis": "GIS",
+    "focus": "FOCUS",
+    "fullStackText": "Web systems",
+    "aiText": "Intelligent workflows",
+    "dataText": "Decision support",
+    "gisText": "Spatial intelligence",
+    "focusText": "From geospatial platforms to AI-powered applications.",
+    "items": {
+      "fullStack": { "title": "FULL-STACK", "description": "Modern web applications" },
+      "ai": { "title": "AI", "description": "Intelligent systems & NLP" },
+      "data": { "title": "DATA", "description": "Analytics & data-driven solutions" },
+      "gis": { "title": "GIS", "description": "Interactive mapping & geospatial systems" }
+    }
+  },
+  "stack": {
+    "sectionLabel": "02 / TECHNOLOGY",
+    "heading": "Tools and systems I work with.",
+    "languages": "LANGUAGES",
+    "frameworks": "FRAMEWORKS & APIs",
+    "frontend": "FRONTEND",
+    "backend": "BACKEND",
+    "aiData": "AI & DATA",
+    "databaseGis": "DATABASE & GIS",
+    "tools": "TOOLS"
+  },
+  "projects": {
+    "sectionLabel": "03 / SELECTED WORK",
+    "heading": "Projects that reflect how I work.",
+    "viewProject": "VIEW PROJECT",
+    "preview": "PROJECT PREVIEW",
+    "comingSoon": "COMING SOON",
+    "items": {
+      "webMapping": {
+        "title": "Web Mapping & Weather Platform",
+        "category": "GIS · Data · Agriculture",
+        "description": "Interactive map and advanced Madagascar weather center for multi-sector agricultural analysis."
+      },
+      "construction": {
+        "title": "Construction Planning System",
+        "category": "Full-Stack · Optimization",
+        "description": "Automatic construction schedule generator with optimized planning algorithms and real-time task visualization."
+      },
+      "nlp": {
+        "title": "Enhanced NLP with LLM",
+        "category": "AI · NLP",
+        "description": "NLP pipeline combining classical models and LLMs to analyze student feedback, supported by a visualization dashboard."
+      },
+      "currency": {
+        "title": "Currency Track",
+        "category": "Web Application",
+        "description": "Next.js and TypeScript application with secure authentication, real-time alerts and dynamic charts."
+      },
+      "stock": {
+        "title": "Intelligent Stock Management",
+        "category": "Optimization · Decision Support",
+        "description": "Intelligent stock management application calculating EOQ and decision indicators with Streamlit and Python."
+      }
+    }
+  },
+  "experience": {
+    "sectionLabel": "04 / EXPERIENCE",
+    "heading": "Professional trajectory.",
+    "items": {
+      "cci": { "period": "Sep. 2024 – Nov. 2024", "company": "Chamber of Commerce and Industry · Fianarantsoa", "role": "Web Mapping Developer", "description": "Improved an interactive GIS application with GeoJSON and PostGIS data, dynamic Leaflet.js maps, Node.js backend APIs, and better display performance and navigation." },
+      "currency": { "period": "May 2025 – Jun. 2025", "company": "École Nationale d'Informatique Tanambao · Fianarantsoa", "role": "Currency Track · Web Application", "description": "Built a Next.js and TypeScript application with secure NextAuth and Prisma authentication, real-time alerts, and dynamic charts." },
+      "data": { "period": "Jun. 2025 – Aug. 2025", "company": "IDEA Academy · Fianarantsoa", "role": "Data Classification & Cleaning", "description": "Automated data classification and cleaning with Python, Power Query transformations, DAX, low-code ML, and interactive decision-making dashboards." },
+      "nlp": { "period": "Jun. 2025 – Dec. 2025", "company": "IDEA Academy · Online", "role": "Enhanced NLP with LLM · Student Sentiment Analysis", "description": "Designed an NLP pipeline combining classical models and LLMs to analyze student feedback, with a visualization dashboard." },
+      "titan": { "period": "Sep. 2025 – Dec. 2025", "company": "TITAN Construction · Fianarantsoa", "role": "Automatic Construction Schedule Generator", "description": "Built a FastAPI, Python, React, and PostgreSQL application to generate construction schedules, optimize scheduling algorithms, and visualize tasks in real time." },
+      "stock": { "period": "Apr. 2026 – May 2026", "company": "École Nationale d'Informatique Tanambao · Fianarantsoa", "role": "Stock Management Application · Wilson Method", "description": "Created an intelligent stock management system with automated EOQ calculations, decision indicators, and an interactive Streamlit and Python interface." },
+      "bionexx": {
+        "period": "Since Apr. 2026 · Ongoing",
+        "role": "Interactive Mapping & Advanced Weather Center",
+        "description": "Visualizing extensive multi-sector Bionexx data and developing an advanced Madagascar weather center for agricultural studies."
+      }
+    }
+  },
+  "education": {
+    "sectionLabel": "05 / EDUCATION & TRAINING",
+    "heading": "Academic and technical foundation.",
+    "bachelor": { "period": "Since Jan. 2026 · Ongoing", "title": "Bachelor in Software Engineering and Database", "institution": "École Nationale d'Informatique, Tanambao Fianarantsoa" },
+    "huawei": { "period": "Since Jul. 2025 · Ongoing", "title": "HCIA-AI Huawei ICT Academy", "institution": "Huawei, Shenzhen, China · AI and Huawei ICT equipment fundamentals" },
+    "powerBI": { "period": "Jun. – Jul. 2025", "title": "Data Analysis with Power BI", "institution": "École Nationale d'Informatique Tanambao, Fianarantsoa · Power BI, DAX and low-code ML" },
+    "aws": { "period": "Jul. 2025", "title": "Cloud Computing · AWS Cloud", "institution": "Orange Digital Center · Cloud fundamentals and AWS Cloud Practitioner preparation" },
+    "iot": { "period": "Apr. 2026", "title": "Creating Useful Connected IoT Solutions", "institution": "Orange Digital Center, Fianarantsoa · IoT solution design and implementation" },
+    "unitarEconomies": { "period": "Nov. 2025 – Jan. 2026", "title": "Reshape our Economies", "institution": "UNITAR, Geneva · Inclusive and sustainable economic transformation" },
+    "unitarPolicy": { "period": "Dec. 2025 – Jan. 2026", "title": "Green Industrial Policy", "institution": "UNITAR, Geneva · Competitiveness and structural transformation" }
+  },
+  "contact": {
+    "sectionLabel": "06 / CONTACT",
+    "heading": "Let's build something meaningful.",
+    "subheading": "Have a project, an idea, or an opportunity in mind?",
+    "cta": "LET'S TALK",
+    "github": "GITHUB",
+    "email": "EMAIL",
+    "githubTitle": "github.com/ONell-Luciano"
+  },
+  "footer": {
+    "description": "FULL-STACK DEVELOPER · AI · DATA · GIS",
+    "github": "GitHub",
+    "email": "Email"
+  },
+  "skills": {
+    "heading": "How I work.",
+    "languages": "French (fluent) · English (advanced) · German (basic)",
+    "soft": {
+      "learning": "Continuous learning",
+      "curiosity": "Curiosity and business sense",
+      "adaptability": "Adaptability",
+      "communication": "Effective communication",
+      "time": "Time management",
+      "initiative": "Initiative"
+    }
+  },
+  "common": {
+    "downloadCv": "DOWNLOAD CV",
+    "language": "Language",
+    "switchTo": "Switch language",
+    "ariaLanguage": "Language switcher",
+    "scroll": "SCROLL TO EXPLORE",
+    "system": "SYSTEM",
+    "identity": "IDENTITY",
+    "role": "ROLE",
+    "specialization": "SPECIALIZATION",
+    "status": "STATUS",
+    "stack": "STACK"
+  }
+}
