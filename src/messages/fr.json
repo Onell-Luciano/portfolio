@@ -17,24 +17,34 @@
       "lineFive": "PROBLÈMES."
     },
     "description": "Développeur full-stack spécialisé dans la création d'applications web modernes, de systèmes intelligents, de solutions orientées données et d'expériences géospatiales interactives.",
-    "statement": "Je développe des logiciels pour des problèmes concrets.",
-    "viewWork": "VOIR MES PROJETS",
+    "statement": "Je développe des logiciels robustes pour répondre aux défis complexes.",
+    "viewWork": "EXPLORER MES PROJETS",
     "letsTalk": "ME CONTACTER",
-    "scroll": "DÉFILEZ POUR DÉCOUVRIR"
+    "downloadCv": "TÉLÉCHARGER LE CV",
+    "copyEmail": "COPIER L'EMAIL",
+    "scroll": "DÉFILEZ POUR DÉCOUVRIR",
+    "status": "DISPONIBLE Remote & Relocation Worldwide",
+    "timezone": "UTC+3 · Fianarantsoa, Madagascar"
+  },
+  "stats": {
+    "experience": "2+ Ans d'exp.",
+    "projects": "7+ Projets Clés",
+    "tech": "25+ Techs Maîtrisées",
+    "focus": "Full-Stack · IA · SIG"
   },
   "capabilities": {
     "sectionLabel": "01 / COMPÉTENCES",
     "heading": "Je conçois et développe des systèmes modernes qui transforment des idées en produits numériques fiables.",
     "fullStack": "FULL-STACK",
     "ai": "IA / NLP",
-    "data": "DATA",
-    "gis": "SIG",
-    "focus": "FOCUS",
-    "fullStackText": "Applications web modernes",
-    "aiText": "Systèmes intelligents & NLP",
-    "dataText": "Analyse et solutions orientées données",
-    "gisText": "Cartographie interactive & systèmes géospatiaux",
-    "focusText": "Des plateformes géospatiales aux applications pilotées par l'IA.",
+    "data": "DATA & ANALYTICS",
+    "gis": "SYSTEMES GÉOSPATIAUX (SIG)",
+    "focus": "VISION ARCHITECTURALE",
+    "fullStackText": "Applications web ultra-réactives & API robustes",
+    "aiText": "Traitement du langage naturel & Modèles LLM",
+    "dataText": "Analyse décisionnelle & Workflows ETL",
+    "gisText": "Cartographie interactive, GeoJSON & PostGIS",
+    "focusText": "Des plateformes géospatiales complexes aux architectures IA scalables.",
     "items": {
       "fullStack": { "title": "FULL-STACK", "description": "Applications web modernes" },
       "ai": { "title": "IA", "description": "Systèmes intelligents & NLP" },
@@ -44,61 +54,132 @@
   },
   "stack": {
     "sectionLabel": "02 / TECHNOLOGIES",
-    "heading": "Les outils et systèmes avec lesquels je travaille.",
+    "heading": "Les outils et écosystèmes avec lesquels je façonne des solutions.",
+    "searchPlaceholder": "Filtrer une technologie (ex: Python, Next.js, PostGIS, PyTorch...)",
+    "all": "Toutes",
     "languages": "LANGAGES",
-    "frameworks": "FRAMEWORKS & API",
+    "frameworks": "FRAMEWORKS & APIS",
     "frontend": "FRONTEND",
     "backend": "BACKEND",
     "aiData": "IA & DATA",
     "databaseGis": "BASES DE DONNÉES & SIG",
-    "tools": "OUTILS"
+    "tools": "OUTILS & DEVOPS"
   },
   "projects": {
     "sectionLabel": "03 / PROJETS SÉLECTIONNÉS",
-    "heading": "Des projets qui reflètent ma manière de travailler.",
-    "viewProject": "VOIR LE PROJET",
+    "heading": "Des réalisations concrètes qui illustrent mon exigence technique.",
+    "all": "Tous les projets",
+    "viewProject": "DÉTAILS DU PROJET",
     "preview": "APERÇU DU PROJET",
     "comingSoon": "À VENIR",
+    "modal": {
+      "architecture": "ARCHITECTURE & TECHNIQUE",
+      "highlights": "POINTS CLÉS & FONCTIONNALITÉS",
+      "close": "Fermer la fenêtre",
+      "category": "Catégorie",
+      "technologies": "Stack Technique"
+    },
     "items": {
       "webMapping": {
         "title": "Web Mapping & Weather Platform",
-        "category": "SIG · Données · Agriculture",
-        "description": "Carte interactive et centre météo avancé de Madagascar pour l'analyse agricole multi-filière."
+        "category": "SIG · Data · Agriculture",
+        "description": "Carte interactive et centre météo avancé de Madagascar pour l'analyse agricole multi-filière. Visualisation interactive avec Leaflet.js, PostGIS et APIs météo.",
+        "highlights": [
+          "Cartographie interactive multi-couches avec Leaflet et OpenStreetMap",
+          "Traitement des données spatiales complexes avec PostGIS",
+          "Centre météo avancé pour l'analyse agricole multi-filières",
+          "Intégration d'APIs tierces (OpenWeatherMap & OpenRouteService)"
+        ]
       },
       "construction": {
         "title": "Construction Planning System",
         "category": "Full-Stack · Optimisation",
-        "description": "Générateur automatique de planning de chantier avec optimisation des algorithmes et visualisation temps réel."
+        "description": "Générateur automatique de planning de chantier avec optimisation des algorithmes et visualisation temps réel.",
+        "highlights": [
+          "Algorithmes d'ordonnancement automatique sous contraintes",
+          "API backend ultra-rapide développée avec FastAPI & Python",
+          "Dashboard React interactif avec timeline Gantt dynamique",
+          "Base de données PostgreSQL optimisée pour les requêtes complexes"
+        ]
       },
       "nlp": {
         "title": "Enhanced NLP with LLM",
         "category": "IA · NLP",
-        "description": "Pipeline NLP combinant modèles classiques et LLM pour analyser les retours étudiants, avec dashboard de visualisation."
+        "description": "Pipeline NLP combinant modèles classiques et LLM pour analyser les retours étudiants, avec dashboard de visualisation.",
+        "highlights": [
+          "Pipeline d'analyse de sentiments et d'extraction de thématiques",
+          "Combinaison de BERT, modèles statistiques et LLMs modernisés",
+          "Dashboard interactif de visualisation des feedbacks",
+          "Classification automatique et reporting décisionnel"
+        ]
       },
       "currency": {
         "title": "Currency Track",
         "category": "Application web",
-        "description": "Application Next.js et TypeScript avec authentification sécurisée, alertes temps réel et graphiques dynamiques."
+        "description": "Application Next.js et TypeScript avec authentification sécurisée, alertes temps réel et graphiques dynamiques.",
+        "highlights": [
+          "Architecture moderne Next.js App Router & TypeScript",
+          "Authentification sécurisée avec NextAuth.js et ORM Prisma",
+          "Graphiques boursiers et monétaires temps réel interactifs",
+          "Système de notifications et d'alertes personnalisées"
+        ]
       },
       "stock": {
         "title": "Intelligent Stock Management",
         "category": "Optimisation · Aide à la décision",
-        "description": "Application intelligente de gestion des stocks calculant l'EOQ et des indicateurs décisionnels avec Streamlit et Python."
+        "description": "Application intelligente de gestion des stocks calculant l'EOQ et des indicateurs décisionnels avec Streamlit et Python.",
+        "highlights": [
+          "Implémentation du modèle mathématique de Wilson (EOQ)",
+          "Calcul automatique des seuils de réapprovisionnement et coûts d'acquisition",
+          "Interface utilisateur fluide développée sous Streamlit",
+          "Aide à la décision stratégique pour la gestion de stocks"
+        ]
       }
     }
   },
   "experience": {
     "sectionLabel": "04 / EXPÉRIENCE",
-    "heading": "Parcours professionnel.",
+    "heading": "Parcours professionnel et réalisations marquantes.",
     "items": {
-      "cci": { "period": "Sept. 2024 – Nov. 2024", "company": "Chambre de Commerce et d'Industrie · Fianarantsoa", "role": "Développeur Web Mapping", "description": "Amélioration d'une application SIG interactive avec données GeoJSON et PostGIS, cartes Leaflet.js, API backend Node.js et optimisation des performances d'affichage et de navigation." },
-      "currency": { "period": "Mai 2025 – Juin 2025", "company": "École Nationale d'Informatique Tanambao · Fianarantsoa", "role": "Currency Track · Application web", "description": "Développement d'une application Next.js et TypeScript avec authentification sécurisée NextAuth et Prisma, alertes temps réel et graphiques dynamiques." },
-      "data": { "period": "Juin 2025 – Août 2025", "company": "IDEA Academy · Fianarantsoa", "role": "Classification et nettoyage de données", "description": "Classification et nettoyage automatisé avec Python, transformations Power Query, DAX, ML low-code et dashboards interactifs d'aide à la décision." },
-      "nlp": { "period": "Juin 2025 – Déc. 2025", "company": "IDEA Academy · En ligne", "role": "Enhanced NLP with LLM · Analyse des sentiments étudiants", "description": "Conception d'un pipeline NLP combinant modèles classiques et LLM pour analyser les retours étudiants, avec dashboard de visualisation." },
-      "titan": { "period": "Sept. 2025 – Déc. 2025", "company": "TITAN Construction · Fianarantsoa", "role": "Générateur automatique de planning de chantier", "description": "Création d'une application FastAPI, Python, React et PostgreSQL pour générer des plannings, optimiser les algorithmes d'ordonnancement et visualiser les tâches en temps réel." },
-      "stock": { "period": "Avr. 2026 – Mai 2026", "company": "École Nationale d'Informatique Tanambao · Fianarantsoa", "role": "Application de gestion de stock · Méthode Wilson", "description": "Création d'un système intelligent de gestion de stock avec calcul automatisé de l'EOQ, indicateurs décisionnels et interface interactive Streamlit/Python." },
+      "cci": {
+        "period": "Sept. 2024 – Nov. 2024",
+        "company": "Chambre de Commerce et d'Industrie · Fianarantsoa",
+        "role": "Développeur Web Mapping",
+        "description": "Amélioration d'une application SIG interactive avec données GeoJSON et PostGIS, cartes Leaflet.js, API backend Node.js et optimisation des performances d'affichage et de navigation."
+      },
+      "currency": {
+        "period": "Mai 2025 – Juin 2025",
+        "company": "École Nationale d'Informatique Tanambao · Fianarantsoa",
+        "role": "Currency Track · Application web",
+        "description": "Développement d'une application Next.js et TypeScript avec authentification sécurisée NextAuth et Prisma, alertes temps réel et graphiques dynamiques."
+      },
+      "data": {
+        "period": "Juin 2025 – Août 2025",
+        "company": "IDEA Academy · Fianarantsoa",
+        "role": "Classification et nettoyage de données",
+        "description": "Classification et nettoyage automatisé avec Python, transformations Power Query, DAX, ML low-code et dashboards interactifs d'aide à la décision."
+      },
+      "nlp": {
+        "period": "Juin 2025 – Déc. 2025",
+        "company": "IDEA Academy · En ligne",
+        "role": "Enhanced NLP with LLM · Analyse des sentiments étudiants",
+        "description": "Conception d'un pipeline NLP combinant modèles classiques et LLM pour analyser les retours étudiants, avec dashboard de visualisation."
+      },
+      "titan": {
+        "period": "Sept. 2025 – Déc. 2025",
+        "company": "TITAN Construction · Fianarantsoa",
+        "role": "Générateur automatique de planning de chantier",
+        "description": "Création d'une application FastAPI, Python, React et PostgreSQL pour générer des plannings, optimiser les algorithmes d'ordonnancement et visualiser les tâches en temps réel."
+      },
+      "stock": {
+        "period": "Avr. 2026 – Mai 2026",
+        "company": "École Nationale d'Informatique Tanambao · Fianarantsoa",
+        "role": "Application de gestion de stock · Méthode Wilson",
+        "description": "Création d'un système intelligent de gestion de stock avec calcul automatisé de l'EOQ, indicateurs décisionnels et interface interactive Streamlit/Python."
+      },
       "bionexx": {
         "period": "Depuis avr. 2026 · En cours",
+        "company": "BIONEXX · Fianarantsoa",
         "role": "Carte interactive et centre météo avancé",
         "description": "Visualisation des vastes données multi-filière de Bionexx et développement d'un centre météo avancé de Madagascar pour les études agricoles."
       }
@@ -106,43 +187,49 @@
   },
   "education": {
     "sectionLabel": "05 / FORMATION",
-    "heading": "Fondation académique et technique.",
+    "heading": "Fondation académique et certifications internationales.",
     "bachelor": { "period": "Depuis janv. 2026 · En cours", "title": "Bachelor en Génie Logiciel et Base de Données", "institution": "École Nationale d'Informatique, Tanambao Fianarantsoa" },
     "huawei": { "period": "Depuis juil. 2025 · En cours", "title": "HCIA-IA de la Huawei ICT Academy", "institution": "Huawei, Shenzhen, Chine · Fondamentaux de l'IA et des équipements ICT Huawei" },
     "powerBI": { "period": "Juin – juil. 2025", "title": "Analyse de données avec Power BI", "institution": "École Nationale d'Informatique Tanambao, Fianarantsoa · Power BI, DAX et ML low-code" },
-    "aws": { "period": "Juil. 2025", "title": "Cloud computing · AWS Cloud", "institution": "Orange Digital Center · Fondamentaux du cloud et préparation AWS Cloud Practitioner" },
-    "iot": { "period": "Avr. 2026", "title": "Créer des solutions IoT utiles et connectées", "institution": "Orange Digital Center, Fianarantsoa · Conception et mise en œuvre de solutions IoT" },
+    "aws": { "period": "Juil. 2025", "title": "Cloud computing · AWS Cloud Practitioner", "institution": "Orange Digital Center · Fondamentaux du cloud et architectures distribuées" },
+    "iot": { "period": "Avr. 2026", "title": "Créer des solutions IoT utiles et connectées", "institution": "Orange Digital Center, Fianarantsoa · Conception microcontrôleurs ESP32 & capteurs" },
     "unitarEconomies": { "period": "Nov. 2025 – janv. 2026", "title": "Reshape our Economies", "institution": "UNITAR, Genève · Transformation économique inclusive et durable" },
     "unitarPolicy": { "period": "Déc. 2025 – janv. 2026", "title": "Green Industrial Policy", "institution": "UNITAR, Genève · Compétitivité et transformation structurelle" }
   },
   "contact": {
     "sectionLabel": "06 / CONTACT",
-    "heading": "Construisons quelque chose de fort.",
-    "subheading": "Vous avez un projet, une idée ou une opportunité en tête ?",
-    "cta": "ME CONTACTER",
+    "heading": "Construisons quelque chose de grand.",
+    "subheading": "Vous recherchez un développeur passionné, rigoureux et prêt à faire la différence sur des projets d'envergure ?",
+    "cta": "ENVOYER UN EMAIL",
+    "copyEmail": "COPIER L'ADRESSE",
+    "emailCopied": "Adresse email copiée avec succès !",
     "github": "GITHUB",
-    "email": "EMAIL",
-    "githubTitle": "github.com/ONell-Luciano"
+    "email": "EMAIL DIRECT",
+    "githubTitle": "github.com/ONell-Luciano",
+    "location": "Fianarantsoa, Madagascar (Disponible Remote / Relocalisation)"
   },
   "footer": {
     "description": "DÉVELOPPEUR FULL-STACK · IA · DATA · SIG",
     "github": "GitHub",
-    "email": "Email"
+    "email": "Email",
+    "rights": "Tous droits réservés."
   },
   "skills": {
-    "heading": "Ma manière de travailler.",
+    "heading": "Philosophie & Soft Skills.",
     "languages": "Français (courant) · Anglais (avancé) · Allemand (notions)",
     "soft": {
-      "learning": "Apprentissage continu",
-      "curiosity": "Curiosité et sens business",
-      "adaptability": "Adaptabilité",
-      "communication": "Communication efficace",
-      "time": "Gestion du temps",
-      "initiative": "Initiative"
+      "learning": "Apprentissage continu rapide",
+      "curiosity": "Curiosité et vision business",
+      "adaptability": "Grande adaptabilité culturelle & technique",
+      "communication": "Communication claire & synthétique",
+      "time": "Rigueur et gestion du temps",
+      "initiative": "Esprit d'initiative & autonomie"
     }
   },
   "common": {
     "downloadCv": "TÉLÉCHARGER LE CV",
+    "copyEmail": "COPIER L'EMAIL",
+    "emailCopied": "Email copié !",
     "language": "Langue",
     "switchTo": "Changer de langue",
     "ariaLanguage": "Sélecteur de langue",

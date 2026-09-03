@@ -1,19 +1,53 @@
 "use client";
-import { motion, useReducedMotion } from "framer-motion";
+
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import { ArrowRight, BarChart3, Database, Globe, Mail, Menu, X, } from "lucide-react";
-import { SiDocker, SiGit, SiLeaflet, SiLinux, SiMysql, SiNodedotjs, SiOpenjdk, SiOpenstreetmap,
-  SiPostgresql, SiPython, SiPytorch, SiReact, SiSpringboot, SiTypescript,} from "@icons-pack/react-simple-icons";
+import {
+  ArrowRight,
+  BarChart3,
+  Check,
+  Clock,
+  Code2,
+  Copy,
+  Database,
+  Download,
+  ExternalLink,
+  Globe,
+  Layers,
+  Mail,
+  MapPin,
+  Menu,
+  Search,
+  Sparkles,
+  X,
+} from "lucide-react";
+import {
+  SiDocker,
+  SiGit,
+  SiLeaflet,
+  SiLinux,
+  SiMysql,
+  SiNodedotjs,
+  SiOpenjdk,
+  SiOpenstreetmap,
+  SiPostgresql,
+  SiPython,
+  SiPytorch,
+  SiReact,
+  SiSpringboot,
+  SiTypescript,
+} from "@icons-pack/react-simple-icons";
 import { useTranslations } from "next-intl";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
+// Staggered reveal variants
 const reveal = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 24 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
   },
 } as const;
 
@@ -24,95 +58,147 @@ export default function LocalePage() {
   const params = useParams();
   const locale = (params?.locale as string) || "en";
   const reduceMotion = useReducedMotion();
+
+  // State management
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [cursor, setCursor] = useState({ x: 0, y: 0 });
+  const [activeSection, setActiveSection] = useState("home");
+  const [cursor, setCursor] = useState({ x: -100, y: -100 });
+  const [cursorHovered, setCursorHovered] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTechCategory, setSelectedTechCategory] = useState("All");
+  const [selectedProjectCategory, setSelectedProjectCategory] = useState("All");
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [projectImageIndex, setProjectImageIndex] = useState(0);
+  const [activeModalProject, setActiveModalProject] = useState<any | null>(null);
+  const [modalImageIndex, setModalImageIndex] = useState(0);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState("");
 
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  // Live Local Time Counter (Madagascar UTC+3)
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: "Indian/Antananarivo",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      };
+      setCurrentTime(new Intl.DateTimeFormat("fr-FR", options).format(now));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Navigation Items
   const navItems = useMemo(
     () => [
-      { label: t("nav.about"), href: `/${locale}#about` },
-      { label: t("nav.work"), href: `/${locale}#projects` },
-      { label: t("nav.experience"), href: `/${locale}#experience` },
-      { label: t("nav.stack"), href: `/${locale}#stack` },
-      { label: t("nav.contact"), href: `/${locale}#contact` },
+      { label: t("nav.about"), href: `#about`, id: "about" },
+      { label: t("nav.stack"), href: `#stack`, id: "stack" },
+      { label: t("nav.work"), href: `#projects`, id: "projects" },
+      { label: t("nav.experience"), href: `#experience`, id: "experience" },
+      { label: t("nav.contact"), href: `#contact`, id: "contact" },
     ],
-    [locale, t],
+    [t]
   );
 
+  // Technology Groups & Directory
   const technologyGroups = useMemo(
     () => [
       {
         id: "01",
         title: t("stack.languages"),
+        categoryKey: "Languages",
         technologies: [
-          { name: "PHP", category: "Languages", icon: Database },
-          { name: "Python", category: "Languages", icon: SiPython },
-          { name: "Java", category: "Languages", icon: SiOpenjdk },
-          { name: "C / C++ / C#", category: "Languages", icon: Database },
-          { name: "SQL / PL/SQL", category: "Languages", icon: Database },
-          { name: "TypeScript / JavaScript", category: "Languages", icon: SiTypescript },
-          { name: "GDScript", category: "Languages", icon: Database },
+          { name: "Python", category: "Languages", icon: SiPython, level: "Advanced" },
+          { name: "TypeScript", category: "Languages", icon: SiTypescript, level: "Advanced" },
+          { name: "JavaScript", category: "Languages", icon: SiTypescript, level: "Advanced" },
+          { name: "Java", category: "Languages", icon: SiOpenjdk, level: "Intermediate" },
+          { name: "PHP", category: "Languages", icon: Database, level: "Intermediate" },
+          { name: "C / C++ / C#", category: "Languages", icon: Database, level: "Intermediate" },
+          { name: "SQL / PL-SQL", category: "Languages", icon: Database, level: "Advanced" },
         ],
       },
       {
         id: "02",
         title: t("stack.frameworks"),
+        categoryKey: "Frameworks",
         technologies: [
-          { name: "React / Next.js", category: "Web", icon: SiReact },
-          { name: "Node.js / FastAPI", category: "APIs", icon: SiNodedotjs },
-          { name: "Spring Boot", category: "Backend", icon: SiSpringboot },
-          { name: "Streamlit", category: "Data apps", icon: SiPython },
-          { name: "Leaflet.js", category: "Mapping", icon: SiLeaflet },
-          { name: "OpenRouteService", category: "Geospatial API", icon: Globe },
-          { name: "OpenWeatherMap", category: "Weather API", icon: Globe },
+          { name: "React / Next.js", category: "Frameworks", icon: SiReact, level: "Advanced" },
+          { name: "Node.js / Express", category: "Frameworks", icon: SiNodedotjs, level: "Advanced" },
+          { name: "FastAPI / Python", category: "Frameworks", icon: SiPython, level: "Advanced" },
+          { name: "Spring Boot", category: "Frameworks", icon: SiSpringboot, level: "Intermediate" },
+          { name: "Leaflet.js", category: "Frameworks", icon: SiLeaflet, level: "Expert" },
+          { name: "Streamlit", category: "Frameworks", icon: SiPython, level: "Advanced" },
         ],
       },
       {
         id: "03",
         title: t("stack.aiData"),
+        categoryKey: "AI & Data",
         technologies: [
-          { name: "MindSpore", category: "AI & Data", icon: SiPython },
-          { name: "PyTorch", category: "AI & Data", icon: SiPytorch },
-          { name: "BERT / LLMs", category: "AI & Data", icon: SiPython },
-          { name: "Power BI / DAX", category: "Analytics", icon: BarChart3 },
-          { name: "ETL & Web Scraping", category: "Data", icon: Database },
+          { name: "PyTorch", category: "AI & Data", icon: SiPytorch, level: "Advanced" },
+          { name: "BERT & LLM Pipelines", category: "AI & Data", icon: SiPython, level: "Advanced" },
+          { name: "MindSpore", category: "AI & Data", icon: SiPython, level: "Intermediate" },
+          { name: "Power BI / DAX", category: "AI & Data", icon: BarChart3, level: "Advanced" },
+          { name: "ETL & Web Scraping", category: "AI & Data", icon: Database, level: "Advanced" },
         ],
       },
       {
         id: "04",
         title: t("stack.databaseGis"),
+        categoryKey: "Database & GIS",
         technologies: [
-          { name: "PostgreSQL", category: "Database & GIS", icon: SiPostgresql },
-          { name: "PostGIS", category: "Database & GIS", icon: SiPostgresql },
-          { name: "MySQL", category: "Database & GIS", icon: SiMysql },
-          { name: "Oracle 19c", category: "Database & GIS", icon: Database },
-          { name: "OpenStreetMap", category: "Database & GIS", icon: SiOpenstreetmap },
+          { name: "PostgreSQL & PostGIS", category: "Database & GIS", icon: SiPostgresql, level: "Expert" },
+          { name: "MySQL", category: "Database & GIS", icon: SiMysql, level: "Advanced" },
+          { name: "Oracle 19c & APEX", category: "Database & GIS", icon: Database, level: "Intermediate" },
+          { name: "OpenStreetMap API", category: "Database & GIS", icon: SiOpenstreetmap, level: "Expert" },
         ],
       },
       {
         id: "05",
         title: t("stack.tools"),
+        categoryKey: "Tools & DevOps",
         technologies: [
-          { name: "Docker", category: "Tools", icon: SiDocker },
-          { name: "Linux", category: "Tools", icon: SiLinux },
-          { name: "Git", category: "Tools", icon: SiGit },
-          { name: "ORDS / Oracle APEX", category: "Oracle tools", icon: Database },
-          { name: "ESP32 / Arduino", category: "IoT", icon: Database },
-          { name: "Unity / Blender", category: "Creative tools", icon: Globe },
+          { name: "Docker", category: "Tools & DevOps", icon: SiDocker, level: "Intermediate" },
+          { name: "Git / GitHub", category: "Tools & DevOps", icon: SiGit, level: "Advanced" },
+          { name: "Linux Administration", category: "Tools & DevOps", icon: SiLinux, level: "Advanced" },
+          { name: "ESP32 / IoT", category: "Tools & DevOps", icon: Database, level: "Intermediate" },
         ],
       },
     ],
-    [t],
+    [t]
   );
 
+  // Flattened tech list for searching
+  const allTechnologies = useMemo(() => {
+    return technologyGroups.flatMap((group) => group.technologies);
+  }, [technologyGroups]);
+
+  // Filtered Tech Stack based on Search Query & Selected Category
+  const filteredTechnologies = useMemo(() => {
+    return allTechnologies.filter((tech) => {
+      const matchesSearch = tech.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        tech.category.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = selectedTechCategory === "All" || tech.category === selectedTechCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [allTechnologies, searchQuery, selectedTechCategory]);
+
+  // Projects Showcase List
   const projects = useMemo(
     () => [
       {
+        id: "web-mapping",
         number: "01",
         title: t("projects.items.webMapping.title"),
         category: t("projects.items.webMapping.category"),
+        categoryGroup: "GIS",
         description: t("projects.items.webMapping.description"),
         technologies: ["Next.js", "React", "Leaflet.js", "PostGIS", "OpenStreetMap", "OpenWeatherMap", "OpenRouteService"],
         images: [
@@ -120,93 +206,244 @@ export default function LocalePage() {
           { src: "/projets/web-mapping/meteo/meteo0.png", alt: "Advanced weather center interface" },
           { src: "/projets/web-mapping/meteo/meteo1.png", alt: "Weather data visualization interface" },
         ],
-        link: `/${locale}#contact`,
+        highlights: [
+          t("projects.items.webMapping.highlights.0"),
+          t("projects.items.webMapping.highlights.1"),
+          t("projects.items.webMapping.highlights.2"),
+          t("projects.items.webMapping.highlights.3"),
+        ],
       },
       {
+        id: "construction-planning",
         number: "02",
         title: t("projects.items.construction.title"),
         category: t("projects.items.construction.category"),
+        categoryGroup: "Full-Stack",
         description: t("projects.items.construction.description"),
-        technologies: ["FastAPI", "Python", "React", "PostgreSQL", "Algorithms"],
+        technologies: ["FastAPI", "Python", "React", "PostgreSQL", "Ordonnancement"],
         images: [],
-        link: `/${locale}#contact`,
+        highlights: [
+          t("projects.items.construction.highlights.0"),
+          t("projects.items.construction.highlights.1"),
+          t("projects.items.construction.highlights.2"),
+          t("projects.items.construction.highlights.3"),
+        ],
       },
       {
+        id: "nlp-llm",
         number: "03",
         title: t("projects.items.nlp.title"),
         category: t("projects.items.nlp.category"),
+        categoryGroup: "AI",
         description: t("projects.items.nlp.description"),
-        technologies: ["Python", "BERT", "LLMs", "NLP", "Data visualization"],
+        technologies: ["Python", "BERT", "LLMs", "NLP", "Dashboarding"],
         images: [],
-        link: `/${locale}#contact`,
+        highlights: [
+          t("projects.items.nlp.highlights.0"),
+          t("projects.items.nlp.highlights.1"),
+          t("projects.items.nlp.highlights.2"),
+          t("projects.items.nlp.highlights.3"),
+        ],
       },
       {
+        id: "currency-track",
         number: "04",
         title: t("projects.items.currency.title"),
         category: t("projects.items.currency.category"),
+        categoryGroup: "Full-Stack",
         description: t("projects.items.currency.description"),
-        technologies: ["Next.js", "TypeScript", "NextAuth", "Prisma", "PostgreSQL", "Charts"],
+        technologies: ["Next.js", "TypeScript", "NextAuth", "Prisma", "PostgreSQL", "Recharts"],
         images: [],
-        link: `/${locale}#contact`,
+        highlights: [
+          t("projects.items.currency.highlights.0"),
+          t("projects.items.currency.highlights.1"),
+          t("projects.items.currency.highlights.2"),
+          t("projects.items.currency.highlights.3"),
+        ],
       },
       {
+        id: "stock-management",
         number: "05",
         title: t("projects.items.stock.title"),
         category: t("projects.items.stock.category"),
+        categoryGroup: "Optimization",
         description: t("projects.items.stock.description"),
-        technologies: ["Python", "Streamlit", "EOQ", "Wilson model", "Decision support"],
+        technologies: ["Python", "Streamlit", "Modèle Wilson", "EOQ", "Data Analysis"],
         images: [],
-        link: `/${locale}#contact`,
+        highlights: [
+          t("projects.items.stock.highlights.0"),
+          t("projects.items.stock.highlights.1"),
+          t("projects.items.stock.highlights.2"),
+          t("projects.items.stock.highlights.3"),
+        ],
       },
     ],
-    [locale, t],
+    [t]
   );
 
+  // Filtered projects
+  const filteredProjects = useMemo(() => {
+    if (selectedProjectCategory === "All") return projects;
+    return projects.filter((p) => p.categoryGroup === selectedProjectCategory);
+  }, [projects, selectedProjectCategory]);
+
+  // Experiences List
   const experiences = useMemo(
     () => [
-      { period: t("experience.items.cci.period"), company: t("experience.items.cci.company"), role: t("experience.items.cci.role"), description: t("experience.items.cci.description"), technologies: ["Node.js", "PostgreSQL", "PostGIS", "Leaflet", "GeoJSON"], highlight: false },
-      { period: t("experience.items.currency.period"), company: t("experience.items.currency.company"), role: t("experience.items.currency.role"), description: t("experience.items.currency.description"), technologies: ["Next.js", "TypeScript", "NextAuth", "Prisma"], highlight: false },
-      { period: t("experience.items.data.period"), company: t("experience.items.data.company"), role: t("experience.items.data.role"), description: t("experience.items.data.description"), technologies: ["Python", "Power BI", "Power Query", "DAX"], highlight: false },
-      { period: t("experience.items.nlp.period"), company: t("experience.items.nlp.company"), role: t("experience.items.nlp.role"), description: t("experience.items.nlp.description"), technologies: ["Python", "NLP", "BERT", "LLMs"], highlight: false },
-      { period: t("experience.items.titan.period"), company: t("experience.items.titan.company"), role: t("experience.items.titan.role"), description: t("experience.items.titan.description"), technologies: ["FastAPI", "Python", "React", "PostgreSQL", "Algorithms"], highlight: false },
-      { period: t("experience.items.stock.period"), company: t("experience.items.stock.company"), role: t("experience.items.stock.role"), description: t("experience.items.stock.description"), technologies: ["Python", "Streamlit", "EOQ", "Wilson model"], highlight: false },
-      { period: t("experience.items.bionexx.period"), company: "BIONEXX · Fianarantsoa", role: t("experience.items.bionexx.role"), description: t("experience.items.bionexx.description"), technologies: ["Leaflet.js", "PostGIS", "OpenWeatherMap", "Data visualization"], highlight: true },
+      {
+        period: t("experience.items.cci.period"),
+        company: t("experience.items.cci.company"),
+        role: t("experience.items.cci.role"),
+        description: t("experience.items.cci.description"),
+        technologies: ["Node.js", "PostgreSQL", "PostGIS", "Leaflet.js", "GeoJSON"],
+        highlight: false,
+      },
+      {
+        period: t("experience.items.currency.period"),
+        company: t("experience.items.currency.company"),
+        role: t("experience.items.currency.role"),
+        description: t("experience.items.currency.description"),
+        technologies: ["Next.js", "TypeScript", "NextAuth", "Prisma", "PostgreSQL"],
+        highlight: false,
+      },
+      {
+        period: t("experience.items.data.period"),
+        company: t("experience.items.data.company"),
+        role: t("experience.items.data.role"),
+        description: t("experience.items.data.description"),
+        technologies: ["Python", "Power BI", "Power Query", "DAX", "Low-code ML"],
+        highlight: false,
+      },
+      {
+        period: t("experience.items.nlp.period"),
+        company: t("experience.items.nlp.company"),
+        role: t("experience.items.nlp.role"),
+        description: t("experience.items.nlp.description"),
+        technologies: ["Python", "NLP", "BERT", "LLMs", "Data Viz"],
+        highlight: false,
+      },
+      {
+        period: t("experience.items.titan.period"),
+        company: t("experience.items.titan.company"),
+        role: t("experience.items.titan.role"),
+        description: t("experience.items.titan.description"),
+        technologies: ["FastAPI", "Python", "React", "PostgreSQL", "Algorithmes"],
+        highlight: false,
+      },
+      {
+        period: t("experience.items.stock.period"),
+        company: t("experience.items.stock.company"),
+        role: t("experience.items.stock.role"),
+        description: t("experience.items.stock.description"),
+        technologies: ["Python", "Streamlit", "Wilson Method", "EOQ"],
+        highlight: false,
+      },
+      {
+        period: t("experience.items.bionexx.period"),
+        company: t("experience.items.bionexx.company"),
+        role: t("experience.items.bionexx.role"),
+        description: t("experience.items.bionexx.description"),
+        technologies: ["Leaflet.js", "PostGIS", "OpenWeatherMap", "Data Viz", "Agriculture"],
+        highlight: true,
+      },
     ].reverse(),
-    [t],
+    [t]
   );
 
+  // Education & Credentials
   const education = useMemo(
     () => [
-      { period: t("education.bachelor.period"), title: t("education.bachelor.title"), institution: t("education.bachelor.institution") },
-      { period: t("education.huawei.period"), title: t("education.huawei.title"), institution: t("education.huawei.institution") },
-      { period: t("education.powerBI.period"), title: t("education.powerBI.title"), institution: t("education.powerBI.institution") },
-      { period: t("education.aws.period"), title: t("education.aws.title"), institution: t("education.aws.institution") },
-      { period: t("education.iot.period"), title: t("education.iot.title"), institution: t("education.iot.institution") },
-      { period: t("education.unitarEconomies.period"), title: t("education.unitarEconomies.title"), institution: t("education.unitarEconomies.institution") },
-      { period: t("education.unitarPolicy.period"), title: t("education.unitarPolicy.title"), institution: t("education.unitarPolicy.institution") },
+      {
+        period: t("education.bachelor.period"),
+        title: t("education.bachelor.title"),
+        institution: t("education.bachelor.institution"),
+        badge: "Degree",
+      },
+      {
+        period: t("education.huawei.period"),
+        title: t("education.huawei.title"),
+        institution: t("education.huawei.institution"),
+        badge: "Certification",
+      },
+      {
+        period: t("education.powerBI.period"),
+        title: t("education.powerBI.title"),
+        institution: t("education.powerBI.institution"),
+        badge: "Training",
+      },
+      {
+        period: t("education.aws.period"),
+        title: t("education.aws.title"),
+        institution: t("education.aws.institution"),
+        badge: "Certification",
+      },
+      {
+        period: t("education.iot.period"),
+        title: t("education.iot.title"),
+        institution: t("education.iot.institution"),
+        badge: "Hardware & IoT",
+      },
+      {
+        period: t("education.unitarEconomies.period"),
+        title: t("education.unitarEconomies.title"),
+        institution: t("education.unitarEconomies.institution"),
+        badge: "International",
+      },
+      {
+        period: t("education.unitarPolicy.period"),
+        title: t("education.unitarPolicy.title"),
+        institution: t("education.unitarPolicy.institution"),
+        badge: "International",
+      },
     ],
-    [t],
+    [t]
   );
 
+  // Language switcher
   const switchLanguage = (nextLocale: string) => {
     const path = pathname.replace(/^\/[a-z]{2}/, `/${nextLocale}`);
     router.push(path || `/${nextLocale}`);
   };
 
+  // Copy email functionality with Toast
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText("rasamiarisonluciano@gmail.com");
+    setToastMessage(t("contact.emailCopied"));
+    setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  // Scroll listener for sticky header & active section spy
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 18);
-    handleScroll();
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+
+      const sections = ["home", "about", "stack", "projects", "experience", "education", "contact"];
+      const current = sections.find((section) => {
+        const el = document.getElementById(section);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          return rect.top <= 200 && rect.bottom >= 200;
+        }
+        return false;
+      });
+      if (current) setActiveSection(current);
+    };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Custom Cursor Pointer tracking
   useEffect(() => {
     if (reduceMotion || typeof window === "undefined") return;
-    const handlePointerMove = (event: PointerEvent) => setCursor({ x: event.clientX, y: event.clientY });
+    const handlePointerMove = (e: PointerEvent) => {
+      setCursor({ x: e.clientX, y: e.clientY });
+    };
     window.addEventListener("pointermove", handlePointerMove);
     return () => window.removeEventListener("pointermove", handlePointerMove);
   }, [reduceMotion]);
 
+  // Dynamic Image slider for cards on hover
   useEffect(() => {
     if (reduceMotion || !hoveredProject) return;
     const project = projects.find((item) => item.title === hoveredProject);
@@ -214,156 +451,879 @@ export default function LocalePage() {
 
     const interval = window.setInterval(() => {
       setProjectImageIndex((index) => (index + 1) % project.images.length);
-    }, 1000);
+    }, 1400);
 
     return () => window.clearInterval(interval);
   }, [hoveredProject, projects, reduceMotion]);
 
-  const parallaxX = reduceMotion ? 0 : cursor.x * 0.015;
-  const parallaxY = reduceMotion ? 0 : cursor.y * 0.015;
+  // Interactive Particle Canvas background effect
+  useEffect(() => {
+    if (reduceMotion || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", handleResize);
+
+    const numParticles = 45;
+    const particles = Array.from({ length: numParticles }).map(() => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.45,
+      vy: (Math.random() - 0.5) * 0.45,
+      radius: Math.random() * 1.8 + 0.8,
+      alpha: Math.random() * 0.5 + 0.2,
+    }));
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw particle nodes & links
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(34, 211, 238, ${p.alpha})`;
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(34, 211, 238, ${0.15 * (1 - dist / 110)})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [reduceMotion]);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
-      <nav className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${isScrolled ? "border-white/10 bg-[#050b16]/80 backdrop-blur-md" : "border-transparent bg-transparent"}`}>
+    <main className="relative min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-cyan-500/30 selection:text-white">
+      {/* Interactive Particle Canvas */}
+      {!reduceMotion && (
+        <canvas ref={canvasRef} className="particle-canvas" aria-hidden="true" />
+      )}
+
+      {/* Custom Cursor follower */}
+      {!reduceMotion && (
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none fixed top-0 left-0 z-50 hidden rounded-full transition-transform duration-100 md:block ${
+            cursorHovered
+              ? "h-12 w-12 border border-cyan-300 bg-cyan-400/10 shadow-[0_0_20px_rgba(34,211,238,0.4)]"
+              : "h-6 w-6 border border-cyan-400/40 bg-cyan-400/15"
+          }`}
+          style={{
+            transform: `translate3d(${cursor.x - (cursorHovered ? 24 : 12)}px, ${
+              cursor.y - (cursorHovered ? 24 : 12)
+            }px, 0)`,
+          }}
+        />
+      )}
+
+      {/* Floating Header Navigation */}
+      <nav
+        className={`fixed inset-x-0 top-0 z-40 border-b transition-all duration-300 ${
+          isScrolled
+            ? "border-cyan-500/20 bg-[#020617]/85 backdrop-blur-xl shadow-[0_10px_30px_rgba(2,6,23,0.8)]"
+            : "border-transparent bg-transparent"
+        }`}
+      >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <a href={`/${locale}#home`} className="text-lg font-semibold tracking-[0.18em] text-white transition hover:text-cyan-300">O&apos;NELL</a>
+          <a
+            href="#home"
+            onMouseEnter={() => setCursorHovered(true)}
+            onMouseLeave={() => setCursorHovered(false)}
+            className="group flex items-center gap-2 text-lg font-bold tracking-[0.2em] text-white transition hover:text-cyan-300"
+          >
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-cyan-400/30 bg-cyan-400/10 text-xs font-mono text-cyan-300 transition group-hover:border-cyan-300 group-hover:bg-cyan-400/25">
+              O
+            </span>
+            <span>O&apos;NELL</span>
+          </a>
+
+          {/* Desktop Nav Links */}
           <div className="hidden items-center gap-8 md:flex">
             {navItems.map((item) => (
-              <a key={item.label} href={item.href} className="nav-link text-[0.7rem] font-medium tracking-[0.22em] text-slate-300">{item.label}</a>
+              <a
+                key={item.label}
+                href={item.href}
+                onMouseEnter={() => setCursorHovered(true)}
+                onMouseLeave={() => setCursorHovered(false)}
+                className={`nav-link text-[0.72rem] font-medium tracking-[0.22em] transition ${
+                  activeSection === item.id ? "text-cyan-300 font-semibold" : "text-slate-300"
+                }`}
+              >
+                {item.label}
+              </a>
             ))}
           </div>
 
-          <div className="hidden items-center gap-3 md:flex">
-            <div aria-label={t("common.ariaLanguage")} className="inline-flex rounded-full border border-(--border) bg-white/3 p-1">
-              {['en', 'fr'].map((option) => (
-                <button key={option} type="button" aria-label={`Switch to ${option.toUpperCase()}`} aria-current={locale === option ? "true" : undefined} onClick={() => switchLanguage(option)} className={`rounded-full px-3 py-1.5 text-[0.68rem] font-medium tracking-[0.18em] transition ${locale === option ? "bg-cyan-500/20 text-cyan-200 shadow-[0_0_18px_rgba(34,211,238,0.22)]" : "text-slate-300 hover:text-white"}`}>
+          {/* Actions: Download CV + Language Switcher */}
+          <div className="hidden items-center gap-4 md:flex">
+            <a
+              href="/cv/CV.pdf"
+              download="CV_ONell_Luciano_Rasamiarison.pdf"
+              target="_blank"
+              rel="noreferrer"
+              onMouseEnter={() => setCursorHovered(true)}
+              onMouseLeave={() => setCursorHovered(false)}
+              className="group inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-[0.68rem] font-semibold tracking-[0.18em] text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.15)] transition duration-200 hover:border-cyan-300 hover:bg-cyan-400/20 hover:text-white"
+            >
+              <Download size={13} className="transition-transform duration-200 group-hover:-translate-y-0.5" />
+              <span>{t("common.downloadCv")}</span>
+            </a>
+
+            <div
+              aria-label={t("common.ariaLanguage")}
+              className="inline-flex rounded-full border border-cyan-500/20 bg-slate-900/60 p-1 backdrop-blur-md"
+            >
+              {["en", "fr"].map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  aria-label={`Switch to ${option.toUpperCase()}`}
+                  onClick={() => switchLanguage(option)}
+                  onMouseEnter={() => setCursorHovered(true)}
+                  onMouseLeave={() => setCursorHovered(false)}
+                  className={`rounded-full px-3 py-1 text-[0.65rem] font-bold tracking-[0.18em] transition ${
+                    locale === option
+                      ? "bg-cyan-500/25 text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.3)]"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
                   {option.toUpperCase()}
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="flex items-center gap-2 md:hidden">
-            <div aria-label={t("common.ariaLanguage")} className="inline-flex rounded-full border border-(--border) bg-white/3 p-1">
-              {['en', 'fr'].map((option) => (
-                <button key={option} type="button" aria-label={`Switch to ${option.toUpperCase()}`} aria-current={locale === option ? "true" : undefined} onClick={() => switchLanguage(option)} className={`rounded-full px-2 py-1 text-[0.6rem] font-medium tracking-[0.12em] transition ${locale === option ? "bg-cyan-500/20 text-cyan-200" : "text-slate-300"}`}>
+          {/* Mobile Menu Toggle */}
+          <div className="flex items-center gap-3 md:hidden">
+            <a
+              href="/cv/CV.pdf"
+              download
+              className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[0.6rem] font-semibold tracking-[0.12em] text-cyan-200"
+            >
+              <Download size={12} />
+              <span>CV</span>
+            </a>
+
+            <div className="inline-flex rounded-full border border-cyan-500/20 bg-slate-900/60 p-0.5">
+              {["en", "fr"].map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => switchLanguage(option)}
+                  className={`rounded-full px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.1em] transition ${
+                    locale === option ? "bg-cyan-500/25 text-cyan-200" : "text-slate-400"
+                  }`}
+                >
                   {option.toUpperCase()}
                 </button>
               ))}
             </div>
-            <button type="button" aria-expanded={mobileOpen} aria-label="Toggle navigation" className="inline-flex items-center gap-2 px-1 py-2 text-[0.68rem] font-medium tracking-[0.2em] text-slate-100" onClick={() => setMobileOpen((open) => !open)}>
-              {mobileOpen ? <X size={16} /> : <Menu size={16} />}
-              <span>MENU</span>
+
+            <button
+              type="button"
+              aria-expanded={mobileOpen}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900/80 p-2 text-slate-200"
+              onClick={() => setMobileOpen((open) => !open)}
+            >
+              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
 
+        {/* Mobile Navigation Drawer */}
         {mobileOpen && (
-          <div className="border-t border-white/10 bg-[#050b16] md:hidden">
-            <div className="mx-auto flex max-w-7xl flex-col px-4 py-4">
+          <div className="border-t border-cyan-500/20 bg-[#020617] px-4 py-5 md:hidden">
+            <div className="flex flex-col gap-3">
               {navItems.map((item) => (
-                <a key={item.label} href={item.href} className="border-b border-white/5 py-3 text-sm font-medium tracking-[0.2em] text-slate-300 last:border-b-0" onClick={() => setMobileOpen(false)}>{item.label}</a>
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="rounded-lg border border-transparent px-3 py-2.5 text-sm font-medium tracking-[0.2em] text-slate-200 hover:border-cyan-500/20 hover:bg-cyan-500/10 hover:text-cyan-200"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {item.label}
+                </a>
               ))}
+              <div className="mt-2 border-t border-slate-800 pt-3">
+                <a
+                  href="/cv/CV.pdf"
+                  download
+                  className="btn-primary w-full text-center"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <Download size={14} />
+                  <span>{t("common.downloadCv")}</span>
+                </a>
+              </div>
             </div>
           </div>
         )}
       </nav>
 
-      <section id="home" className="relative z-10 min-h-screen overflow-hidden bg-[#050b16]">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_78%_48%,rgba(31,111,177,0.14),transparent_33%),linear-gradient(115deg,#050b16_0%,#07101d_55%,#050b16_100%)]" />
-        <div className="relative mx-auto grid min-h-screen max-w-7xl items-center gap-12 px-4 pb-16 pt-28 sm:px-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(300px,0.72fr)] lg:gap-8 lg:px-8 lg:pb-20 lg:pt-24">
-          <motion.div initial="hidden" animate="show" variants={{ hidden: {}, show: { transition: { staggerChildren: reduceMotion ? 0 : 0.1 } } }} className="relative z-10">
-            <motion.p variants={reveal} className="mb-7 text-[0.66rem] font-medium uppercase tracking-[0.28em] text-cyan-200/75 sm:mb-10">{t("hero.eyebrow")} <span className="mx-2 text-white/25">/</span> {t("hero.discipline")}</motion.p>
-            <h1 className="max-w-4xl text-[clamp(3.3rem,8.2vw,8.2rem)] font-semibold uppercase leading-[0.84] tracking-[-0.075em] text-white">
-              {["lineOne", "lineTwo", "lineThree", "lineFour", "lineFive"].map((line, index) => (
-                <motion.span key={line} variants={reveal} className={`block ${index === 2 ? "text-white/70" : ""} ${index === 3 ? "pl-[0.08em] font-normal text-cyan-100/90" : ""}`}>
-                  {t(`hero.headline.${line}`)}
-                </motion.span>
-              ))}
-            </h1>
-            <motion.div variants={reveal} className="mt-10 max-w-md border-l border-cyan-300/40 pl-4 sm:mt-12 sm:pl-5">
-              <p className="text-sm leading-7 text-slate-300 sm:text-base">{t("hero.statement")}</p>
-              <p className="mt-2 text-xs leading-6 text-slate-500">{t("hero.description")}</p>
-            </motion.div>
-            <motion.div variants={reveal} className="mt-8 flex flex-wrap items-center gap-5 sm:mt-10">
-              <a href={`/${locale}#projects`} className="group inline-flex items-center gap-3 border border-cyan-200/55 px-5 py-3 text-[0.68rem] font-medium tracking-[0.2em] text-white transition-colors hover:border-cyan-200 hover:bg-cyan-100/10">{t("hero.viewWork")}<ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-1" /></a>
-              <a href={`/${locale}#contact`} className="group inline-flex items-center gap-2 border-b border-white/30 px-1 py-3 text-[0.68rem] font-medium tracking-[0.2em] text-slate-300 transition-colors hover:border-cyan-200 hover:text-white">{t("hero.letsTalk")}</a>
-            </motion.div>
+      {/* Hero Section */}
+      <section id="home" className="relative z-10 min-h-screen overflow-hidden pb-16 pt-32 lg:pt-36">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Live Recruiter Status Telemetry Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: -15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-8 inline-flex flex-wrap items-center gap-3 rounded-full border border-cyan-500/25 bg-cyan-950/30 px-4 py-1.5 text-xs backdrop-blur-md shadow-[0_0_25px_rgba(34,211,238,0.1)]"
+          >
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
+            </span>
+            <span className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-emerald-300 font-medium">
+              {t("hero.status")}
+            </span>
+            <span className="hidden text-slate-600 sm:inline">•</span>
+            <span className="hidden items-center gap-1.5 font-mono text-[0.68rem] tracking-[0.16em] text-slate-400 sm:inline-flex">
+              <Clock size={12} className="text-cyan-400" />
+              <span>{t("hero.timezone")}</span>
+              {currentTime && <span className="ml-1 text-cyan-200 font-semibold">({currentTime})</span>}
+            </span>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, scale: 1.03 }} animate={reduceMotion ? { opacity: 1, scale: 1 } : { opacity: 1, scale: 1, x: parallaxX * 0.18, y: parallaxY * 0.18 }} transition={{ duration: 1.15, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="relative mx-auto aspect-square w-[min(82vw,560px)] lg:-mr-12 lg:w-[min(42vw,560px)]">
-            <div aria-hidden="true" className="absolute inset-[-12%] rounded-full bg-[radial-gradient(circle_at_55%_43%,rgba(54,180,224,0.2),rgba(26,92,160,0.08)_38%,transparent_70%)] opacity-75 blur-3xl" />
-            <div aria-hidden="true" className="absolute inset-[-3%] rounded-full bg-[radial-gradient(circle_at_38%_62%,rgba(70,190,224,0.18),transparent_58%)] opacity-70 blur-2xl" />
-            <div className="relative h-full w-full overflow-hidden rounded-full">
-              <Image src="/image/profile/jqcDP.jpg" alt="O'Nell Rasamiarison, full-stack developer" fill priority sizes="(max-width: 1023px) 82vw, 42vw" className="rounded-full object-cover object-top brightness-[0.92] contrast-[1.04] saturate-[0.9]" />
-            </div>
+          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
+            {/* Left Column: Headlines & Statements */}
+            <motion.div
+              initial="hidden"
+              animate="show"
+              variants={{ hidden: {}, show: { transition: { staggerChildren: reduceMotion ? 0 : 0.08 } } }}
+            >
+              <motion.p variants={reveal} className="mb-4 text-xs font-mono font-semibold uppercase tracking-[0.28em] text-cyan-400">
+                {t("hero.eyebrow")} <span className="mx-2 text-slate-600">/</span> {t("hero.discipline")}
+              </motion.p>
+
+              <h1 className="max-w-4xl text-[clamp(2.8rem,7vw,7.2rem)] font-extrabold uppercase leading-[0.88] tracking-[-0.05em] text-white">
+                {["lineOne", "lineTwo", "lineThree", "lineFour", "lineFive"].map((line, index) => (
+                  <motion.span
+                    key={line}
+                    variants={reveal}
+                    className={`block ${index === 2 ? "text-slate-400" : ""} ${
+                      index === 3 ? "text-cyan-300 shimmer-text font-normal" : ""
+                    }`}
+                  >
+                    {t(`hero.headline.${line}`)}
+                  </motion.span>
+                ))}
+              </h1>
+
+              <motion.div variants={reveal} className="mt-8 max-w-xl border-l-2 border-cyan-400/60 pl-5">
+                <p className="text-base font-medium leading-relaxed text-slate-200 sm:text-lg">
+                  {t("hero.statement")}
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                  {t("hero.description")}
+                </p>
+              </motion.div>
+
+              {/* Action Buttons */}
+              <motion.div variants={reveal} className="mt-10 flex flex-wrap items-center gap-4">
+                <a href="#projects" className="btn-primary">
+                  <span>{t("hero.viewWork")}</span>
+                  <ArrowRight size={16} />
+                </a>
+
+                <a
+                  href="/cv/CV.pdf"
+                  download="CV_ONell_Luciano_Rasamiarison.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn-secondary"
+                >
+                  <Download size={15} />
+                  <span>{t("common.downloadCv")}</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/60 px-4 py-3 text-xs font-semibold tracking-[0.16em] text-slate-300 hover:border-cyan-400/40 hover:text-white"
+                >
+                  <Copy size={14} className="text-cyan-400" />
+                  <span>{t("hero.copyEmail")}</span>
+                </button>
+              </motion.div>
+            </motion.div>
+
+            {/* Right Column: Dynamic Portrait Card with Halo */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative mx-auto w-full max-w-md"
+            >
+              <div
+                aria-hidden="true"
+                className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-cyan-500/20 via-blue-600/15 to-emerald-500/20 blur-2xl opacity-70 neon-glow"
+              />
+
+              <div className="glow-card relative overflow-hidden rounded-3xl border border-cyan-400/30 p-3 shadow-2xl">
+                <div className="relative aspect-[0.88] w-full overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-950">
+                  <Image
+                    src="/image/profile/jqcDP.jpg"
+                    alt="O'Nell Luciano Rasamiarison - Full-Stack & AI Developer"
+                    fill
+                    priority
+                    sizes="(max-width: 1023px) 90vw, 40vw"
+                    className="object-cover object-top contrast-[1.05] brightness-[0.95]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent opacity-80" />
+
+                  {/* Floating Live Telemetry Badges on Image */}
+                  <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-[#020617]/80 px-3 py-1 backdrop-blur-md">
+                    <Sparkles size={13} className="text-cyan-300" />
+                    <span className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-slate-200 font-semibold">
+                      Full-Stack · AI · SIG
+                    </span>
+                  </div>
+
+                  <div className="absolute bottom-4 left-4 right-4 rounded-xl border border-cyan-500/30 bg-[#020617]/90 p-3.5 backdrop-blur-md">
+                    <p className="text-xs font-bold text-white tracking-wide">O&apos;Nell Luciano Rasamiarison</p>
+                    <p className="text-[0.7rem] text-cyan-300 font-mono mt-0.5">Software Engineer & Data Specialist</p>
+                    <div className="mt-2 flex items-center justify-between border-t border-slate-800 pt-2 text-[0.62rem] text-slate-400">
+                      <span className="flex items-center gap-1">
+                        <MapPin size={11} className="text-cyan-400" /> Madagascar
+                      </span>
+                      <span className="text-emerald-400 font-mono">Open to Worldwide Opportunities</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Quick Stats Grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="mt-16 grid grid-cols-2 gap-4 md:grid-cols-4"
+          >
+            {[
+              { label: t("stats.experience"), desc: "Full-Stack & Systems" },
+              { label: t("stats.projects"), desc: "Production Ready" },
+              { label: t("stats.tech"), desc: "Languages & Frameworks" },
+              { label: t("stats.focus"), desc: "Core Specialization" },
+            ].map((stat, i) => (
+              <div
+                key={stat.label}
+                className="rounded-2xl border border-cyan-500/20 bg-slate-900/40 p-5 backdrop-blur-md transition duration-300 hover:border-cyan-400/40 hover:bg-slate-900/70"
+              >
+                <p className="text-xl font-extrabold tracking-tight text-cyan-300 sm:text-2xl">{stat.label}</p>
+                <p className="mt-1 text-xs text-slate-400">{stat.desc}</p>
+              </div>
+            ))}
           </motion.div>
         </div>
-        <div className="absolute bottom-6 left-4 text-[0.62rem] uppercase tracking-[0.26em] text-slate-500 sm:left-6 lg:left-8">01 <span className="mx-2 text-cyan-300/60">/</span> {t("hero.scroll")}</div>
       </section>
 
-      <section id="about" className="relative z-10 border-t border-(--border) bg-[rgba(6,21,43,0.42)]">
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.75fr_1.5fr] lg:gap-16">
-            <div><p className="section-tag">01 / {locale === "fr" ? "COMPÉTENCES" : "CAPABILITIES"}</p></div>
-            <div className="space-y-8">
-              <h2 className="max-w-4xl text-3xl font-semibold tracking-tighter text-white sm:text-5xl">{t("capabilities.heading")}</h2>
-              <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                <div className="rounded-2xl border border-(--border) bg-[rgba(8,27,51,0.7)] p-5"><p className="text-[0.64rem] uppercase tracking-[0.22em] text-slate-400">{t("capabilities.fullStack")}</p><p className="mt-3 text-2xl font-semibold text-white">{t("capabilities.fullStackText")}</p></div>
-                <div className="rounded-2xl border border-(--border) bg-[rgba(8,27,51,0.7)] p-5"><p className="text-[0.64rem] uppercase tracking-[0.22em] text-slate-400">{t("capabilities.ai")}</p><p className="mt-3 text-2xl font-semibold text-white">{t("capabilities.aiText")}</p></div>
-                <div className="rounded-2xl border border-(--border) bg-[rgba(8,27,51,0.7)] p-5"><p className="text-[0.64rem] uppercase tracking-[0.22em] text-slate-400">{t("capabilities.data")}</p><p className="mt-3 text-2xl font-semibold text-white">{t("capabilities.dataText")}</p></div>
-                <div className="rounded-2xl border border-(--border) bg-[rgba(8,27,51,0.7)] p-5"><p className="text-[0.64rem] uppercase tracking-[0.22em] text-slate-400">{t("capabilities.gis")}</p><p className="mt-3 text-2xl font-semibold text-white">{t("capabilities.gisText")}</p></div>
-                <div className="rounded-2xl border border-(--border) bg-[rgba(8,27,51,0.7)] p-5 md:col-span-2 xl:col-span-2"><p className="text-[0.64rem] uppercase tracking-[0.22em] text-slate-400">{t("capabilities.focus")}</p><p className="mt-3 text-2xl font-semibold text-white">{t("capabilities.focusText")}</p></div>
+      {/* Capabilities / Bento Grid Section */}
+      <section id="about" className="relative z-10 border-t border-cyan-500/15 bg-slate-950/60 py-24 backdrop-blur-sm">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+            <div>
+              <p className="section-tag">01 / {t("capabilities.sectionLabel")}</p>
+              <h2 className="mt-6 text-3xl font-bold tracking-tight text-white sm:text-5xl leading-tight">
+                {t("capabilities.heading")}
+              </h2>
+            </div>
+
+            <div className="space-y-6">
+              {/* Bento Grid */}
+              <div className="grid gap-4 sm:grid-cols-2">
+                {[
+                  {
+                    title: t("capabilities.fullStack"),
+                    desc: t("capabilities.fullStackText"),
+                    icon: Code2,
+                    tag: "Modern Web",
+                  },
+                  {
+                    title: t("capabilities.ai"),
+                    desc: t("capabilities.aiText"),
+                    icon: Sparkles,
+                    tag: "NLP & LLM",
+                  },
+                  {
+                    title: t("capabilities.data"),
+                    desc: t("capabilities.dataText"),
+                    icon: BarChart3,
+                    tag: "Analytics",
+                  },
+                  {
+                    title: t("capabilities.gis"),
+                    desc: t("capabilities.gisText"),
+                    icon: Globe,
+                    tag: "Geospatial",
+                  },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={item.title}
+                      className="glow-card group p-6 border border-cyan-500/20 bg-slate-900/50"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 text-cyan-300 transition group-hover:scale-110">
+                          <Icon size={20} />
+                        </div>
+                        <span className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cyan-400/80">
+                          {item.tag}
+                        </span>
+                      </div>
+                      <h3 className="mt-5 text-lg font-bold text-white">{item.title}</h3>
+                      <p className="mt-2 text-xs leading-relaxed text-slate-300">{item.desc}</p>
+                    </div>
+                  );
+                })}
               </div>
-              <div className="border-t border-(--border) pt-6">
-                <p className="section-tag">{t("skills.heading")}</p>
-                <ul className="mt-4 grid gap-3 sm:grid-cols-2" aria-label={t("skills.heading")}>
-                  {["learning", "curiosity", "adaptability", "communication", "time", "initiative"].map((skill, index) => (
-                    <li key={skill} className="flex items-center gap-3 text-sm text-slate-300">
-                      <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300/70" />
+
+              {/* Soft skills & Languages summary */}
+              <div className="rounded-2xl border border-cyan-500/20 bg-slate-900/40 p-6 backdrop-blur-md">
+                <p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-400 font-semibold mb-4">
+                  {t("skills.heading")}
+                </p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {["learning", "curiosity", "adaptability", "communication", "time", "initiative"].map((skill) => (
+                    <div key={skill} className="flex items-center gap-2.5 text-xs text-slate-300">
+                      <Check size={14} className="text-cyan-400" />
                       <span>{t(`skills.soft.${skill}`)}</span>
-                      <span aria-hidden="true" className="ml-auto text-xs text-slate-600">0{index + 1}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-4 border-t border-slate-800 pt-3 font-mono text-xs text-slate-400">
+                  🌐 {t("skills.languages")}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tech Stack Directory with Search & Filters */}
+      <section id="stack" className="relative z-10 border-t border-cyan-500/15 py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="section-tag">02 / {t("stack.sectionLabel")}</p>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+                {t("stack.heading")}
+              </h2>
+            </div>
+
+            {/* Live Search Input */}
+            <div className="relative w-full max-w-md">
+              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-cyan-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t("stack.searchPlaceholder")}
+                className="w-full rounded-full border border-cyan-500/30 bg-slate-900/80 py-2.5 pl-10 pr-4 text-xs text-slate-200 placeholder-slate-500 outline-none backdrop-blur-md transition focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="mt-8 flex flex-wrap gap-2">
+            {["All", "Languages", "Frameworks", "AI & Data", "Database & GIS", "Tools & DevOps"].map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedTechCategory(cat)}
+                className={`rounded-full px-4 py-1.5 text-[0.68rem] font-semibold tracking-[0.16em] uppercase transition ${
+                  selectedTechCategory === cat
+                    ? "border border-cyan-400 bg-cyan-400/20 text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.25)]"
+                    : "border border-slate-800 bg-slate-900/50 text-slate-400 hover:border-slate-700 hover:text-white"
+                }`}
+              >
+                {cat === "All" ? t("stack.all") : cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Technology Cards Grid */}
+          <div className="mt-8 grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {filteredTechnologies.map((tech) => {
+              const Icon = tech.icon;
+              return (
+                <motion.div
+                  key={tech.name}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="glow-card group flex flex-col justify-between p-4 border border-cyan-500/20 bg-slate-900/40"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/10 text-cyan-300 transition group-hover:scale-110">
+                      <Icon size={18} />
+                    </div>
+                    <span className="font-mono text-[0.55rem] uppercase tracking-[0.14em] text-cyan-400/70">
+                      {tech.level}
+                    </span>
+                  </div>
+                  <div className="mt-4">
+                    <h3 className="text-xs font-bold text-white">{tech.name}</h3>
+                    <p className="text-[0.62rem] text-slate-400 mt-0.5">{tech.category}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Selected Work Showcase */}
+      <section id="projects" className="relative z-10 border-t border-cyan-500/15 bg-slate-950/60 py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="section-tag">03 / {t("projects.sectionLabel")}</p>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+                {t("projects.heading")}
+              </h2>
+            </div>
+
+            {/* Category Filter Tabs */}
+            <div className="flex flex-wrap gap-2">
+              {["All", "GIS", "Full-Stack", "AI", "Optimization"].map((groupKey) => (
+                <button
+                  key={groupKey}
+                  type="button"
+                  onClick={() => setSelectedProjectCategory(groupKey)}
+                  className={`rounded-full px-4 py-1.5 text-[0.65rem] font-semibold tracking-[0.16em] uppercase transition ${
+                    selectedProjectCategory === groupKey
+                      ? "border border-cyan-400 bg-cyan-400/20 text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.25)]"
+                      : "border border-slate-800 bg-slate-900/50 text-slate-400 hover:border-slate-700 hover:text-white"
+                  }`}
+                >
+                  {groupKey === "All" ? t("projects.all") : groupKey}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Project Cards Grid */}
+          <div className="mt-12 grid gap-8 lg:grid-cols-2">
+            {filteredProjects.map((project, index) => (
+              <motion.article
+                key={project.title}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+                onMouseEnter={() => {
+                  if (project.images.length > 0) {
+                    setHoveredProject(project.title);
+                    setProjectImageIndex(0);
+                  }
+                }}
+                onMouseLeave={() => {
+                  setHoveredProject(null);
+                  setProjectImageIndex(0);
+                }}
+                className="glow-card group overflow-hidden rounded-3xl border border-cyan-500/20 bg-slate-900/60 p-6"
+              >
+                <div className="mb-4 flex items-center justify-between font-mono text-[0.62rem] uppercase tracking-[0.24em] text-cyan-400">
+                  <span>{project.number}</span>
+                  <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2.5 py-0.5">
+                    {project.category}
+                  </span>
+                </div>
+
+                {/* Project Image Preview / Fallback */}
+                {project.images.length > 0 ? (
+                  <div className="relative h-60 w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
+                    <motion.div
+                      key={`${project.title}-${projectImageIndex}`}
+                      initial={{ opacity: 0.4 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0"
+                    >
+                      <Image
+                        src={project.images[projectImageIndex].src}
+                        alt={project.images[projectImageIndex].alt}
+                        fill
+                        sizes="(max-width: 1023px) 90vw, 45vw"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    </motion.div>
+                    <div className="absolute bottom-3 right-3 flex gap-1.5">
+                      {project.images.map((img, imgIdx) => (
+                        <span
+                          key={img.src}
+                          className={`h-1.5 w-1.5 rounded-full transition-all ${
+                            imgIdx === projectImageIndex ? "w-4 bg-cyan-300" : "bg-white/40"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative flex h-60 w-full items-center justify-center rounded-2xl border border-slate-800/80 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/30 p-6 text-center">
+                    <div>
+                      <Layers size={32} className="mx-auto text-cyan-400/60" />
+                      <p className="mt-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-slate-400">
+                        {t("projects.preview")}
+                      </p>
+                      <p className="mt-1 text-xl font-bold text-white">{project.title}</p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-6">
+                  <h3 className="text-2xl font-bold text-white tracking-tight">{project.title}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-slate-300">{project.description}</p>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {project.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="rounded-full border border-slate-800 bg-slate-950/60 px-3 py-1 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-slate-300"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveModalProject(project);
+                    setModalImageIndex(0);
+                  }}
+                  className="mt-6 inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan-300 transition group-hover:text-white"
+                >
+                  <span>{t("projects.viewProject")}</span>
+                  <ArrowRight size={15} />
+                </button>
+              </motion.article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive Project Detail Modal */}
+      <AnimatePresence>
+        {activeModalProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#020617]/90 p-4 backdrop-blur-xl"
+            onClick={() => setActiveModalProject(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.92, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.92, y: 20 }}
+              className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-cyan-500/30 bg-slate-900 p-6 sm:p-8 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setActiveModalProject(null)}
+                className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full border border-slate-700 bg-slate-800 text-slate-300 hover:text-white"
+              >
+                <X size={18} />
+              </button>
+
+              <p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-400">
+                {activeModalProject.number} / {activeModalProject.category}
+              </p>
+
+              <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-white">
+                {activeModalProject.title}
+              </h2>
+
+              {activeModalProject.images.length > 0 && (
+                <div className="relative mt-6 h-64 sm:h-80 w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
+                  <Image
+                    src={activeModalProject.images[modalImageIndex].src}
+                    alt={activeModalProject.images[modalImageIndex].alt}
+                    fill
+                    className="object-cover"
+                  />
+                  {activeModalProject.images.length > 1 && (
+                    <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 rounded-full border border-slate-800 bg-slate-950/80 px-3 py-1.5 backdrop-blur-md">
+                      {activeModalProject.images.map((_: any, idx: number) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setModalImageIndex(idx)}
+                          className={`h-2 rounded-full transition-all ${
+                            idx === modalImageIndex ? "w-6 bg-cyan-300" : "w-2 bg-slate-600"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="mt-6 border-t border-slate-800 pt-6">
+                <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-400">
+                  {t("projects.modal.architecture")}
+                </h4>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                  {activeModalProject.description}
+                </p>
+              </div>
+
+              <div className="mt-6 border-t border-slate-800 pt-6">
+                <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-400">
+                  {t("projects.modal.highlights")}
+                </h4>
+                <ul className="mt-3 space-y-2">
+                  {activeModalProject.highlights.map((item: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-3 text-xs leading-relaxed text-slate-300">
+                      <Check size={14} className="mt-0.5 shrink-0 text-cyan-400" />
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-                <p className="mt-2 text-sm leading-7 text-slate-500">{t("skills.languages")}</p>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <section id="stack" className="relative z-10 border-t border-(--border)">
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-          <div className="mb-12"><p className="section-tag">02 / {locale === "fr" ? "TECHNOLOGIES" : "TECHNOLOGY"}</p><h2 className="mt-4 text-3xl font-semibold tracking-tighter text-white sm:text-5xl">{t("stack.heading")}</h2></div>
-          <div className="space-y-8">{technologyGroups.map((group, groupIndex) => (<div key={group.title} className="rounded-[28px] border border-(--border) bg-[rgba(8,27,51,0.8)] p-5 sm:p-6"><div className="mb-5 flex items-center justify-between gap-3"><p className="text-[0.66rem] uppercase tracking-[0.28em] text-slate-400">{group.id} — {group.title}</p></div><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">{group.technologies.map((technology, techIndex) => { const Icon = technology.icon; return <motion.div key={technology.name} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45, delay: groupIndex * 0.08 + techIndex * 0.05 }} className="tech-card group flex h-full min-h-42.5 flex-col justify-between rounded-2xl border border-(--border) bg-[rgba(2,6,23,0.48)] p-4"><div className="flex items-start justify-between"><div className="inline-flex rounded-xl border border-cyan-400/20 bg-cyan-400/8 p-3 text-cyan-200"><Icon size={22} /></div><span className="rounded-full border border-(--border) px-2 py-1 text-[0.58rem] uppercase tracking-[0.2em] text-slate-400">{technology.category}</span></div><div><h3 className="mt-8 text-xl font-semibold text-white">{technology.name}</h3><p className="mt-1 text-sm text-slate-400">{technology.category}</p></div></motion.div>;})}</div></div>))}</div>
-        </div>
-      </section>
+              <div className="mt-6 border-t border-slate-800 pt-6">
+                <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-400 mb-3">
+                  {t("projects.modal.technologies")}
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {activeModalProject.technologies.map((tName: string) => (
+                    <span
+                      key={tName}
+                      className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-cyan-200"
+                    >
+                      {tName}
+                    </span>
+                  ))}
+                </div>
+              </div>
 
-      <section id="projects" className="relative z-10 border-t border-(--border) bg-[rgba(6,21,43,0.42)]">
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8"><div className="mb-12"><p className="section-tag">03 / {locale === "fr" ? "PROJETS SÉLECTIONNÉS" : "SELECTED WORK"}</p><h2 className="mt-4 text-3xl font-semibold tracking-tighter text-white sm:text-5xl">{t("projects.heading")}</h2></div><div className="grid gap-6 lg:grid-cols-2">{projects.map((project, index) => (<motion.article key={project.title} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.5, delay: index * 0.06 }} onMouseEnter={() => { if (project.images.length > 0) { setHoveredProject(project.title); setProjectImageIndex(0); } }} onMouseLeave={() => { setHoveredProject(null); setProjectImageIndex(0); }} className="project-card group overflow-hidden rounded-[28px] border border-(--border) bg-[rgba(8,27,51,0.82)] p-4 sm:p-5"><div className="mb-4 flex items-center justify-between text-[0.62rem] uppercase tracking-[0.24em] text-slate-400"><span>{project.number}</span><span>{project.category}</span></div>{project.images.length > 0 ? <div className="relative h-57.5 overflow-hidden rounded-[22px] border border-(--border) bg-slate-950"><motion.div key={`${project.title}-${projectImageIndex}`} initial={reduceMotion ? { opacity: 1 } : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }} className="absolute inset-0"><Image src={project.images[projectImageIndex].src} alt={project.images[projectImageIndex].alt} fill sizes="(max-width: 1023px) 90vw, 42vw" className="object-cover transition duration-500 group-hover:scale-[1.02]" /></motion.div><div className="absolute bottom-3 right-3 flex gap-1.5" aria-hidden="true">{project.images.map((image, imageIndex) => <span key={image.src} className={`h-1.5 w-1.5 rounded-full ${imageIndex === projectImageIndex ? "bg-cyan-200" : "bg-white/35"}`} />)}</div></div> : <div className="image-placeholder overflow-hidden rounded-[22px] border border-(--border) bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.18),rgba(8,27,51,0.8)_42%,rgba(2,6,23,0.96)_100%)]"><div className="flex h-57.5 items-center justify-center px-6 text-center"><div><p className="text-[0.62rem] uppercase tracking-[0.28em] text-slate-400">{locale === "fr" ? "APERÇU DU PROJET" : "PROJECT PREVIEW"}</p><p className="mt-3 text-2xl font-semibold tracking-[-0.04em] text-slate-100">{locale === "fr" ? "À VENIR" : "COMING SOON"}</p></div></div></div>}<div className="mt-6 flex items-start justify-between gap-6"><div><h3 className="text-2xl font-semibold tracking-[-0.04em] text-white">{project.title}</h3><p className="mt-3 max-w-xl text-sm leading-7 text-slate-300">{project.description}</p></div></div><div className="mt-5 flex flex-wrap gap-2">{project.technologies.map((technology) => (<span key={technology} className="rounded-full border border-(--border) bg-white/2 px-3 py-1.5 text-[0.62rem] uppercase tracking-[0.18em] text-slate-300">{technology}</span>))}</div><a href={project.link} className="mt-6 inline-flex items-center gap-2 text-[0.66rem] font-medium uppercase tracking-[0.22em] text-cyan-200">{t("projects.viewProject")}<ArrowRight size={14} /></a></motion.article>))}</div></div>
-      </section>
+              <div className="mt-8 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setActiveModalProject(null)}
+                  className="btn-primary"
+                >
+                  <span>{t("projects.modal.close")}</span>
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <section id="experience" className="relative z-10 border-t border-(--border)">
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      {/* Experience & Career Timeline */}
+      <section id="experience" className="relative z-10 border-t border-cyan-500/15 py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
-            <p className="section-tag">04 / {locale === "fr" ? "EXPÉRIENCE" : "EXPERIENCE"}</p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tighter text-white sm:text-5xl">{t("experience.heading")}</h2>
+            <p className="section-tag">04 / {t("experience.sectionLabel")}</p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+              {t("experience.heading")}
+            </h2>
           </div>
+
           <div className="relative">
-            <div aria-hidden="true" className="absolute bottom-0 left-4 top-0 w-px bg-linear-to-b from-cyan-400/0 via-cyan-400/35 to-cyan-400/0 md:left-1/2 md:-translate-x-1/2" />
-            <div className="space-y-10 md:space-y-14">
-              {experiences.map((experience, index) => (
-                <div key={`${experience.company}-${experience.role}`} className="relative grid md:grid-cols-[1fr_72px_1fr] md:items-start">
-                  <motion.article initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.15 }} transition={{ duration: 0.5 }} className={`relative ml-10 rounded-2xl border p-5 sm:p-6 md:ml-0 ${index % 2 === 0 ? "md:col-start-1" : "md:col-start-3"} ${experience.highlight ? "border-cyan-400/25 bg-linear-to-r from-cyan-400/8 to-blue-500/5 shadow-[0_0_30px_rgba(34,211,238,0.08)]" : "border-(--border) bg-[rgba(8,27,51,0.7)]"}`}>
-                    <div className="flex flex-col gap-4 border-b border-white/10 pb-5">
-                      <div><p className="text-[0.64rem] uppercase tracking-[0.2em] text-slate-400">{experience.company}</p><h3 className="mt-2 text-xl font-semibold leading-tight text-white sm:text-2xl">{experience.role}</h3></div>
-                      <span className="w-fit text-[0.64rem] uppercase tracking-[0.16em] text-cyan-200/80">{experience.period}</span>
+            {/* Timeline center line */}
+            <div
+              aria-hidden="true"
+              className="absolute bottom-0 left-4 top-0 w-0.5 bg-gradient-to-b from-cyan-400/0 via-cyan-400/40 to-cyan-400/0 md:left-1/2 md:-translate-x-1/2"
+            />
+
+            <div className="space-y-12">
+              {experiences.map((exp, index) => (
+                <div key={`${exp.company}-${exp.role}`} className="relative grid md:grid-cols-[1fr_60px_1fr] md:items-center">
+                  <motion.article
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.15 }}
+                    transition={{ duration: 0.5 }}
+                    className={`relative ml-10 rounded-2xl border p-6 backdrop-blur-md md:ml-0 ${
+                      index % 2 === 0 ? "md:col-start-1" : "md:col-start-3"
+                    } ${
+                      exp.highlight
+                        ? "border-cyan-400/40 bg-gradient-to-br from-cyan-950/40 to-blue-950/20 shadow-[0_0_30px_rgba(34,211,238,0.15)]"
+                        : "border-cyan-500/20 bg-slate-900/50"
+                    }`}
+                  >
+                    <span className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-300 font-bold">
+                      {exp.period}
+                    </span>
+                    <h3 className="mt-1 text-xl font-bold text-white">{exp.role}</h3>
+                    <p className="text-xs font-medium text-slate-400 mt-0.5">{exp.company}</p>
+                    <p className="mt-3 text-xs leading-relaxed text-slate-300">{exp.description}</p>
+
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {exp.technologies.map((tech) => (
+                        <span
+                          key={tech}
+                          className="rounded border border-slate-800 bg-slate-950/60 px-2 py-0.5 font-mono text-[0.58rem] uppercase tracking-[0.12em] text-slate-400"
+                        >
+                          {tech}
+                        </span>
+                      ))}
                     </div>
-                    <p className="mt-5 text-sm leading-7 text-slate-300">{experience.description}</p>
-                    <div className="mt-5 flex flex-wrap gap-2">{experience.technologies.map((technology) => <span key={technology} className="border border-(--border) px-2.5 py-1 text-[0.56rem] uppercase tracking-[0.16em] text-slate-400">{technology}</span>)}</div>
                   </motion.article>
-                  <div aria-hidden="true" className="absolute left-1.5 top-7 z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#07101d] bg-cyan-300 shadow-[0_0_0_1px_rgba(103,232,249,0.55)] md:relative md:left-auto md:top-7 md:col-start-2 md:row-start-1 md:mx-auto" />
+
+                  {/* Node point */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute left-1.5 top-6 z-10 h-5 w-5 rounded-full border-2 border-slate-950 bg-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.8)] md:relative md:left-auto md:top-auto md:col-start-2 md:row-start-1 md:mx-auto"
+                  />
                 </div>
               ))}
             </div>
@@ -371,18 +1331,151 @@ export default function LocalePage() {
         </div>
       </section>
 
-      <section id="education" className="relative z-10 border-t border-(--border) bg-[rgba(6,21,43,0.42)]">
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8"><div className="mb-12"><p className="section-tag">05 / {locale === "fr" ? "FORMATION" : "EDUCATION & TRAINING"}</p><h2 className="mt-4 text-3xl font-semibold tracking-tighter text-white sm:text-5xl">{t("education.heading")}</h2></div><div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{education.map((item, index) => (<motion.div key={item.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45, delay: index * 0.04 }} className="rounded-3xl border border-(--border) bg-[rgba(8,27,51,0.72)] p-5"><p className="text-[0.62rem] uppercase tracking-[0.2em] text-slate-400">{item.period}</p><h3 className="mt-4 text-xl font-semibold text-white">{item.title}</h3><p className="mt-2 text-sm leading-7 text-slate-300">{item.institution}</p></motion.div>))}</div></div>
+      {/* Education & Academic Credentials */}
+      <section id="education" className="relative z-10 border-t border-cyan-500/15 bg-slate-950/60 py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-12">
+            <p className="section-tag">05 / {t("education.sectionLabel")}</p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-5xl">
+              {t("education.heading")}
+            </h2>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {education.map((edu, idx) => (
+              <motion.div
+                key={edu.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                className="glow-card p-6 border border-cyan-500/20 bg-slate-900/50"
+              >
+                <div className="flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cyan-400">
+                  <span>{edu.period}</span>
+                  <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-0.5">
+                    {edu.badge}
+                  </span>
+                </div>
+                <h3 className="mt-4 text-lg font-bold text-white">{edu.title}</h3>
+                <p className="mt-2 text-xs leading-relaxed text-slate-300">{edu.institution}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      <section id="contact" className="relative z-10 border-t border-(--border)">
-        <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8"><div className="rounded-4xl border border-cyan-400/20 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.18),rgba(8,27,51,0.9)_42%,rgba(2,6,23,0.97)_100%)] p-8 shadow-[0_0_32px_rgba(59,130,246,0.12)] sm:p-12"><p className="section-tag">06 / {locale === "fr" ? "CONTACT" : "CONTACT"}</p><h2 className="mt-6 max-w-4xl text-4xl font-semibold tracking-[-0.06em] text-white sm:text-6xl">{t("contact.heading")}</h2><p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">{t("contact.subheading")}</p><div className="mt-8 flex flex-wrap items-center gap-4"><a href="mailto:rasamiarisonluciano@gmail.com" className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-linear-to-r from-blue-600 to-cyan-500 px-6 py-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-white shadow-[0_0_24px_rgba(34,211,238,0.12)] transition duration-200 hover:-translate-y-0.5"><Mail size={16} />{t("contact.cta")}</a><a href="https://github.com/ONell-Luciano" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-(--border) bg-white/2 px-6 py-3 text-[0.7rem] font-medium uppercase tracking-[0.2em] text-slate-200 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-400/30"><Globe size={16} />{t("contact.github")}</a></div><div className="mt-10 grid gap-4 md:grid-cols-2"><a href="mailto:rasamiarisonluciano@gmail.com" className="rounded-2xl border border-(--border) bg-[rgba(8,27,51,0.7)] p-5 transition duration-200 hover:border-cyan-400/25 hover:bg-cyan-400/4"><p className="text-[0.62rem] uppercase tracking-[0.22em] text-slate-400">{t("contact.email")}</p><p className="mt-3 text-lg text-white">rasamiarisonluciano@gmail.com</p></a><a href="https://github.com/ONell-Luciano" target="_blank" rel="noreferrer" className="rounded-2xl border border-(--border) bg-[rgba(8,27,51,0.7)] p-5 transition duration-200 hover:border-cyan-400/25 hover:bg-cyan-400/4"><p className="text-[0.62rem] uppercase tracking-[0.22em] text-slate-400">{t("contact.github")}</p><p className="mt-3 text-lg text-white">{t("contact.githubTitle")}</p></a></div></div></div>
+      {/* High-Conversion Recruiter Contact Section */}
+      <section id="contact" className="relative z-10 border-t border-cyan-500/15 py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-3xl border border-cyan-400/40 bg-gradient-to-br from-slate-900 via-slate-950 to-cyan-950/40 p-8 sm:p-14 shadow-[0_0_50px_rgba(34,211,238,0.15)]">
+            <p className="section-tag">06 / {t("contact.sectionLabel")}</p>
+            <h2 className="mt-6 max-w-3xl text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+              {t("contact.heading")}
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-slate-300">
+              {t("contact.subheading")}
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <a
+                href="mailto:rasamiarisonluciano@gmail.com"
+                className="btn-primary"
+              >
+                <Mail size={16} />
+                <span>{t("contact.cta")}</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="btn-secondary"
+              >
+                <Copy size={15} />
+                <span>{t("contact.copyEmail")}</span>
+              </button>
+
+              <a
+                href="https://github.com/ONell-Luciano"
+                target="_blank"
+                rel="noreferrer"
+                className="btn-secondary"
+              >
+                <Globe size={15} />
+                <span>{t("contact.github")}</span>
+              </a>
+            </div>
+
+            <div className="mt-12 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+                <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-400 font-semibold">
+                  {t("contact.email")}
+                </p>
+                <p className="mt-2 text-base font-bold text-white font-mono">
+                  rasamiarisonluciano@gmail.com
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-800 bg-slate-950/60 p-5">
+                <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-400 font-semibold">
+                  {t("contact.github")}
+                </p>
+                <p className="mt-2 text-base font-bold text-white font-mono">
+                  {t("contact.githubTitle")}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <footer className="relative z-10 border-t border-(--border) bg-[rgba(2,6,23,0.9)]">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-8 text-xs uppercase tracking-[0.2em] text-slate-400 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8"><div className="flex items-center gap-3 text-slate-200"><span>O&apos;NELL RASAMIARISON</span></div><div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6"><span>{t("footer.description")}</span><div className="flex items-center gap-4"><a href="https://github.com/ONell-Luciano" target="_blank" rel="noreferrer" className="hover:text-cyan-200">{t("footer.github")}</a><a href="mailto:rasamiarisonluciano@gmail.com" className="hover:text-cyan-200">{t("footer.email")}</a></div></div></div>
-        <div className="mx-auto max-w-7xl border-t border-(--border) px-4 py-5 text-xs text-slate-500 sm:px-6 lg:px-8">© {new Date().getFullYear()} O&apos;NELL RASAMIARISON</div>
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-slate-800 bg-slate-950 py-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 md:flex-row">
+          <div className="flex items-center gap-2 font-mono text-xs text-slate-300">
+            <span className="font-bold text-white">O&apos;NELL RASAMIARISON</span>
+            <span className="text-slate-600">•</span>
+            <span>{t("footer.description")}</span>
+          </div>
+
+          <div className="flex items-center gap-6 font-mono text-xs text-slate-400">
+            <a
+              href="https://github.com/ONell-Luciano"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-cyan-300"
+            >
+              GitHub
+            </a>
+            <a href="mailto:rasamiarisonluciano@gmail.com" className="hover:text-cyan-300">
+              Email
+            </a>
+            <a href="/cv/CV.pdf" download className="hover:text-cyan-300">
+              CV (PDF)
+            </a>
+          </div>
+        </div>
+        <div className="mx-auto max-w-7xl mt-4 border-t border-slate-900 px-4 pt-4 text-center font-mono text-[0.65rem] text-slate-600 sm:px-6 lg:px-8">
+          © {new Date().getFullYear()} O&apos;NELL LUCIANO RASAMIARISON. {t("footer.rights")}
+        </div>
       </footer>
+
+      {/* Floating Toast Notification */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 30, scale: 0.9 }}
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-2xl border border-cyan-400/40 bg-slate-900/95 px-5 py-3.5 shadow-2xl backdrop-blur-xl"
+          >
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-cyan-400/20 text-cyan-300">
+              <Check size={16} />
+            </div>
+            <span className="text-xs font-semibold text-white font-mono">{toastMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
