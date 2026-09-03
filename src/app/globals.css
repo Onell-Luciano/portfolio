@@ -17,6 +17,10 @@ html.dark {
   --light-cyan: #67e8f9;
   --emerald: #34d399;
   --glow: rgba(34, 211, 238, 0.22);
+  --overlay: rgba(2, 6, 23, 0.9);
+  --control-background: rgba(7, 21, 41, 0.78);
+  --control-background-hover: rgba(34, 211, 238, 0.12);
+  --shadow: 0 18px 45px rgba(2, 6, 23, 0.28);
 }
 
 html.light {
@@ -35,6 +39,10 @@ html.light {
   --light-cyan: #0369a1;
   --emerald: #059669;
   --glow: rgba(14, 165, 233, 0.12);
+  --overlay: rgba(15, 23, 42, 0.58);
+  --control-background: rgba(255, 255, 255, 0.86);
+  --control-background-hover: rgba(14, 165, 233, 0.08);
+  --shadow: 0 18px 45px rgba(15, 23, 42, 0.1);
 }
 
 @theme inline {
@@ -77,9 +85,64 @@ body {
   min-height: 100vh;
   color: var(--text);
   font-family: var(--font-geist-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  letter-spacing: -0.015em;
+  letter-spacing: 0;
   overflow-x: hidden;
   transition: background-color 300ms ease, color 300ms ease;
+}
+
+/* Shared theme surfaces keep component contrast consistent during theme changes. */
+.theme-surface {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+  transition: background-color 300ms ease, border-color 300ms ease, color 300ms ease, box-shadow 300ms ease;
+}
+
+.theme-surface-muted {
+  background: var(--background-secondary);
+  border-color: var(--border);
+  color: var(--text);
+  transition: background-color 300ms ease, border-color 300ms ease, color 300ms ease;
+}
+
+.theme-control {
+  background: var(--control-background);
+  border-color: var(--border);
+  color: var(--text);
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
+}
+
+.theme-control:hover,
+.theme-control:focus-visible {
+  background: var(--control-background-hover);
+  border-color: var(--border-bright);
+  box-shadow: 0 0 0 3px var(--glow);
+  outline: none;
+}
+
+.theme-chip {
+  background: color-mix(in srgb, var(--cyan) 10%, var(--surface));
+  border-color: var(--border);
+  color: var(--text);
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+
+.theme-chip:hover,
+.theme-chip[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--cyan) 20%, var(--surface));
+  border-color: var(--border-bright);
+  color: var(--cyan);
+}
+
+.theme-modal {
+  background: var(--surface);
+  border-color: var(--border-bright);
+  box-shadow: var(--shadow);
+  color: var(--text);
+}
+
+.theme-overlay {
+  background: var(--overlay);
 }
 
 html.dark body {
@@ -380,6 +443,14 @@ html.light .shimmer-text {
   border-color: var(--border-bright);
   background: rgba(34, 211, 238, 0.1);
   box-shadow: 0 0 20px var(--glow);
+}
+
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--light-cyan);
+  outline-offset: 3px;
 }
 
 /* Reduced motion accessibility */

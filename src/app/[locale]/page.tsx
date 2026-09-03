@@ -17,10 +17,8 @@ import {
   Mail,
   MapPin,
   Menu,
-  Moon,
   Search,
   Sparkles,
-  Sun,
   X,
 } from "lucide-react";
 import {
@@ -62,12 +60,9 @@ export default function LocalePage() {
   const reduceMotion = useReducedMotion();
 
   // State management
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const [cursor, setCursor] = useState({ x: -100, y: -100 });
-  const [cursorHovered, setCursorHovered] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTechCategory, setSelectedTechCategory] = useState("All");
   const [selectedProjectCategory, setSelectedProjectCategory] = useState("All");
@@ -79,32 +74,11 @@ export default function LocalePage() {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Sync theme with localStorage and document element
+  // Keep the portfolio in its single dark presentation.
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as "dark" | "light" | null;
-    const initialTheme = savedTheme || "dark";
-    setTheme(initialTheme);
-    if (initialTheme === "light") {
-      document.documentElement.classList.remove("dark");
-      document.documentElement.classList.add("light");
-    } else {
-      document.documentElement.classList.remove("light");
-      document.documentElement.classList.add("dark");
-    }
+    document.documentElement.classList.remove("light");
+    document.documentElement.classList.add("dark");
   }, []);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    localStorage.setItem("theme", nextTheme);
-    if (nextTheme === "light") {
-      document.documentElement.classList.remove("dark");
-      document.documentElement.classList.add("light");
-    } else {
-      document.documentElement.classList.remove("light");
-      document.documentElement.classList.add("dark");
-    }
-  };
 
   // Navigation Items
   const navItems = useMemo(
@@ -444,16 +418,6 @@ export default function LocalePage() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Custom Cursor Pointer tracking
-  useEffect(() => {
-    if (reduceMotion || typeof window === "undefined") return;
-    const handlePointerMove = (e: PointerEvent) => {
-      setCursor({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("pointermove", handlePointerMove);
-    return () => window.removeEventListener("pointermove", handlePointerMove);
-  }, [reduceMotion]);
-
   // Dynamic Image slider for cards on hover
   useEffect(() => {
     if (reduceMotion || !hoveredProject) return;
@@ -509,7 +473,7 @@ export default function LocalePage() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = theme === "dark" ? `rgba(34, 211, 238, ${p.alpha})` : `rgba(2, 132, 199, ${p.alpha})`;
+        ctx.fillStyle = `rgba(34, 211, 238, ${p.alpha})`;
         ctx.fill();
 
         for (let j = i + 1; j < particles.length; j++) {
@@ -522,7 +486,7 @@ export default function LocalePage() {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = theme === "dark" ? `rgba(34, 211, 238, ${0.15 * (1 - dist / 110)})` : `rgba(2, 132, 199, ${0.2 * (1 - dist / 110)})`;
+            ctx.strokeStyle = `rgba(34, 211, 238, ${0.15 * (1 - dist / 110)})`;
             ctx.lineWidth = 0.6;
             ctx.stroke();
           }
@@ -538,30 +502,13 @@ export default function LocalePage() {
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [reduceMotion, theme]);
+  }, [reduceMotion]);
 
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-background text-foreground selection:bg-cyan-500/30 selection:text-white">
       {/* Interactive Particle Canvas */}
       {!reduceMotion && (
         <canvas ref={canvasRef} className="particle-canvas" aria-hidden="true" />
-      )}
-
-      {/* Custom Cursor follower */}
-      {!reduceMotion && (
-        <div
-          aria-hidden="true"
-          className={`pointer-events-none fixed top-0 left-0 z-50 hidden rounded-full transition-transform duration-100 md:block ${
-            cursorHovered
-              ? "h-12 w-12 border border-cyan-300 bg-cyan-400/10 shadow-[0_0_20px_rgba(34,211,238,0.4)]"
-              : "h-6 w-6 border border-cyan-400/40 bg-cyan-400/15"
-          }`}
-          style={{
-            transform: `translate3d(${cursor.x - (cursorHovered ? 24 : 12)}px, ${
-              cursor.y - (cursorHovered ? 24 : 12)
-            }px, 0)`,
-          }}
-        />
       )}
 
       {/* Floating Header Navigation */}
@@ -575,8 +522,6 @@ export default function LocalePage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <a
             href="#home"
-            onMouseEnter={() => setCursorHovered(true)}
-            onMouseLeave={() => setCursorHovered(false)}
             className="group flex items-center gap-2 text-lg font-bold tracking-[0.2em] text-slate-900 dark:text-white transition hover:text-cyan-600 dark:hover:text-cyan-300"
           >
             <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-cyan-400/30 bg-cyan-400/10 text-xs font-mono text-cyan-600 dark:text-cyan-300 transition group-hover:border-cyan-300 group-hover:bg-cyan-400/25">
@@ -591,8 +536,6 @@ export default function LocalePage() {
               <a
                 key={item.label}
                 href={item.href}
-                onMouseEnter={() => setCursorHovered(true)}
-                onMouseLeave={() => setCursorHovered(false)}
                 className={`nav-link text-[0.72rem] font-medium tracking-[0.22em] transition ${
                   activeSection === item.id
                     ? "text-cyan-600 dark:text-cyan-300 font-semibold"
@@ -611,30 +554,16 @@ export default function LocalePage() {
               download="CV_ONell_Luciano_Rasamiarison.pdf"
               target="_blank"
               rel="noreferrer"
-              onMouseEnter={() => setCursorHovered(true)}
-              onMouseLeave={() => setCursorHovered(false)}
               className="group inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-[0.68rem] font-semibold tracking-[0.18em] text-cyan-600 dark:text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.15)] transition duration-200 hover:border-cyan-300 hover:bg-cyan-400/20 hover:text-cyan-700 dark:hover:text-white"
             >
               <Download size={13} className="transition-transform duration-200 group-hover:-translate-y-0.5" />
               <span>{t("common.downloadCv")}</span>
             </a>
 
-            {/* Theme Toggle Button */}
-            <button
-              type="button"
-              aria-label="Switch Theme Mode"
-              onClick={toggleTheme}
-              onMouseEnter={() => setCursorHovered(true)}
-              onMouseLeave={() => setCursorHovered(false)}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-cyan-500/20 bg-slate-100/90 dark:bg-slate-900/60 text-cyan-600 dark:text-cyan-300 backdrop-blur-md transition hover:scale-105 hover:border-cyan-400"
-            >
-              {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
-            </button>
-
             {/* Language Switcher */}
             <div
               aria-label={t("common.ariaLanguage")}
-              className="inline-flex rounded-full border border-cyan-500/20 bg-slate-100/90 dark:bg-slate-900/60 p-1 backdrop-blur-md"
+              className="theme-control inline-flex rounded-full border border-cyan-500/20 p-1 backdrop-blur-md"
             >
               {["en", "fr"].map((option) => (
                 <button
@@ -642,8 +571,6 @@ export default function LocalePage() {
                   type="button"
                   aria-label={`Switch to ${option.toUpperCase()}`}
                   onClick={() => switchLanguage(option)}
-                  onMouseEnter={() => setCursorHovered(true)}
-                  onMouseLeave={() => setCursorHovered(false)}
                   className={`rounded-full px-3 py-1 text-[0.65rem] font-bold tracking-[0.18em] transition ${
                     locale === option
                       ? "bg-cyan-500/25 text-cyan-700 dark:text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.3)]"
@@ -658,16 +585,6 @@ export default function LocalePage() {
 
           {/* Mobile Menu Toggle */}
           <div className="flex items-center gap-2 md:hidden">
-            {/* Mobile Theme Toggle */}
-            <button
-              type="button"
-              aria-label="Switch Theme Mode"
-              onClick={toggleTheme}
-              className="flex h-7 w-7 items-center justify-center rounded-full border border-cyan-500/20 bg-slate-100 dark:bg-slate-900/80 text-cyan-600 dark:text-cyan-300"
-            >
-              {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
-            </button>
-
             <a
               href="/cv/CV.pdf"
               download
@@ -677,7 +594,7 @@ export default function LocalePage() {
               <span>CV</span>
             </a>
 
-            <div className="inline-flex rounded-full border border-cyan-500/20 bg-slate-100 dark:bg-slate-900/60 p-0.5">
+            <div className="theme-control inline-flex rounded-full border border-cyan-500/20 p-0.5">
               {["en", "fr"].map((option) => (
                 <button
                   key={option}
@@ -705,7 +622,7 @@ export default function LocalePage() {
 
         {/* Mobile Navigation Drawer */}
         {mobileOpen && (
-          <div className="border-t border-cyan-500/20 bg-white dark:bg-[#020617] px-4 py-5 md:hidden">
+          <div className="theme-surface border-t border-cyan-500/20 px-4 py-5 md:hidden">
             <div className="flex flex-col gap-3">
               {navItems.map((item) => (
                 <a
@@ -845,7 +762,7 @@ export default function LocalePage() {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-2xl border border-slate-200 dark:border-cyan-500/20 bg-white dark:bg-slate-900/40 p-5 backdrop-blur-md shadow-sm dark:shadow-none transition duration-300 hover:border-cyan-400/40 hover:bg-slate-50 dark:hover:bg-slate-900/70"
+                className="theme-surface rounded-2xl border border-slate-200 dark:border-cyan-500/20 p-5 backdrop-blur-md shadow-sm dark:shadow-none transition duration-300 hover:border-cyan-400/40 hover:bg-slate-50 dark:hover:bg-slate-900/70"
               >
                 <p className="text-xl font-extrabold tracking-tight text-cyan-600 dark:text-cyan-300 sm:text-2xl">{stat.label}</p>
                 <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">{stat.desc}</p>
@@ -899,7 +816,7 @@ export default function LocalePage() {
                   return (
                     <div
                       key={item.title}
-                      className="glow-card group p-6 border border-slate-200 dark:border-cyan-500/20 bg-white dark:bg-slate-900/50 shadow-sm dark:shadow-none"
+                      className="glow-card theme-surface group p-6 border border-slate-200 dark:border-cyan-500/20 shadow-sm dark:shadow-none"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-500/20 dark:border-cyan-400/30 bg-cyan-50 dark:bg-cyan-400/10 text-cyan-600 dark:text-cyan-300 transition group-hover:scale-110">
@@ -917,7 +834,7 @@ export default function LocalePage() {
               </div>
 
               {/* Soft skills & Languages summary */}
-              <div className="rounded-2xl border border-slate-200 dark:border-cyan-500/20 bg-white dark:bg-slate-900/40 p-6 backdrop-blur-md shadow-sm dark:shadow-none">
+              <div className="theme-surface rounded-2xl border border-slate-200 dark:border-cyan-500/20 p-6 backdrop-blur-md shadow-sm dark:shadow-none">
                 <p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-600 dark:text-cyan-400 font-semibold mb-4">
                   {t("skills.heading")}
                 </p>
@@ -957,7 +874,7 @@ export default function LocalePage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t("stack.searchPlaceholder")}
-                className="w-full rounded-full border border-slate-300 dark:border-cyan-500/30 bg-white/90 dark:bg-slate-900/80 py-2.5 pl-10 pr-4 text-xs text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 outline-none backdrop-blur-md transition focus:border-cyan-500 dark:focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400"
+                className="theme-control w-full rounded-full border border-slate-300 dark:border-cyan-500/30 py-2.5 pl-10 pr-4 text-xs placeholder-slate-400 dark:placeholder-slate-500 outline-none backdrop-blur-md"
               />
               {searchQuery && (
                 <button
@@ -977,8 +894,9 @@ export default function LocalePage() {
               <button
                 key={cat}
                 type="button"
+                aria-pressed={selectedTechCategory === cat}
                 onClick={() => setSelectedTechCategory(cat)}
-                className={`rounded-full px-4 py-1.5 text-[0.68rem] font-semibold tracking-[0.16em] uppercase transition ${
+                className={`theme-chip rounded-full px-4 py-1.5 text-[0.68rem] font-semibold tracking-[0.16em] uppercase transition ${
                   selectedTechCategory === cat
                     ? "border border-cyan-500 dark:border-cyan-400 bg-cyan-400/20 text-cyan-700 dark:text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.25)]"
                     : "border border-slate-300 dark:border-slate-800 bg-white/70 dark:bg-slate-900/50 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-white"
@@ -1001,7 +919,7 @@ export default function LocalePage() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
-                  className="glow-card group flex flex-col justify-between p-4 border border-cyan-500/20 bg-white/80 dark:bg-slate-900/40"
+                  className="glow-card theme-surface group flex flex-col justify-between p-4 border border-cyan-500/20"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/10 text-cyan-600 dark:text-cyan-300 transition group-hover:scale-110">
@@ -1039,8 +957,9 @@ export default function LocalePage() {
                 <button
                   key={groupKey}
                   type="button"
+                  aria-pressed={selectedProjectCategory === groupKey}
                   onClick={() => setSelectedProjectCategory(groupKey)}
-                  className={`rounded-full px-4 py-1.5 text-[0.65rem] font-semibold tracking-[0.16em] uppercase transition ${
+                  className={`theme-chip rounded-full px-4 py-1.5 text-[0.65rem] font-semibold tracking-[0.16em] uppercase transition ${
                     selectedProjectCategory === groupKey
                       ? "border border-cyan-500 dark:border-cyan-400 bg-cyan-400/20 text-cyan-700 dark:text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.25)]"
                       : "border border-slate-300 dark:border-slate-800 bg-white/70 dark:bg-slate-900/50 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-white"
@@ -1071,7 +990,7 @@ export default function LocalePage() {
                   setHoveredProject(null);
                   setProjectImageIndex(0);
                 }}
-                className="glow-card group overflow-hidden rounded-3xl border border-cyan-500/20 bg-white/80 dark:bg-slate-900/60 p-6"
+                className="glow-card theme-surface group overflow-hidden rounded-3xl border border-cyan-500/20 p-6"
               >
                 <div className="mb-4 flex items-center justify-between font-mono text-[0.62rem] uppercase tracking-[0.24em] text-cyan-600 dark:text-cyan-400">
                   <span>{project.number}</span>
@@ -1110,7 +1029,7 @@ export default function LocalePage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="relative flex h-60 w-full items-center justify-center rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-gradient-to-br from-slate-100 via-slate-50 to-cyan-50/50 dark:from-slate-950 dark:via-slate-900 dark:to-cyan-950/30 p-6 text-center">
+                  <div className="theme-surface-muted relative flex h-60 w-full items-center justify-center rounded-2xl border border-slate-200 dark:border-slate-800/80 p-6 text-center">
                     <div>
                       <Layers size={32} className="mx-auto text-cyan-600 dark:text-cyan-400/60" />
                       <p className="mt-3 font-mono text-[0.65rem] uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400">
@@ -1161,14 +1080,14 @@ export default function LocalePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 dark:bg-[#020617]/90 p-4 backdrop-blur-xl"
+            className="theme-overlay fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-xl"
             onClick={() => setActiveModalProject(null)}
           >
             <motion.div
               initial={{ scale: 0.92, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.92, y: 20 }}
-              className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-slate-200 dark:border-cyan-500/30 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-2xl"
+              className="theme-modal relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-slate-200 dark:border-cyan-500/30 p-6 sm:p-8 shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -1295,7 +1214,7 @@ export default function LocalePage() {
                     } ${
                       exp.highlight
                         ? "border-cyan-400/40 bg-gradient-to-br from-cyan-50/80 to-blue-50/60 dark:from-cyan-950/40 dark:to-blue-950/20 shadow-[0_0_30px_rgba(34,211,238,0.15)]"
-                        : "border-slate-200 dark:border-cyan-500/20 bg-white/80 dark:bg-slate-900/50"
+                        : "theme-surface border-slate-200 dark:border-cyan-500/20"
                     }`}
                   >
                     <span className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-300 font-bold">
@@ -1347,7 +1266,7 @@ export default function LocalePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.15 }}
                 transition={{ duration: 0.4, delay: idx * 0.05 }}
-                className="glow-card p-6 border border-cyan-500/20 bg-white/80 dark:bg-slate-900/50"
+                className="glow-card theme-surface p-6 border border-cyan-500/20"
               >
                 <div className="flex items-center justify-between font-mono text-[0.6rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400">
                   <span>{edu.period}</span>
@@ -1366,7 +1285,7 @@ export default function LocalePage() {
       {/* High-Conversion Recruiter Contact Section */}
       <section id="contact" className="relative z-10 border-t border-cyan-500/15 py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl border border-cyan-400/40 bg-gradient-to-br from-white via-slate-50 to-cyan-50/60 dark:from-slate-900 dark:via-slate-950 dark:to-cyan-950/40 p-8 sm:p-14 shadow-[0_0_50px_rgba(34,211,238,0.1)]">
+          <div className="theme-surface relative overflow-hidden rounded-3xl border border-cyan-400/40 bg-gradient-to-br from-white via-slate-50 to-cyan-50/60 dark:from-slate-900 dark:via-slate-950 dark:to-cyan-950/40 p-8 sm:p-14 shadow-[0_0_50px_rgba(34,211,238,0.1)]">
             <p className="section-tag">06 / {t("contact.sectionLabel")}</p>
             <h2 className="mt-6 max-w-3xl text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
               {t("contact.heading")}
@@ -1405,7 +1324,7 @@ export default function LocalePage() {
             </div>
 
             <div className="mt-12 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/60 p-5">
+              <div className="theme-surface-muted rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
                 <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 font-semibold">
                   {t("contact.email")}
                 </p>
@@ -1414,7 +1333,7 @@ export default function LocalePage() {
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/60 p-5">
+              <div className="theme-surface-muted rounded-2xl border border-slate-200 dark:border-slate-800 p-5">
                 <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 font-semibold">
                   {t("contact.github")}
                 </p>
