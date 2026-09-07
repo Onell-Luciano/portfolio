@@ -2,38 +2,8 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
-import {
-  ArrowRight,
-  BarChart3,
-  Check,
-  Code2,
-  Copy,
-  Database,
-  Download,
-  Globe,
-  Layers,
-  Mail,
-  Menu,
-  Search,
-  Sparkles,
-  X,
-} from "lucide-react";
-import {
-  SiDocker,
-  SiGit,
-  SiLeaflet,
-  SiLinux,
-  SiMysql,
-  SiNodedotjs,
-  SiOpenjdk,
-  SiOpenstreetmap,
-  SiPostgresql,
-  SiPython,
-  SiPytorch,
-  SiReact,
-  SiSpringboot,
-  SiTypescript,
-} from "@icons-pack/react-simple-icons";
+import { ArrowRight, BarChart3, Check, Code2, Copy, Database, Download, Globe, Layers, Mail, Menu, Search, Sparkles, X, } from "lucide-react";
+import { SiDocker, SiGit, SiLeaflet, SiLinux, SiMysql, SiNodedotjs, SiOpenjdk, SiOpenstreetmap, SiPostgresql, SiPython, SiPytorch, SiReact, SiSpringboot, SiTypescript, } from "@icons-pack/react-simple-icons";
 import { useTranslations } from "next-intl";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -41,23 +11,11 @@ import { useEffect, useMemo, useRef, useState } from "react";
 // Staggered reveal variants
 const reveal = {
   hidden: { opacity: 0, y: 24 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
-  },
-} as const;
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }, },} as const;
 
 type Project = {
-  id: string;
-  number: string;
-  title: string;
-  category: string;
-  categoryGroup: string;
-  description: string;
-  technologies: string[];
-  images: { src: string; alt: string }[];
-  highlights: string[];
+  id: string; number: string; title: string; category: string; categoryGroup: string; description: string;
+  technologies: string[]; images: { src: string; alt: string }[]; highlights: string[];
 };
 
 export default function LocalePage() {
@@ -67,7 +25,6 @@ export default function LocalePage() {
   const params = useParams();
   const locale = (params?.locale as string) || "en";
   const reduceMotion = useReducedMotion();
-
   // State management
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -80,7 +37,6 @@ export default function LocalePage() {
   const [activeModalProject, setActiveModalProject] = useState<Project | null>(null);
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Keep the portfolio in its single dark presentation.
@@ -88,7 +44,6 @@ export default function LocalePage() {
     document.documentElement.classList.remove("light");
     document.documentElement.classList.add("dark");
   }, []);
-
   // Navigation Items
   const navItems = useMemo(
     () => [
@@ -100,7 +55,6 @@ export default function LocalePage() {
     ],
     [t]
   );
-
   // Technology Groups & Directory
   const technologyGroups = useMemo(
     () => [
@@ -168,12 +122,10 @@ export default function LocalePage() {
     ],
     [t]
   );
-
   // Flattened tech list for searching
   const allTechnologies = useMemo(() => {
     return technologyGroups.flatMap((group) => group.technologies);
   }, [technologyGroups]);
-
   // Filtered Tech Stack based on Search Query & Selected Category
   const filteredTechnologies = useMemo(() => {
     return allTechnologies.filter((tech) => {
@@ -183,7 +135,6 @@ export default function LocalePage() {
       return matchesSearch && matchesCategory;
     });
   }, [allTechnologies, searchQuery, selectedTechCategory]);
-
   // Projects Showcase List
   const projects = useMemo(
     () => [
@@ -281,13 +232,11 @@ export default function LocalePage() {
     ],
     [t]
   );
-
   // Filtered projects
   const filteredProjects = useMemo(() => {
     if (selectedProjectCategory === "All") return projects;
     return projects.filter((p) => p.categoryGroup === selectedProjectCategory);
   }, [projects, selectedProjectCategory]);
-
   // Experiences List
   const experiences = useMemo(
     () => [
@@ -350,7 +299,6 @@ export default function LocalePage() {
     ].reverse(),
     [t]
   );
-
   // Education & Credentials
   const education = useMemo(
     () => [
@@ -399,20 +347,17 @@ export default function LocalePage() {
     ],
     [t]
   );
-
   // Language switcher
   const switchLanguage = (nextLocale: string) => {
     const path = pathname.replace(/^\/[a-z]{2}/, `/${nextLocale}`);
     router.push(path || `/${nextLocale}`);
   };
-
   // Copy email functionality with Toast
   const handleCopyEmail = () => {
     navigator.clipboard.writeText("rasamiarisonluciano@gmail.com");
     setToastMessage(t("contact.emailCopied"));
     setTimeout(() => setToastMessage(null), 3500);
   };
-
   // Scroll listener for sticky header & active section spy
   useEffect(() => {
     const handleScroll = () => {
@@ -433,7 +378,6 @@ export default function LocalePage() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
   // Dynamic Image slider for cards on hover
   useEffect(() => {
     if (reduceMotion || !hoveredProject) return;
@@ -446,7 +390,6 @@ export default function LocalePage() {
 
     return () => window.clearInterval(interval);
   }, [hoveredProject, projects, reduceMotion]);
-
   // Interactive Particle Canvas background effect
   useEffect(() => {
     if (reduceMotion || !canvasRef.current) return;
@@ -477,7 +420,6 @@ export default function LocalePage() {
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
-
       // Draw particle nodes & links
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
@@ -526,7 +468,6 @@ export default function LocalePage() {
       {!reduceMotion && (
         <canvas ref={canvasRef} className="particle-canvas" aria-hidden="true" />
       )}
-
       {/* Floating Header Navigation */}
       <nav
         className={`fixed inset-x-0 top-0 z-40 border-b transition-all duration-300 ${
@@ -545,7 +486,6 @@ export default function LocalePage() {
             </span>
             <span>O&apos;NELL</span>
           </a>
-
           {/* Desktop Nav Links */}
           <div className="hidden items-center gap-8 md:flex">
             {navItems.map((item) => (
@@ -562,7 +502,6 @@ export default function LocalePage() {
               </a>
             ))}
           </div>
-
           {/* Actions: Download CV + Theme Switcher + Language Switcher */}
           <div className="hidden items-center gap-3 md:flex">
             <a
@@ -575,7 +514,6 @@ export default function LocalePage() {
               <Download size={13} className="transition-transform duration-200 group-hover:-translate-y-0.5" />
               <span>{t("common.downloadCv")}</span>
             </a>
-
             {/* Language Switcher */}
             <div
               aria-label={t("common.ariaLanguage")}
@@ -616,7 +554,7 @@ export default function LocalePage() {
                   key={option}
                   type="button"
                   onClick={() => switchLanguage(option)}
-                  className={`rounded-full px-2 py-0.5 text-[0.58rem] font-bold tracking-[0.1em] transition ${
+                  className={`rounded-full px-2 py-0.5 text-[0.58rem] font-bold tracking-widest transition ${
                     locale === option ? "bg-cyan-500/25 text-cyan-700 dark:text-cyan-200" : "text-slate-600 dark:text-slate-400"
                   }`}
                 >
@@ -635,7 +573,6 @@ export default function LocalePage() {
             </button>
           </div>
         </div>
-
         {/* Mobile Navigation Drawer */}
         {mobileOpen && (
           <div className="theme-surface border-t border-cyan-500/20 px-4 py-5 md:hidden">
@@ -665,7 +602,6 @@ export default function LocalePage() {
           </div>
         )}
       </nav>
-
       {/* Hero Section */}
       <section id="home" className="relative z-10 min-h-[92vh] overflow-hidden pb-20 pt-32 lg:pt-40">
         <div className="ambient-orb -left-48 top-12" aria-hidden="true" />
@@ -704,7 +640,6 @@ export default function LocalePage() {
                   {t("hero.description")}
                 </p>
               </motion.div>
-
               {/* Action Buttons */}
               <motion.div variants={reveal} className="mt-10 flex flex-wrap items-center gap-4">
                 <a href="#projects" className="btn-primary">
@@ -722,7 +657,6 @@ export default function LocalePage() {
                   <Download size={15} />
                   <span>{t("common.downloadCv")}</span>
                 </a>
-
                 <button
                   type="button"
                   onClick={handleCopyEmail}
@@ -733,7 +667,6 @@ export default function LocalePage() {
                 </button>
               </motion.div>
             </motion.div>
-
             {/* Right Column: Dynamic Circular Portrait Card */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -744,11 +677,10 @@ export default function LocalePage() {
               {/* Glow : reste derrière et ne déborde pas vers le titre */}
               <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -inset-4 rounded-full bg-gradient-to-r from-violet-500/25 via-blue-600/20 to-cyan-400/20 blur-3xl opacity-70 neon-glow"
+                className="pointer-events-none absolute -inset-4 rounded-full bg-linear-to-r from-violet-500/25 via-blue-600/20 to-cyan-400/20 blur-3xl opacity-70 neon-glow"
               />
-
               {/* Zone réservée uniquement au portrait */}
-              <div className="relative mx-auto aspect-square w-full max-w-[420px]">
+              <div className="relative mx-auto aspect-square w-full max-w-105">
                 <div className="hero-stage relative h-full w-full overflow-hidden rounded-full">
                   <Image
                     src="/image/profile/jqcDP.jpg"
@@ -1257,7 +1189,7 @@ export default function LocalePage() {
                     </div>
                   </motion.article>
 
-                  <div aria-hidden="true" className="col-start-2 row-start-1 h-full w-px bg-gradient-to-b from-violet-400 to-cyan-400" />
+                  <div aria-hidden="true" className="col-start-2 row-start-1 h-full w-px bg-linear-to-b from-violet-400 to-cyan-400" />
                 </div>
               ))}
             </div>
@@ -1303,7 +1235,7 @@ export default function LocalePage() {
       <section id="contact" className="editorial-section relative z-10 overflow-hidden">
         <div className="ambient-orb ambient-orb-cyan -right-48 top-24 opacity-20" aria-hidden="true" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden border border-white/15 bg-white/[0.03] p-8 sm:p-14">
+          <div className="relative overflow-hidden border border-white/15 bg-white/3 p-8 sm:p-14">
             <p className="section-number">06 / {t("contact.sectionLabel")}</p>
             <h2 className="section-title mt-6">
               {t("contact.heading")}
