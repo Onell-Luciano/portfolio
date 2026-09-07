@@ -690,19 +690,6 @@ export default function LocalePage() {
                     sizes="(max-width: 1080px) 90vw, 50vw"
                     className="object-cover object-center contrast-[1.05] brightness-[0.98]"
                   />
-
-                  <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-80" />
-
-                  {/* Infos DANS le cercle */}
-                  <div className="absolute bottom-6 left-1/2 w-[85%] -translate-x-1/2 border border-white/15 bg-black/65 px-4 py-3 text-center backdrop-blur-md">
-                    <p className="text-xs font-bold tracking-wide text-white">
-                      O&apos;Nell Luciano Rasamiarison
-                    </p>
-
-                    <p className="mt-1 font-mono text-[0.6rem] text-cyan-300">
-                      Software Engineer & Data Specialist
-                    </p>
-                  </div>
                 </div>
               </div>
             </motion.div>
