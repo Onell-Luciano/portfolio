@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight, BarChart3, Check, Code2, Copy, Database, Download, Globe, Layers, Mail, Menu, Search, Sparkles, X, } from "lucide-react";
-import { SiDocker, SiGit, SiLeaflet, SiLinux, SiMysql, SiNodedotjs, SiOpenjdk, SiOpenstreetmap, SiPostgresql, SiPython, SiPytorch, SiReact, SiSpringboot, SiTypescript, } from "@icons-pack/react-simple-icons";
+import { SiDocker, SiFlutter, SiGit, SiLeaflet, SiLinux, SiMysql, SiNodedotjs, SiOpenjdk, SiOpenstreetmap, SiPostgresql, SiPython, SiPytorch, SiReact, SiSpringboot, SiSqlite, SiTypescript, } from "@icons-pack/react-simple-icons";
 import { useTranslations } from "next-intl";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -81,6 +81,7 @@ export default function LocalePage() {
           { name: "Node.js / Express", category: "Frameworks", icon: SiNodedotjs, level: "Advanced" },
           { name: "FastAPI / Python", category: "Frameworks", icon: SiPython, level: "Advanced" },
           { name: "Spring Boot", category: "Frameworks", icon: SiSpringboot, level: "Intermediate" },
+          { name: "Flutter", category: "Frameworks", icon: SiFlutter, level: "Advanced" },
           { name: "Leaflet.js", category: "Frameworks", icon: SiLeaflet, level: "Expert" },
           { name: "Streamlit", category: "Frameworks", icon: SiPython, level: "Advanced" },
         ],
@@ -103,6 +104,7 @@ export default function LocalePage() {
         categoryKey: "Database & GIS",
         technologies: [
           { name: "PostgreSQL & PostGIS", category: "Database & GIS", icon: SiPostgresql, level: "Expert" },
+          { name: "SQLite", category: "Database & GIS", icon: SiSqlite, level: "Advanced" },
           { name: "MySQL", category: "Database & GIS", icon: SiMysql, level: "Advanced" },
           { name: "Oracle 19c & APEX", category: "Database & GIS", icon: Database, level: "Intermediate" },
           { name: "OpenStreetMap API", category: "Database & GIS", icon: SiOpenstreetmap, level: "Expert" },
@@ -229,6 +231,22 @@ export default function LocalePage() {
           t("projects.items.stock.highlights.3"),
         ],
       },
+      {
+        id: "bionexx-mobile",
+        number: "06",
+        title: t("projects.items.bionexxMobile.title"),
+        category: t("projects.items.bionexxMobile.category"),
+        categoryGroup: "Mobile",
+        description: t("projects.items.bionexxMobile.description"),
+        technologies: ["Flutter", "SQLite", "Dart", "Stockage Local"],
+        images: [],
+        highlights: [
+          t("projects.items.bionexxMobile.highlights.0"),
+          t("projects.items.bionexxMobile.highlights.1"),
+          t("projects.items.bionexxMobile.highlights.2"),
+          t("projects.items.bionexxMobile.highlights.3"),
+        ],
+      },
     ],
     [t]
   );
@@ -293,7 +311,7 @@ export default function LocalePage() {
         company: t("experience.items.bionexx.company"),
         role: t("experience.items.bionexx.role"),
         description: t("experience.items.bionexx.description"),
-        technologies: ["Leaflet.js", "PostGIS", "OpenWeatherMap", "Data Viz", "Agriculture"],
+        technologies: ["Flutter", "SQLite", "Leaflet.js", "PostGIS", "OpenWeatherMap", "Agriculture"],
         highlight: true,
       },
     ].reverse(),
@@ -901,7 +919,7 @@ export default function LocalePage() {
 
             {/* Category Filter Tabs */}
             <div className="flex flex-wrap gap-2">
-              {["All", "GIS", "Full-Stack", "AI", "Optimization"].map((groupKey) => (
+              {["All", "Mobile", "GIS", "Full-Stack", "AI", "Optimization"].map((groupKey) => (
                 <button
                   key={groupKey}
                   type="button"

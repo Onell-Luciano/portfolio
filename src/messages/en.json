@@ -28,8 +28,8 @@
   },
   "stats": {
     "experience": "4+ Yrs Exp.",
-    "projects": "7+ Key Projects",
-    "tech": "25+ Techs Mastered",
+    "projects": "8+ Key Projects",
+    "tech": "27+ Techs Mastered",
     "focus": "Full-Stack · AI · GIS"
   },
   "capabilities": {
@@ -133,6 +133,17 @@
           "Automated safety stock and reorder point calculations",
           "Fluid interactive web application interface developed with Streamlit",
           "Decision-support metrics for supply chain optimization"
+        ]
+      },
+      "bionexxMobile": {
+        "title": "Bionexx Mobile Application",
+        "category": "Mobile · Flutter · SQLite",
+        "description": "Mobile application development for purchasing management and field coordination among producers, service providers, managers, and field agents for Bionexx Madagascar.",
+        "highlights": [
+          "Digitalized purchasing management and on-field operation tracking",
+          "Multi-role coordination system: producers, service providers, managers, and field agents",
+          "Intuitive UI development and core business logic implementation with Flutter SDK",
+          "Local SQLite database implementation for reliable offline data storage"
         ]
       }
     }
