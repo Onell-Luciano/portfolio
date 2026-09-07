@@ -19,34 +19,20 @@ type Project = {
 };
 
 export default function LocalePage() {
-  const t = useTranslations();
-  const router = useRouter();
-  const pathname = usePathname();
-  const params = useParams();
-  const locale = (params?.locale as string) || "en";
-  const reduceMotion = useReducedMotion();
+  const t = useTranslations(); const router = useRouter();
+  const pathname = usePathname(); const params = useParams();
+  const locale = (params?.locale as string) || "en"; const reduceMotion = useReducedMotion();
   // State management
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTechCategory, setSelectedTechCategory] = useState("All");
-  const [selectedProjectCategory, setSelectedProjectCategory] = useState("All");
-  const [hoveredProject, setHoveredProject] = useState<string | null>(null);
-  const [projectImageIndex, setProjectImageIndex] = useState(0);
-  const [activeModalProject, setActiveModalProject] = useState<Project | null>(null);
-  const [modalImageIndex, setModalImageIndex] = useState(0);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
+  const [mobileOpen, setMobileOpen] = useState(false); const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home"); const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTechCategory, setSelectedTechCategory] = useState("All"); const [selectedProjectCategory, setSelectedProjectCategory] = useState("All");
+  const [hoveredProject, setHoveredProject] = useState<string | null>(null); const [projectImageIndex, setProjectImageIndex] = useState(0);
+  const [activeModalProject, setActiveModalProject] = useState<Project | null>(null); const [modalImageIndex, setModalImageIndex] = useState(0);
+  const [toastMessage, setToastMessage] = useState<string | null>(null); const canvasRef = useRef<HTMLCanvasElement | null>(null);
   // Keep the portfolio in its single dark presentation.
-  useEffect(() => {
-    document.documentElement.classList.remove("light");
-    document.documentElement.classList.add("dark");
-  }, []);
+  useEffect(() => { document.documentElement.classList.remove("light"); document.documentElement.classList.add("dark"); }, []);
   // Navigation Items
-  const navItems = useMemo(
-    () => [
+  const navItems = useMemo(() => [
       { label: t("nav.about"), href: `#about`, id: "about" },
       { label: t("nav.stack"), href: `#stack`, id: "stack" },
       { label: t("nav.work"), href: `#projects`, id: "projects" },
@@ -332,12 +318,10 @@ const projects = useMemo(
 // Filtered projects
 const filteredProjects = useMemo(() => {
   if (selectedProjectCategory === "All") return projects;
-
   return projects.filter(
     (p) => p.categoryGroup === selectedProjectCategory
   );
 }, [projects, selectedProjectCategory]);
-
 // Experiences List
 const experiences = useMemo(
   () => [
@@ -1062,7 +1046,6 @@ const experiences = useMemo(
                     {project.category}
                   </span>
                 </div>
-
                 {/* Project Image Preview / Fallback */}
                 {project.images.length > 0 ? (
                   <div className="project-visual relative h-60 w-full">
@@ -1103,12 +1086,10 @@ const experiences = useMemo(
                     </div>
                   </div>
                 )}
-
                 <div className="mt-6">
                   <h3 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{project.title}</h3>
                   <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300">{project.description}</p>
                 </div>
-
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {project.technologies.map((tech) => (
                     <span
@@ -1119,7 +1100,6 @@ const experiences = useMemo(
                     </span>
                   ))}
                 </div>
-
                 <button
                   type="button"
                   onClick={() => {
@@ -1136,7 +1116,6 @@ const experiences = useMemo(
           </div>
         </div>
       </section>
-
       {/* Interactive Project Detail Modal */}
       <AnimatePresence>
         {activeModalProject && (
@@ -1161,15 +1140,12 @@ const experiences = useMemo(
               >
                 <X size={18} />
               </button>
-
               <p className="font-mono text-xs uppercase tracking-[0.22em] text-cyan-600 dark:text-cyan-400">
                 {activeModalProject.number} / {activeModalProject.category}
               </p>
-
               <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
                 {activeModalProject.title}
               </h2>
-
               {activeModalProject.images.length > 0 && (
                 <div className="relative mt-6 h-64 sm:h-80 w-full overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950">
                   <Image
@@ -1194,7 +1170,6 @@ const experiences = useMemo(
                   )}
                 </div>
               )}
-
               <div className="mt-6 border-t border-slate-200 dark:border-slate-800 pt-6">
                 <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400">
                   {t("projects.modal.architecture")}
@@ -1203,7 +1178,6 @@ const experiences = useMemo(
                   {activeModalProject.description}
                 </p>
               </div>
-
               <div className="mt-6 border-t border-slate-200 dark:border-slate-800 pt-6">
                 <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400">
                   {t("projects.modal.highlights")}
@@ -1217,7 +1191,6 @@ const experiences = useMemo(
                   ))}
                 </ul>
               </div>
-
               <div className="mt-6 border-t border-slate-200 dark:border-slate-800 pt-6">
                 <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 mb-3">
                   {t("projects.modal.technologies")}
@@ -1233,7 +1206,6 @@ const experiences = useMemo(
                   ))}
                 </div>
               </div>
-
               <div className="mt-8 flex justify-end">
                 <button
                   type="button"
@@ -1247,7 +1219,6 @@ const experiences = useMemo(
           </motion.div>
         )}
       </AnimatePresence>
-
       {/* Experience & Career Timeline */}
       <section id="experience" className="editorial-section relative z-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -1257,7 +1228,6 @@ const experiences = useMemo(
               {t("experience.heading")}
             </h2>
           </div>
-
           <div className="relative">
             <div>
               {experiences.map((exp) => (
@@ -1279,7 +1249,6 @@ const experiences = useMemo(
                     <h3 className="mt-1 text-xl font-bold text-slate-900 dark:text-white">{exp.role}</h3>
                     <p className="text-xs font-medium text-slate-600 dark:text-slate-400 mt-0.5">{exp.company}</p>
                     <p className="mt-3 text-xs leading-relaxed text-slate-700 dark:text-slate-300">{exp.description}</p>
-
                     <div className="mt-4 flex flex-wrap gap-1.5">
                       {exp.technologies.map((tech) => (
                         <span
@@ -1291,7 +1260,6 @@ const experiences = useMemo(
                       ))}
                     </div>
                   </motion.article>
-
                   <div aria-hidden="true" className="col-start-2 row-start-1 h-full w-px bg-linear-to-b from-violet-400 to-cyan-400" />
                 </div>
               ))}
@@ -1299,7 +1267,6 @@ const experiences = useMemo(
           </div>
         </div>
       </section>
-
       {/* Education & Academic Credentials */}
       <section id="education" className="editorial-section relative z-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -1309,7 +1276,6 @@ const experiences = useMemo(
               {t("education.heading")}
             </h2>
           </div>
-
           <div className="glass-list grid gap-px md:grid-cols-2 lg:grid-cols-3">
             {education.map((edu, idx) => (
               <motion.div
@@ -1333,7 +1299,6 @@ const experiences = useMemo(
           </div>
         </div>
       </section>
-
       {/* High-Conversion Recruiter Contact Section */}
       <section id="contact" className="editorial-section relative z-10 overflow-hidden">
         <div className="ambient-orb ambient-orb-cyan -right-48 top-24 opacity-20" aria-hidden="true" />
@@ -1346,7 +1311,6 @@ const experiences = useMemo(
             <p className="mt-5 max-w-2xl text-sm leading-relaxed text-slate-400 sm:text-base">
               {t("contact.subheading")}
             </p>
-
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <a
                 href="mailto:rasamiarisonluciano@gmail.com"
@@ -1354,8 +1318,7 @@ const experiences = useMemo(
               >
                 <Mail size={16} />
                 <span>{t("contact.cta")}</span>
-              </a>
-
+              </a>²
               <button
                 type="button"
                 onClick={handleCopyEmail}
@@ -1364,7 +1327,6 @@ const experiences = useMemo(
                 <Copy size={15} />
                 <span>{t("contact.copyEmail")}</span>
               </button>
-
               <a
                 href="https://github.com/ONell-Luciano"
                 target="_blank"
@@ -1375,7 +1337,6 @@ const experiences = useMemo(
                 <span>{t("contact.github")}</span>
               </a>
             </div>
-
             <div className="mt-12 grid gap-4 sm:grid-cols-2">
               <div className="border-t border-white/15 p-5 pl-0">
                 <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 font-semibold">
@@ -1385,7 +1346,6 @@ const experiences = useMemo(
                   rasamiarisonluciano@gmail.com
                 </p>
               </div>
-
               <div className="border-t border-white/15 p-5 pl-0">
                 <p className="font-mono text-[0.62rem] uppercase tracking-[0.2em] text-cyan-600 dark:text-cyan-400 font-semibold">
                   {t("contact.github")}
@@ -1398,7 +1358,6 @@ const experiences = useMemo(
           </div>
         </div>
       </section>
-
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/10 bg-black py-8">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:px-6 lg:px-8 md:flex-row">
@@ -1429,7 +1388,6 @@ const experiences = useMemo(
           © {new Date().getFullYear()} O&apos;NELL LUCIANO RASAMIARISON. {t("footer.rights")}
         </div>
       </footer>
-
       {/* Floating Toast Notification */}
       <AnimatePresence>
         {toastMessage && (
