@@ -191,8 +191,8 @@
       "bionexx": {
         "period": "Depuis avr. 2026 · En cours",
         "company": "BIONEXX · Fianarantsoa",
-        "role": "Carte interactive et centre météo avancé",
-        "description": "Visualisation des vastes données multi-filière de Bionexx et développement d'un centre météo avancé de Madagascar pour les études agricoles."
+        "role": "Carte interactive et centre météo avancé + application mobile des agents de terrain",
+        "description": "Visualisation des vastes données multi-filière de Bionexx et développement d'un centre météo avancé de Madagascar pour les études agricoles. Application mobile pour la gestion des achats et la coordination terrain des producteurs, prestataires, responsables et agents pour Bionexx Madagascar."
       }
     }
   },
