@@ -145,6 +145,17 @@
           "Intuitive UI development and core business logic implementation with Flutter SDK",
           "Local SQLite database implementation for reliable offline data storage"
         ]
+      },
+      "transaction": {
+        "title": "Online Transaction Web Platform",
+        "category": "Full-Stack · REST Backend · Spring Boot",
+        "description": "Design and development of an online transaction web platform with Spring Boot. The project implements a REST backend architecture enabling the management of users, accounts, and financial operations, with a focus on security, data validation, persistence, and transactional consistency. This academic project explored API design, layered architecture, and best practices in transactional application development. (April 2025 - May 2025)",
+        "highlights": [
+          "Complete REST backend architecture for managing users, accounts, and financial operations",
+          "Endpoint security, strict data validation, and transactional persistence",
+          "Implementation of layered architecture principles and strict transactional consistency",
+          "Academic project focused on API design and best practices for transactional development"
+        ]
       }
     }
   },
@@ -157,6 +168,12 @@
         "company": "Chamber of Commerce and Industry · Fianarantsoa",
         "role": "Web Mapping Developer",
         "description": "Improved an interactive GIS application with GeoJSON and PostGIS data, dynamic Leaflet.js maps, Node.js backend APIs, and better display performance and navigation."
+      },
+      "transaction": {
+        "period": "Apr. 2025 – May 2025",
+        "company": "École Nationale d'Informatique Tanambao · Fianarantsoa",
+        "role": "Online Transaction Web Platform · Spring Boot",
+        "description": "Design and development of an online transaction web platform with Spring Boot (REST architecture, user/account management, financial operations, security, validation, and transactional consistency)."
       },
       "currency": {
         "period": "May 2025 – Jun. 2025",

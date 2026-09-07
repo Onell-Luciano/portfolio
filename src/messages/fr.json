@@ -145,6 +145,17 @@
           "Développement de l'interface utilisateur et de la logique métier avec Flutter SDK",
           "Stockage local et base de données SQLite pour un fonctionnement hors-ligne fiable"
         ]
+      },
+      "transaction": {
+        "title": "Plateforme web de transactions en ligne",
+        "category": "Full-Stack · REST Backend · Spring Boot",
+        "description": "Conception et développement d’une plateforme web de transactions en ligne avec Spring Boot. Le projet met en œuvre une architecture backend REST permettant la gestion des utilisateurs, des comptes et des opérations financières, avec une attention portée à la sécurité, à la validation des données, à la persistance et à la cohérence des transactions. Ce projet académique a permis d’explorer la conception d’API, l’architecture en couches et les bonnes pratiques du développement d’applications transactionnelles. (Avril 2025 - Mai 2025)",
+        "highlights": [
+          "Architecture backend REST complète pour la gestion des utilisateurs, des comptes et des opérations financières",
+          "Sécurisation des endpoints, validation stricte des données et persistance des transactions",
+          "Mise en œuvre des principes d'architecture en couches et garantie de cohérence transactionnelle",
+          "Projet académique axé sur la conception d'API et les bonnes pratiques du développement transactionnel"
+        ]
       }
     }
   },
@@ -157,6 +168,12 @@
         "company": "Chambre de Commerce et d'Industrie · Fianarantsoa",
         "role": "Développeur Web Mapping",
         "description": "Amélioration d'une application SIG interactive avec données GeoJSON et PostGIS, cartes Leaflet.js, API backend Node.js et optimisation des performances d'affichage et de navigation."
+      },
+      "transaction": {
+        "period": "Avr. 2025 – Mai 2025",
+        "company": "École Nationale d'Informatique Tanambao · Fianarantsoa",
+        "role": "Plateforme web de transactions en ligne · Spring Boot",
+        "description": "Conception et développement d’une plateforme web de transactions en ligne avec Spring Boot (architecture REST, gestion des utilisateurs, comptes et opérations financières, sécurité, validation et cohérence transactionnelle)."
       },
       "currency": {
         "period": "Mai 2025 – Juin 2025",

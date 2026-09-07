@@ -302,6 +302,29 @@ const projects = useMemo(
         t("projects.items.stock.highlights.3"),
       ],
     },
+    {
+      id: "transaction-platform",
+      number: "07",
+      title: t("projects.items.transaction.title"),
+      category: t("projects.items.transaction.category"),
+      categoryGroup: "Full-Stack",
+      description: t("projects.items.transaction.description"),
+      technologies: [
+        "Spring Boot",
+        "Java",
+        "REST API",
+        "PostgreSQL",
+        "Spring Security",
+        "JPA / Hibernate",
+      ],
+      images: [],
+      highlights: [
+        t("projects.items.transaction.highlights.0"),
+        t("projects.items.transaction.highlights.1"),
+        t("projects.items.transaction.highlights.2"),
+        t("projects.items.transaction.highlights.3"),
+      ],
+    },
   ],
   [t]
 );
@@ -324,6 +347,14 @@ const experiences = useMemo(
       role: t("experience.items.cci.role"),
       description: t("experience.items.cci.description"),
       technologies: ["Node.js", "PostgreSQL", "PostGIS", "Leaflet.js", "GeoJSON"],
+      highlight: false,
+    },
+    {
+      period: t("experience.items.transaction.period"),
+      company: t("experience.items.transaction.company"),
+      role: t("experience.items.transaction.role"),
+      description: t("experience.items.transaction.description"),
+      technologies: ["Spring Boot", "Java", "REST API", "PostgreSQL", "Spring Security"],
       highlight: false,
     },
     {
