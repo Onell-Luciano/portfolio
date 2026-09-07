@@ -138,185 +138,252 @@ export default function LocalePage() {
     });
   }, [allTechnologies, searchQuery, selectedTechCategory]);
   // Projects Showcase List
-  const projects = useMemo(
-    () => [
-      {
-        id: "web-mapping",
-        number: "01",
-        title: t("projects.items.webMapping.title"),
-        category: t("projects.items.webMapping.category"),
-        categoryGroup: "GIS",
-        description: t("projects.items.webMapping.description"),
-        technologies: ["Next.js", "React", "Leaflet.js", "PostGIS", "OpenStreetMap", "OpenWeatherMap", "OpenRouteService"],
-        images: [
-          { src: "/projets/web-mapping/map/Carte0.png", alt: "Interactive web mapping interface" },
-          { src: "/projets/web-mapping/meteo/meteo0.png", alt: "Advanced weather center interface" },
-          { src: "/projets/web-mapping/meteo/meteo1.png", alt: "Weather data visualization interface" },
-        ],
-        highlights: [
-          t("projects.items.webMapping.highlights.0"),
-          t("projects.items.webMapping.highlights.1"),
-          t("projects.items.webMapping.highlights.2"),
-          t("projects.items.webMapping.highlights.3"),
-        ],
-      },
-      {
-        id: "construction-planning",
-        number: "02",
-        title: t("projects.items.construction.title"),
-        category: t("projects.items.construction.category"),
-        categoryGroup: "Full-Stack",
-        description: t("projects.items.construction.description"),
-        technologies: ["FastAPI", "Python", "React", "PostgreSQL", "Ordonnancement"],
-        images: [
-          { src: "/projets/titan/Titan0.png", alt: "Interactive construction planning interface" },
-          { src: "/projets/titan/Titan1.png", alt: "Advanced construction planning interface" },
-          { src: "/projets/titan/Titan2.png", alt: "Section construction planning interface" },
-        ],
-        highlights: [
-          t("projects.items.construction.highlights.0"),
-          t("projects.items.construction.highlights.1"),
-          t("projects.items.construction.highlights.2"),
-          t("projects.items.construction.highlights.3"),
-        ],
-      },
-      {
-        id: "nlp-llm",
-        number: "03",
-        title: t("projects.items.nlp.title"),
-        category: t("projects.items.nlp.category"),
-        categoryGroup: "AI",
-        description: t("projects.items.nlp.description"),
-        technologies: ["Python", "BERT", "LLMs", "NLP", "Dashboarding"],
-        images: [
-          { src: "/projets/nlp-llm/nlp0.png", alt: "Interactive construction planning interface" },
-          { src: "/projets/nlp-llm/nlp1.png", alt: "Advanced construction planning interface" },
-          { src: "/projets/nlp-llm/nlp2.png", alt: "Section construction planning interface" },],
-        highlights: [
-          t("projects.items.nlp.highlights.0"),
-          t("projects.items.nlp.highlights.1"),
-          t("projects.items.nlp.highlights.2"),
-          t("projects.items.nlp.highlights.3"),
-        ],
-      },
-      {
-        id: "currency-track",
-        number: "04",
-        title: t("projects.items.currency.title"),
-        category: t("projects.items.currency.category"),
-        categoryGroup: "Full-Stack",
-        description: t("projects.items.currency.description"),
-        technologies: ["Next.js", "TypeScript", "NextAuth", "Prisma", "PostgreSQL", "Recharts"],
-        images: [],
-        highlights: [
-          t("projects.items.currency.highlights.0"),
-          t("projects.items.currency.highlights.1"),
-          t("projects.items.currency.highlights.2"),
-          t("projects.items.currency.highlights.3"),
-        ],
-      },
-      {
-        id: "stock-management",
-        number: "05",
-        title: t("projects.items.stock.title"),
-        category: t("projects.items.stock.category"),
-        categoryGroup: "Optimization",
-        description: t("projects.items.stock.description"),
-        technologies: ["Python", "Streamlit", "Modèle Wilson", "EOQ", "Data Analysis"],
-        images: [],
-        highlights: [
-          t("projects.items.stock.highlights.0"),
-          t("projects.items.stock.highlights.1"),
-          t("projects.items.stock.highlights.2"),
-          t("projects.items.stock.highlights.3"),
-        ],
-      },
-      {
-        id: "bionexx-mobile",
-        number: "06",
-        title: t("projects.items.bionexxMobile.title"),
-        category: t("projects.items.bionexxMobile.category"),
-        categoryGroup: "Mobile",
-        description: t("projects.items.bionexxMobile.description"),
-        technologies: ["Flutter", "SQLite", "Dart", "Stockage Local"],
-        images: [],
-        highlights: [
-          t("projects.items.bionexxMobile.highlights.0"),
-          t("projects.items.bionexxMobile.highlights.1"),
-          t("projects.items.bionexxMobile.highlights.2"),
-          t("projects.items.bionexxMobile.highlights.3"),
-        ],
-      },
-    ],
-    [t]
+const projects = useMemo(
+  () => [
+    {
+      id: "bionexx-mobile",
+      number: "01",
+      title: t("projects.items.bionexxMobile.title"),
+      category: t("projects.items.bionexxMobile.category"),
+      categoryGroup: "Mobile",
+      description: t("projects.items.bionexxMobile.description"),
+      technologies: ["Flutter", "SQLite", "Dart", "Stockage Local"],
+      images: [],
+      highlights: [
+        t("projects.items.bionexxMobile.highlights.0"),
+        t("projects.items.bionexxMobile.highlights.1"),
+        t("projects.items.bionexxMobile.highlights.2"),
+        t("projects.items.bionexxMobile.highlights.3"),
+      ],
+    },
+    {
+      id: "web-mapping",
+      number: "02",
+      title: t("projects.items.webMapping.title"),
+      category: t("projects.items.webMapping.category"),
+      categoryGroup: "GIS",
+      description: t("projects.items.webMapping.description"),
+      technologies: [
+        "Next.js",
+        "React",
+        "Leaflet.js",
+        "PostGIS",
+        "OpenStreetMap",
+        "OpenWeatherMap",
+        "OpenRouteService",
+      ],
+      images: [
+        {
+          src: "/projets/web-mapping/map/Carte0.png",
+          alt: "Interactive web mapping interface",
+        },
+        {
+          src: "/projets/web-mapping/meteo/meteo0.png",
+          alt: "Advanced weather center interface",
+        },
+        {
+          src: "/projets/web-mapping/meteo/meteo1.png",
+          alt: "Weather data visualization interface",
+        },
+      ],
+      highlights: [
+        t("projects.items.webMapping.highlights.0"),
+        t("projects.items.webMapping.highlights.1"),
+        t("projects.items.webMapping.highlights.2"),
+        t("projects.items.webMapping.highlights.3"),
+      ],
+    },
+    {
+      id: "construction-planning",
+      number: "03",
+      title: t("projects.items.construction.title"),
+      category: t("projects.items.construction.category"),
+      categoryGroup: "Full-Stack",
+      description: t("projects.items.construction.description"),
+      technologies: [
+        "FastAPI",
+        "Python",
+        "React",
+        "PostgreSQL",
+        "Ordonnancement",
+      ],
+      images: [
+        {
+          src: "/projets/titan/Titan0.png",
+          alt: "Interactive construction planning interface",
+        },
+        {
+          src: "/projets/titan/Titan1.png",
+          alt: "Advanced construction planning interface",
+        },
+        {
+          src: "/projets/titan/Titan2.png",
+          alt: "Section construction planning interface",
+        },
+      ],
+      highlights: [
+        t("projects.items.construction.highlights.0"),
+        t("projects.items.construction.highlights.1"),
+        t("projects.items.construction.highlights.2"),
+        t("projects.items.construction.highlights.3"),
+      ],
+    },
+    {
+      id: "nlp-llm",
+      number: "04",
+      title: t("projects.items.nlp.title"),
+      category: t("projects.items.nlp.category"),
+      categoryGroup: "AI",
+      description: t("projects.items.nlp.description"),
+      technologies: ["Python", "BERT", "LLMs", "NLP", "Dashboarding"],
+      images: [
+        {
+          src: "/projets/nlp-llm/nlp0.png",
+          alt: "Interactive NLP and LLM interface",
+        },
+        {
+          src: "/projets/nlp-llm/nlp1.png",
+          alt: "Advanced NLP and LLM interface",
+        },
+        {
+          src: "/projets/nlp-llm/nlp2.png",
+          alt: "NLP data visualization interface",
+        },
+      ],
+      highlights: [
+        t("projects.items.nlp.highlights.0"),
+        t("projects.items.nlp.highlights.1"),
+        t("projects.items.nlp.highlights.2"),
+        t("projects.items.nlp.highlights.3"),
+      ],
+    },
+    {
+      id: "currency-track",
+      number: "05",
+      title: t("projects.items.currency.title"),
+      category: t("projects.items.currency.category"),
+      categoryGroup: "Full-Stack",
+      description: t("projects.items.currency.description"),
+      technologies: [
+        "Next.js",
+        "TypeScript",
+        "NextAuth",
+        "Prisma",
+        "PostgreSQL",
+        "Recharts",
+      ],
+      images: [],
+      highlights: [
+        t("projects.items.currency.highlights.0"),
+        t("projects.items.currency.highlights.1"),
+        t("projects.items.currency.highlights.2"),
+        t("projects.items.currency.highlights.3"),
+      ],
+    },
+    {
+      id: "stock-management",
+      number: "06",
+      title: t("projects.items.stock.title"),
+      category: t("projects.items.stock.category"),
+      categoryGroup: "Optimization",
+      description: t("projects.items.stock.description"),
+      technologies: [
+        "Python",
+        "Streamlit",
+        "Modèle Wilson",
+        "EOQ",
+        "Data Analysis",
+      ],
+      images: [],
+      highlights: [
+        t("projects.items.stock.highlights.0"),
+        t("projects.items.stock.highlights.1"),
+        t("projects.items.stock.highlights.2"),
+        t("projects.items.stock.highlights.3"),
+      ],
+    },
+  ],
+  [t]
+);
+
+// Filtered projects
+const filteredProjects = useMemo(() => {
+  if (selectedProjectCategory === "All") return projects;
+
+  return projects.filter(
+    (p) => p.categoryGroup === selectedProjectCategory
   );
-  // Filtered projects
-  const filteredProjects = useMemo(() => {
-    if (selectedProjectCategory === "All") return projects;
-    return projects.filter((p) => p.categoryGroup === selectedProjectCategory);
-  }, [projects, selectedProjectCategory]);
-  // Experiences List
-  const experiences = useMemo(
-    () => [
-      {
-        period: t("experience.items.cci.period"),
-        company: t("experience.items.cci.company"),
-        role: t("experience.items.cci.role"),
-        description: t("experience.items.cci.description"),
-        technologies: ["Node.js", "PostgreSQL", "PostGIS", "Leaflet.js", "GeoJSON"],
-        highlight: false,
-      },
-      {
-        period: t("experience.items.currency.period"),
-        company: t("experience.items.currency.company"),
-        role: t("experience.items.currency.role"),
-        description: t("experience.items.currency.description"),
-        technologies: ["Next.js", "TypeScript", "NextAuth", "Prisma", "PostgreSQL"],
-        highlight: false,
-      },
-      {
-        period: t("experience.items.data.period"),
-        company: t("experience.items.data.company"),
-        role: t("experience.items.data.role"),
-        description: t("experience.items.data.description"),
-        technologies: ["Python", "Power BI", "Power Query", "DAX", "Low-code ML"],
-        highlight: false,
-      },
-      {
-        period: t("experience.items.nlp.period"),
-        company: t("experience.items.nlp.company"),
-        role: t("experience.items.nlp.role"),
-        description: t("experience.items.nlp.description"),
-        technologies: ["Python", "NLP", "BERT", "LLMs", "Data Viz"],
-        highlight: false,
-      },
-      {
-        period: t("experience.items.titan.period"),
-        company: t("experience.items.titan.company"),
-        role: t("experience.items.titan.role"),
-        description: t("experience.items.titan.description"),
-        technologies: ["FastAPI", "Python", "React", "PostgreSQL", "Algorithmes"],
-        highlight: false,
-      },
-      {
-        period: t("experience.items.stock.period"),
-        company: t("experience.items.stock.company"),
-        role: t("experience.items.stock.role"),
-        description: t("experience.items.stock.description"),
-        technologies: ["Python", "Streamlit", "Wilson Method", "EOQ"],
-        highlight: false,
-      },
-      {
-        period: t("experience.items.bionexx.period"),
-        company: t("experience.items.bionexx.company"),
-        role: t("experience.items.bionexx.role"),
-        description: t("experience.items.bionexx.description"),
-        technologies: ["Flutter", "SQLite", "Leaflet.js", "PostGIS", "OpenWeatherMap", "Agriculture"],
-        highlight: true,
-      },
-    ].reverse(),
-    [t]
-  );
+}, [projects, selectedProjectCategory]);
+
+// Experiences List
+const experiences = useMemo(
+  () => [
+    {
+      period: t("experience.items.cci.period"),
+      company: t("experience.items.cci.company"),
+      role: t("experience.items.cci.role"),
+      description: t("experience.items.cci.description"),
+      technologies: ["Node.js", "PostgreSQL", "PostGIS", "Leaflet.js", "GeoJSON"],
+      highlight: false,
+    },
+    {
+      period: t("experience.items.currency.period"),
+      company: t("experience.items.currency.company"),
+      role: t("experience.items.currency.role"),
+      description: t("experience.items.currency.description"),
+      technologies: ["Next.js", "TypeScript", "NextAuth", "Prisma", "PostgreSQL"],
+      highlight: false,
+    },
+    {
+      period: t("experience.items.data.period"),
+      company: t("experience.items.data.company"),
+      role: t("experience.items.data.role"),
+      description: t("experience.items.data.description"),
+      technologies: ["Python", "Power BI", "Power Query", "DAX", "Low-code ML"],
+      highlight: false,
+    },
+    {
+      period: t("experience.items.nlp.period"),
+      company: t("experience.items.nlp.company"),
+      role: t("experience.items.nlp.role"),
+      description: t("experience.items.nlp.description"),
+      technologies: ["Python", "NLP", "BERT", "LLMs", "Data Viz"],
+      highlight: false,
+    },
+    {
+      period: t("experience.items.titan.period"),
+      company: t("experience.items.titan.company"),
+      role: t("experience.items.titan.role"),
+      description: t("experience.items.titan.description"),
+      technologies: ["FastAPI", "Python", "React", "PostgreSQL", "Algorithmes"],
+      highlight: false,
+    },
+    {
+      period: t("experience.items.stock.period"),
+      company: t("experience.items.stock.company"),
+      role: t("experience.items.stock.role"),
+      description: t("experience.items.stock.description"),
+      technologies: ["Python", "Streamlit", "Wilson Method", "EOQ"],
+      highlight: false,
+    },
+    {
+      period: t("experience.items.bionexx.period"),
+      company: t("experience.items.bionexx.company"),
+      role: t("experience.items.bionexx.role"),
+      description: t("experience.items.bionexx.description"),
+      technologies: [
+        "Flutter",
+        "SQLite",
+        "Leaflet.js",
+        "PostGIS",
+        "OpenWeatherMap",
+        "Agriculture",
+      ],
+      highlight: true,
+    },
+  ].reverse(),
+  [t]
+);
   // Education & Credentials
   const education = useMemo(
     () => [
