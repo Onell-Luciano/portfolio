@@ -207,7 +207,6 @@ export function Nav({ items }: { items: NavItem[] }) {
                     <span className="display-serif text-[clamp(2.6rem,11vw,4.5rem)] capitalize text-ivory">
                       {item.label.toLowerCase()}
                     </span>
-                    <span className="font-mono text-xs text-gold">0{i + 1}</span>
                   </motion.a>
                 </div>
               ))}

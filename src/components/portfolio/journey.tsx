@@ -22,7 +22,6 @@ export function Experience({ items }: { items: ExperienceItem[] }) {
             <SplitReveal text={t("experience.heading")} />
           </h2>
           <div className="mt-12 hidden items-end gap-4 lg:flex">
-            <span className="display-serif text-[8rem] italic leading-[0.8] text-divine">{String(items.length).padStart(2, "0")}</span>
             <span className="eyebrow pb-3 text-[0.6rem] text-mute">
               2024
               <span className="mx-2 text-gold">—</span>
@@ -94,7 +93,6 @@ export function Education({ items }: { items: EducationItem[] }) {
               className="row-sweep group grid gap-3 border-b border-line px-1 py-7 md:grid-cols-12 md:items-center md:gap-6 md:px-4"
             >
               <span className="font-mono text-[0.65rem] text-mute transition-colors duration-500 group-hover:text-gold md:col-span-1">
-                {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className="display-serif text-[1.75rem] leading-tight text-ivory transition-transform duration-700 ease-(--ease-divine) group-hover:translate-x-2 sm:text-[2rem] md:col-span-5">
                 {e.title}

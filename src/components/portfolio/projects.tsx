@@ -153,8 +153,6 @@ function ProjectCard({
         <div className="order-2 flex flex-col justify-between gap-8 p-7 sm:p-10 md:order-1">
           <div className="flex items-center justify-between gap-4">
             <span className="eyebrow shrink-0 whitespace-nowrap text-gold">
-              {project.number}
-              <span className="text-mute"> / {String(total).padStart(2, "0")}</span>
             </span>
             <span className="eyebrow truncate rounded-full border border-line px-3 py-1.5 text-[0.55rem] text-mute">
               {project.category}
@@ -247,7 +245,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
       >
         <div className="sticky top-0 z-20 flex items-center justify-between border-b border-line bg-ink-2/85 px-6 py-4 backdrop-blur-xl sm:px-8">
           <span className="eyebrow text-[0.6rem] text-gold">
-            {project.number} <span className="text-mute">/ {project.category}</span>
+            {project.category}
           </span>
           <button
             ref={closeRef}
@@ -294,7 +292,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                       <ArrowLeft size={16} />
                     </button>
                     <span className="glass rounded-full px-4 py-2 font-mono text-[0.65rem] text-ivory-dim">
-                      {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
                     </span>
                     <button
                       type="button"
@@ -353,7 +350,6 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             <ol className="mt-4">
               {project.highlights.map((h, i) => (
                 <li key={h} className="flex gap-5 border-b border-line py-4 last:border-0">
-                  <span className="display-serif text-2xl italic leading-none text-gold">{i + 1}</span>
                   <span className="text-sm leading-relaxed text-ivory-dim">{h}</span>
                 </li>
               ))}
@@ -384,7 +380,6 @@ export function Projects({ projects }: { projects: Project[] }) {
             <SectionLabel label={t("projects.sectionLabel")} />
             <h2 className="display-serif mt-8 text-[clamp(2.4rem,5vw,4.8rem)] text-ivory">
               <SplitReveal text={t("projects.heading")} />
-              <sup className="ml-2 align-super font-mono text-sm tracking-normal text-gold">({String(filtered.length).padStart(2, "0")})</sup>
             </h2>
           </div>
           <div className="lg:col-span-12">

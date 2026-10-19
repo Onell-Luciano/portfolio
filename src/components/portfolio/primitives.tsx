@@ -165,20 +165,11 @@ export function FadeUp({
 
 /* ── Section header ──────────────────────────────────────────── */
 export function SectionLabel({ label, className = "" }: { label: string; className?: string }) {
-  const [num, ...rest] = label.split(" / ");
-  const name = rest.join(" / ");
+  const name = label.split(" / ").slice(-1)[0];
   return (
     <p className={`eyebrow flex items-center gap-3 text-mute ${className}`}>
       <span className="text-gold">✦</span>
-      {name ? (
-        <>
-          <span className="text-gold">{num}</span>
-          <span className="h-px w-8 bg-line-strong" />
-          <span>{name}</span>
-        </>
-      ) : (
-        <span>{label}</span>
-      )}
+      <span>{name}</span>
     </p>
   );
 }
