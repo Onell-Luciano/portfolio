@@ -44,7 +44,7 @@ export function Hero({ ready, stats, onCopyEmail }: { ready: boolean; stats: Sta
 
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
         {/* Meta row */}
-        <motion.div {...appear(0.05)} className="flex flex-wrap items-center justify-between gap-4">
+        {/* <motion.div {...appear(0.05)} className="flex flex-wrap items-center justify-between gap-4">
           <span className="glass inline-flex items-center gap-3 rounded-full px-4 py-2">
             <span className="relative flex h-2 w-2">
               <span className="pulse-ring absolute inset-0 rounded-full bg-emerald-400" />
@@ -57,7 +57,7 @@ export function Hero({ ready, stats, onCopyEmail }: { ready: boolean; stats: Sta
             <span className="text-gold">✦</span>
             <LocalTime className="text-ivory" />
           </span>
-        </motion.div>
+        </motion.div> */}
 
         <div className="mt-12 grid items-center gap-16 lg:mt-16 lg:grid-cols-12 lg:gap-10">
           {/* Copy */}
