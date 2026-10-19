@@ -144,7 +144,7 @@ export function Hero({ ready, stats, onCopyEmail }: { ready: boolean; stats: Sta
             </div>
 
             {/* Rotating badge */}
-            <a
+            {/* <a
               href="#about"
               aria-label={t("ui.scroll")}
               className="glass group absolute -right-5 bottom-[24%] flex h-28 w-28 items-center justify-center rounded-full sm:-right-10 sm:h-32 sm:w-32"
@@ -158,7 +158,7 @@ export function Hero({ ready, stats, onCopyEmail }: { ready: boolean; stats: Sta
                 </text>
               </svg>
               <ArrowDown size={18} className="text-gold transition-transform duration-500 group-hover:translate-y-1" />
-            </a>
+            </a> */}
           </motion.div>
         </div>
 
