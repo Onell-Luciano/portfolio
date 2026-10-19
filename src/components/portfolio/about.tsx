@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import type { LucideIcon } from "lucide-react";
 import { EASE, FadeUp, Marquee, ScrollWords, SectionLabel, trackSpotlight } from "./primitives";
 
-const NUMERALS = ["I", "II", "III", "IV"];
 const SOFT_SKILLS = ["learning", "curiosity", "adaptability", "communication", "time", "initiative"];
 
 type Capability = { title: string; text: string; icon: LucideIcon; tag: string };
@@ -67,17 +66,14 @@ export function About({ capabilities }: { capabilities: Capability[] }) {
                 onPointerMove={trackSpotlight}
                 className="spotlight group flex min-h-64 flex-col justify-between bg-ink-2 p-7 sm:min-h-80 sm:p-8"
               >
-                <div className="flex items-start justify-between">
-                  <span className="display-serif text-4xl italic text-mute/60 transition-colors duration-700 group-hover:text-gold">
-                    {NUMERALS[i]}
-                  </span>
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full border border-line text-ivory-dim transition-all duration-700 group-hover:rotate-12 group-hover:border-gold/50 group-hover:text-gold">
+                <div className="flex items-start justify-between gap-4">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full border border-line text-ivory-dim transition-all duration-700 group-hover:rotate-12 group-hover:border-gold/50 group-hover:text-gold group-hover:shadow-[0_0_30px_-6px_var(--gold)]">
                     <Icon size={19} strokeWidth={1.5} />
                   </span>
+                  <span className="eyebrow pt-1 text-[0.56rem] text-gold/80">{c.tag}</span>
                 </div>
                 <div>
-                  <p className="eyebrow text-[0.58rem] text-gold/80">{c.tag}</p>
-                  <h3 className="mt-3 text-xl font-semibold tracking-tight text-ivory">{c.title}</h3>
+                  <h3 className="text-xl font-semibold tracking-tight text-ivory">{c.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-mute">{c.text}</p>
                 </div>
               </motion.article>
@@ -101,20 +97,23 @@ export function About({ capabilities }: { capabilities: Capability[] }) {
           </FadeUp>
 
           <FadeUp delay={0.1} className="lg:col-span-6 lg:col-start-7">
-            <p className="eyebrow text-mute">{t("skills.heading")}</p>
-            <ul className="mt-6">
-              {SOFT_SKILLS.map((skill, i) => (
-                <li
-                  key={skill}
-                  className="group flex items-center justify-between gap-6 border-b border-line py-4 transition-colors duration-500 hover:border-gold/40"
-                >
-                  <span className="flex items-center gap-5">
-                    <span className="font-mono text-[0.65rem] text-mute">0{i + 1}</span>
-                    <span className="text-[1.05rem] text-ivory-dim transition-all duration-500 group-hover:translate-x-1 group-hover:text-ivory">
-                      {t(`skills.soft.${skill}`)}
-                    </span>
+            <h3 className="display-serif text-[clamp(1.9rem,3vw,2.6rem)] italic leading-tight text-ivory">
+              {t("skills.heading")}
+            </h3>
+            <ul className="mt-8 grid border-t border-line sm:grid-cols-2 sm:gap-x-10">
+              {SOFT_SKILLS.map((skill) => (
+                <li key={skill} className="group relative flex items-center gap-4 border-b border-line py-5">
+                  <span
+                    aria-hidden="true"
+                    className="h-1.5 w-1.5 shrink-0 rotate-45 bg-gold/45 transition-all duration-700 ease-(--ease-divine) group-hover:rotate-225 group-hover:bg-gold group-hover:shadow-[0_0_12px_var(--gold)]"
+                  />
+                  <span className="text-[1rem] leading-snug text-ivory-dim transition-colors duration-500 group-hover:text-ivory">
+                    {t(`skills.soft.${skill}`)}
                   </span>
-                  <span className="text-gold opacity-0 transition-opacity duration-500 group-hover:opacity-100">✦</span>
+                  <span
+                    aria-hidden="true"
+                    className="absolute -bottom-px left-0 h-px w-full origin-left scale-x-0 bg-linear-to-r from-gold via-gold/40 to-transparent transition-transform duration-700 ease-(--ease-divine) group-hover:scale-x-100"
+                  />
                 </li>
               ))}
             </ul>
