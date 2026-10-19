@@ -124,7 +124,7 @@ export function Hero({ ready, stats, onCopyEmail }: { ready: boolean; stats: Sta
             <div className="arch relative aspect-4/5 overflow-hidden border border-line-strong bg-ink-2 shadow-[0_50px_120px_-40px_rgba(230,194,122,0.45)]">
               <motion.div style={{ y: imageY, scale: 1.32, transformOrigin: "50% 78%" }} className="absolute inset-0">
                 <Image
-                  src="/image/profile/jqcDP.jpg"
+                  src="/image/profile/jqcDP.png"
                   alt="O'Nell Luciano Rasamiarison — Full-Stack & AI Developer"
                   fill
                   priority
