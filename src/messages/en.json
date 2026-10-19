@@ -254,6 +254,26 @@
       "initiative": "Proactive initiative & ownership"
     }
   },
+  "ui": {
+    "available": "Available for new projects",
+    "localTime": "Local time",
+    "badge": "AVAILABLE FOR WORK ✦ REMOTE ✦ RELOCATION ✦ ",
+    "menu": "Menu",
+    "close": "Close",
+    "scroll": "Scroll",
+    "noResults": "No technology matches your search.",
+    "levels": { "expert": "Expert", "advanced": "Advanced", "intermediate": "Intermediate" },
+    "filters": { "mobile": "Mobile", "gis": "GIS", "fullStack": "Full-Stack", "ai": "AI", "optimization": "Optimization" },
+    "view": "View",
+    "private": "Private codebase · Visuals on request",
+    "prevImage": "Previous image",
+    "nextImage": "Next image",
+    "now": "Now",
+    "badges": { "degree": "Degree", "certification": "Certification", "training": "Training", "iot": "Hardware & IoT", "international": "International" },
+    "sayHello": "Say hello",
+    "backToTop": "Back to top",
+    "crafted": "Designed & engineered with care"
+  },
   "common": {
     "downloadCv": "DOWNLOAD CV",
     "copyEmail": "COPY EMAIL",

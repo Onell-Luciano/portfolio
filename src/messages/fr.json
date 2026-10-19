@@ -254,6 +254,26 @@
       "initiative": "Esprit d'initiative & autonomie"
     }
   },
+  "ui": {
+    "available": "Disponible pour de nouveaux projets",
+    "localTime": "Heure locale",
+    "badge": "DISPONIBLE ✦ REMOTE ✦ RELOCALISATION ✦ ",
+    "menu": "Menu",
+    "close": "Fermer",
+    "scroll": "Défiler",
+    "noResults": "Aucune technologie ne correspond à votre recherche.",
+    "levels": { "expert": "Expert", "advanced": "Avancé", "intermediate": "Intermédiaire" },
+    "filters": { "mobile": "Mobile", "gis": "SIG", "fullStack": "Full-Stack", "ai": "IA", "optimization": "Optimisation" },
+    "view": "Voir",
+    "private": "Code privé · Visuels sur demande",
+    "prevImage": "Image précédente",
+    "nextImage": "Image suivante",
+    "now": "En cours",
+    "badges": { "degree": "Diplôme", "certification": "Certification", "training": "Formation", "iot": "Hardware & IoT", "international": "International" },
+    "sayHello": "Écrivez-moi",
+    "backToTop": "Retour en haut",
+    "crafted": "Conçu & développé avec exigence"
+  },
   "common": {
     "downloadCv": "TÉLÉCHARGER LE CV",
     "copyEmail": "COPIER L'EMAIL",
