@@ -114,7 +114,7 @@ export function Hero({ ready, stats, onCopyEmail }: { ready: boolean; stats: Sta
             <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-[-7%] aspect-square w-[122%] -translate-x-1/2">
                 <div className="halo inset-0" />
                 <div className="orbit inset-[9%]" />
-                <div className="orbit -inset-[6%] border-dashed opacity-50" />
+                <div className="orbit inset-[-6%] border-dashed opacity-50" />
                 <div className="spin-slow absolute inset-[9%]">
                   <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold shadow-[0_0_18px_5px_rgba(127,156,255,0.55)]" />
                 </div>

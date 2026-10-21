@@ -27,10 +27,10 @@ export function Ribbons({ words }: { words: string[] }) {
 
   return (
     <div className="relative z-10 my-10 overflow-hidden py-16 sm:my-16" aria-hidden="true">
-      <div className="relative -left-[5%] w-[110%] -rotate-2 bg-linear-to-r from-gold-deep via-gold to-gold-pale py-4 shadow-[0_20px_80px_-20px_rgba(230,194,122,0.5)]">
+      <div className="relative left-[-5%] w-[110%] -rotate-2 bg-linear-to-r from-gold-deep via-gold to-gold-pale py-4 shadow-[0_20px_80px_-20px_rgba(230,194,122,0.5)]">
         <Marquee speed={32}>{row(false)}</Marquee>
       </div>
-      <div className="absolute -left-[5%] top-1/2 w-[110%] -translate-y-1/2 rotate-2 border-y border-line bg-ink/90 py-4 backdrop-blur-sm">
+      <div className="absolute left-[-5%] top-1/2 w-[110%] -translate-y-1/2 rotate-2 border-y border-line bg-ink/90 py-4 backdrop-blur-sm">
         <Marquee speed={40} reverse>
           {row(true)}
         </Marquee>

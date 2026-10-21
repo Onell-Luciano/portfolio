@@ -35,7 +35,7 @@ function Backdrop({ number }: { number: string }) {
         <div className="halo inset-0 opacity-60" />
         <div className="orbit inset-[14%]" />
       </div>
-      <span className="display-serif absolute -bottom-[0.18em] -right-[0.04em] text-[clamp(8rem,16vw,15rem)] italic leading-none text-gold/[0.07]">
+      <span className="display-serif absolute bottom-[-0.18em] right-[-0.04em] text-[clamp(8rem,16vw,15rem)] italic leading-none text-gold/[0.07]">
         {number}
       </span>
     </div>
@@ -65,7 +65,7 @@ function ProjectVisual({ project, framed = true }: { project: Project; framed?: 
         <div className="absolute inset-x-[7%] top-1/2 -translate-y-1/2 perspective-[1600px]">
           <div
             className={`overflow-hidden rounded-xl border border-line-strong bg-ink shadow-[0_40px_100px_-30px_rgba(0,0,0,0.9),0_0_0_1px_rgba(230,194,122,0.08)] transition-transform duration-1200 ease-(--ease-divine) ${
-              framed ? "rotate-x-[8deg] -rotate-y-[12deg] group-hover:rotate-x-0 group-hover:rotate-y-0" : ""
+              framed ? "rotate-x-[8deg] -rotate-y-12 group-hover:rotate-x-0 group-hover:rotate-y-0" : ""
             }`}
           >
             <div className="flex items-center gap-1.5 border-b border-line bg-ink-3 px-3 py-2">
@@ -305,7 +305,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                 )}
               </div>
             ) : (
-              <div className="relative aspect-16/9 sm:aspect-21/9">
+              <div className="relative aspect-video sm:aspect-21/9">
                 <ProjectVisual project={project} framed={false} />
               </div>
             )}

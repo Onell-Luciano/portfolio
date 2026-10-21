@@ -13,7 +13,7 @@ export function Contact({ onCopyEmail }: { onCopyEmail: () => void }) {
 
   return (
     <section id="contact" className="relative z-10 overflow-hidden pb-16 pt-28 sm:pt-40">
-      <div className="god-rays rotate-180 top-auto! -bottom-[20%]" aria-hidden="true" />
+      <div className="god-rays rotate-180 top-auto! bottom-[-20%]" aria-hidden="true" />
       <div className="aura bottom-0 left-1/2 h-136 w-240 -translate-x-1/2 translate-y-1/2 bg-gold/15" aria-hidden="true" />
 
       <div className="relative mx-auto flex max-w-7xl flex-col items-center px-5 text-center sm:px-8">
@@ -27,7 +27,7 @@ export function Contact({ onCopyEmail }: { onCopyEmail: () => void }) {
 
         {/* Orbiting CTA */}
         <FadeUp delay={0.3} className="relative mt-20 flex items-center justify-center">
-          <div className="pointer-events-none absolute aspect-square w-[22rem] sm:w-[28rem]" aria-hidden="true">
+          <div className="pointer-events-none absolute aspect-square w-88 sm:w-md" aria-hidden="true">
             <div className="halo inset-0 opacity-70" />
             <div className="orbit inset-[12%] border-dashed" />
             <div className="spin-slow absolute inset-[12%]">
