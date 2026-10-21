@@ -14,20 +14,20 @@
   --line-strong: rgba(243, 238, 228, 0.2);
 
   /* Bleu divin (remplace l'or) */
-  --gold: #7f9cff;              /* bleu principal */
-  --gold-deep: #3f63d9;         /* bleu profond */
-  --gold-pale: #cfe0ff;         /* bleu pâle / ciel */
+--gold: #4f8cff;         /* bleu plus saturé */
+--gold-deep: #1e3a8a;    /* bleu nuit */
+--gold-pale: #bcd4ff;    /* bleu glacier */
 
   --celestial: #7f9cff;         /* conservé */
-  --divine: linear-gradient(
-    115deg,
-    #e8f0ff 0%,
-    #7f9cff 22%,
-    #3f63d9 44%,
-    #a9c3ff 62%,
-    #7f9cff 80%,
-    #e8f0ff 100%
-  );
+--divine: linear-gradient(
+  115deg,
+  #dbe7ff 0%,
+  #4f8cff 22%,
+  #1e3a8a 44%,
+  #8fb3ff 62%,
+  #4f8cff 80%,
+  #dbe7ff 100%
+);
   --ease-divine: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: dark;
 }

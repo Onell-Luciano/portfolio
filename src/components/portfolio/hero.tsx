@@ -112,25 +112,25 @@ export function Hero({ ready, stats, onCopyEmail }: { ready: boolean; stats: Sta
             className="relative mx-auto w-full max-w-[20rem] sm:max-w-sm lg:col-span-5 lg:max-w-none xl:col-span-4"
           >
             <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-[-7%] aspect-square w-[122%] -translate-x-1/2">
-              <div className="halo inset-0" />
-              <div className="orbit inset-[9%]" />
-              <div className="orbit -inset-[6%] border-dashed opacity-50" />
-              <div className="spin-slow absolute inset-[9%]">
-                <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold shadow-[0_0_18px_5px_rgba(230,194,122,0.55)]" />
+                <div className="halo inset-0" />
+                <div className="orbit inset-[9%]" />
+                <div className="orbit -inset-[6%] border-dashed opacity-50" />
+                <div className="spin-slow absolute inset-[9%]">
+                  <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold shadow-[0_0_18px_5px_rgba(127,156,255,0.55)]" />
+                </div>
               </div>
-            </div>
             <div aria-hidden="true" className="aura inset-x-6 top-1/3 h-2/3 bg-gold/25" />
 
-            <div className="arch relative aspect-4/5 overflow-hidden border border-line-strong bg-ink-2 shadow-[0_50px_120px_-40px_rgba(230,194,122,0.45)]">
+            <div className="relative aspect-square overflow-hidden rounded-full border border-line-strong bg-ink-2 shadow-[0_50px_120px_-40px_rgba(127,156,255,0.45)]">
               <motion.div style={{ y: imageY, scale: 1.32, transformOrigin: "50% 78%" }} className="absolute inset-0">
                 <Image
-                  src="/image/profile/jqcDP.png"
-                  alt="O'Nell Luciano Rasamiarison — Full-Stack & AI Developer"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 80vw, 34vw"
-                  className="object-cover object-[50%_80%]"
-                />
+                    src="/image/profile/jqcDP.png"
+                    alt="O'Nell Luciano Rasamiarison — Full-Stack & AI Developer"
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 80vw, 34vw"
+                    className="object-cover object-[50%_30%]"
+                  />
               </motion.div>
               <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/5 to-transparent" />
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(230,194,122,0.28),transparent_60%)] mix-blend-screen" />
