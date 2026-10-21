@@ -104,61 +104,69 @@ export function Hero({ ready, stats, onCopyEmail }: { ready: boolean; stats: Sta
             </motion.div>
           </motion.div>
 
-          {/* Portrait — arched, haloed */}
+          {/* Portrait — cadre arrondi, moderne, chaleureux */}
           <motion.div
             initial={{ opacity: 0, y: 60, scale: 0.94 }}
             animate={ready ? { opacity: 1, y: 0, scale: 1 } : undefined}
             transition={{ duration: 1.5, ease: EASE, delay: 0.35 }}
             className="relative mx-auto w-full max-w-[20rem] sm:max-w-sm lg:col-span-5 lg:max-w-none xl:col-span-4"
           >
-            <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-[-7%] aspect-square w-[122%] -translate-x-1/2">
-                <div className="halo inset-0" />
-                <div className="orbit inset-[9%]" />
-                <div className="orbit inset-[-6%] border-dashed opacity-50" />
-                <div className="spin-slow absolute inset-[9%]">
-                  <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold shadow-[0_0_18px_5px_rgba(127,156,255,0.55)]" />
-                </div>
-              </div>
-            <div aria-hidden="true" className="aura inset-x-6 top-1/3 h-2/3 bg-gold/25" />
+            {/* Aura douce derrière — plus de halo conique */}
+            <div
+              aria-hidden="true"
+              className="aura -inset-8 bg-celestial/20 blur-3xl"
+            />
 
-            <div className="relative aspect-square overflow-hidden rounded-full border border-line-strong bg-ink-2 shadow-[0_50px_120px_-40px_rgba(127,156,255,0.45)]">
-              <motion.div style={{ y: imageY, scale: 1.32, transformOrigin: "50% 78%" }} className="absolute inset-0">
+            {/* Petite étoile/point déco au lieu du badge tournant */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-3 -top-3 z-20 h-3 w-3 rounded-full bg-gold shadow-[0_0_18px_4px_rgba(79,140,255,0.6)]"
+            />
+
+            {/* Cadre arrondi asymétrique (style "arch") au lieu d'un cercle parfait */}
+            <div className="group relative aspect-[4/5] overflow-hidden rounded-[2rem] rounded-tl-[8rem] border border-line-strong bg-ink-2 shadow-[0_40px_100px_-30px_rgba(79,140,255,0.35)] transition-transform duration-700 ease-out hover:-rotate-1">
+              <motion.div
+                style={{ y: imageY, scale: 1.08, transformOrigin: "50% 40%" }}
+                className="absolute inset-0"
+              >
                 <Image
                   src="/image/profile/jqcDP.png"
                   alt="O'Nell Luciano Rasamiarison — Full-Stack & AI Developer"
                   fill
                   priority
                   sizes="(max-width: 1024px) 80vw, 34vw"
-                  className="object-cover object-[50%_60%]"
+                  className="object-cover object-[50%_35%] transition-transform duration-700 group-hover:scale-105"
                 />
               </motion.div>
-              <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/5 to-transparent" />
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(230,194,122,0.28),transparent_60%)] mix-blend-screen" />
-              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-5 sm:p-6">
-                <div>
-                  <p className="display-serif text-2xl italic text-ivory sm:text-3xl">O&apos;Nell Luciano</p>
-                  <p className="eyebrow mt-1 text-[0.55rem] text-mute">Rasamiarison</p>
-                </div>
-                <span className="eyebrow text-[0.55rem] text-gold">MG ✦ {new Date().getFullYear()}</span>
+
+              {/* Dégradé très discret, uniquement dans les coins inférieurs */}
+              <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-ink/60 via-transparent to-transparent opacity-70" />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_-10%,rgba(79,140,255,0.18),transparent_55%)] mix-blend-screen" />
+
+              {/* Badge "disponible" discret en bas à gauche */}
+              <div className="absolute bottom-4 left-4 z-10">
+                <span className="glass inline-flex items-center gap-2 rounded-full px-3 py-1.5">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="pulse-ring absolute inset-0 rounded-full bg-emerald-400" />
+                    <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  </span>
+                  <span className="eyebrow text-[0.55rem] text-ivory-dim">
+                    {t("ui.available")}
+                  </span>
+                </span>
               </div>
             </div>
 
-            {/* Rotating badge */}
-            {/* <a
-              href="#about"
-              aria-label={t("ui.scroll")}
-              className="glass group absolute -right-5 bottom-[24%] flex h-28 w-28 items-center justify-center rounded-full sm:-right-10 sm:h-32 sm:w-32"
-            >
-              <svg viewBox="0 0 100 100" className="spin-slow absolute inset-0 h-full w-full" aria-hidden="true">
-                <defs>
-                  <path id="badge-circle" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0" />
-                </defs>
-                <text className="fill-ivory-dim font-mono" fontSize="7.6" letterSpacing="2.4">
-                  <textPath href="#badge-circle">{t("ui.badge").repeat(2)}</textPath>
-                </text>
-              </svg>
-              <ArrowDown size={18} className="text-gold transition-transform duration-500 group-hover:translate-y-1" />
-            </a> */}
+            {/* Signature déplacée SOUS la photo, plus discrète */}
+            <div className="mt-4 flex items-center justify-between px-1">
+              <div>
+                <p className="text-sm font-medium text-ivory">O&apos;Nell Luciano</p>
+                <p className="eyebrow mt-0.5 text-[0.55rem] text-mute">Rasamiarison</p>
+              </div>
+              <span className="eyebrow text-[0.55rem] text-gold">
+                MG ✦ {new Date().getFullYear()}
+              </span>
+            </div>
           </motion.div>
         </div>
 
