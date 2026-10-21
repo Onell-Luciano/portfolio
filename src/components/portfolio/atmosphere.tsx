@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useMotionValue, useReducedMotion, useSpring } 
 import { useEffect, useRef, useState } from "react";
 import { EASE, EASE_IN_OUT, useMediaQuery } from "./primitives";
 
-/* ── Preloader: counter + name, then a curtain lifts ─────────── */
+/*  Preloader: counter + name, then a curtain lifts  */
 export function Preloader({ onDone }: { onDone: () => void }) {
   const reduce = useReducedMotion();
   const [count, setCount] = useState(0);
@@ -90,7 +90,7 @@ export function Preloader({ onDone }: { onDone: () => void }) {
   );
 }
 
-/* ── Custom cursor: dot + trailing ring with contextual label ── */
+/*  Custom cursor: dot + trailing ring with contextual label  */
 export function Cursor() {
   const enabled = useMediaQuery("(pointer: fine) and (prefers-reduced-motion: no-preference)");
   const [hover, setHover] = useState(false);
@@ -174,7 +174,7 @@ export function Cursor() {
   );
 }
 
-/* ── Starfield: slow, twinkling gold & ivory dust ────────────── */
+/*  Starfield: slow, twinkling gold & ivory dust  */
 export function Starfield() {
   const ref = useRef<HTMLCanvasElement>(null);
   const reduce = useReducedMotion();
@@ -245,7 +245,7 @@ export function Starfield() {
   return <canvas ref={ref} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 opacity-70" />;
 }
 
-/* ── Scroll progress hairline ────────────────────────────────── */
+/*  Scroll progress hairline  */
 export function ScrollProgress() {
   const [progress, setProgress] = useState(0);
   useEffect(() => {

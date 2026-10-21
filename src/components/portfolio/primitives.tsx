@@ -16,7 +16,7 @@ import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } fro
 export const EASE = [0.22, 1, 0.36, 1] as const;
 export const EASE_IN_OUT = [0.76, 0, 0.24, 1] as const;
 
-/* ── Media query ─────────────────────────────────────────────── */
+/*  Media query  */
 export function useMediaQuery(query: string) {
   return useSyncExternalStore(
     (onChange) => {
@@ -29,7 +29,7 @@ export function useMediaQuery(query: string) {
   );
 }
 
-/* ── Magnetic wrapper ────────────────────────────────────────── */
+/*  Magnetic wrapper  */
 export function Magnetic({
   children,
   strength = 0.35,
@@ -65,7 +65,7 @@ export function Magnetic({
   );
 }
 
-/* ── Word-by-word masked reveal ──────────────────────────────── */
+/*  Word-by-word masked reveal  */
 export function SplitReveal({
   text,
   className = "",
@@ -112,7 +112,7 @@ export function SplitReveal({
   );
 }
 
-/* ── Scroll-lit paragraph (words light up while scrolling) ───── */
+/*  Scroll-lit paragraph (words light up while scrolling)  */
 export function ScrollWords({ text, className = "" }: { text: string; className?: string }) {
   const ref = useRef<HTMLParagraphElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.85", "end 0.45"] });
@@ -138,7 +138,7 @@ function LitWord({ children, progress, range }: { children: string; progress: Mo
   );
 }
 
-/* ── Fade-up on view ─────────────────────────────────────────── */
+/*  Fade-up on view  */
 export function FadeUp({
   children,
   className = "",
@@ -163,7 +163,7 @@ export function FadeUp({
   );
 }
 
-/* ── Section header ──────────────────────────────────────────── */
+/*  Section header  */
 export function SectionLabel({ label, className = "" }: { label: string; className?: string }) {
   const name = label.split(" / ").slice(-1)[0];
   return (
@@ -174,7 +174,7 @@ export function SectionLabel({ label, className = "" }: { label: string; classNa
   );
 }
 
-/* ── Animated counter ────────────────────────────────────────── */
+/*  Animated counter  */
 export function Counter({ value, suffix = "", className = "" }: { value: number; suffix?: string; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true });
@@ -195,7 +195,7 @@ export function Counter({ value, suffix = "", className = "" }: { value: number;
   );
 }
 
-/* ── Live local time in Fianarantsoa ─────────────────────────── */
+/*  Live local time in Fianarantsoa  */
 export function LocalTime({ className = "" }: { className?: string }) {
   const [time, setTime] = useState<string | null>(null);
 
@@ -219,7 +219,7 @@ export function LocalTime({ className = "" }: { className?: string }) {
   );
 }
 
-/* ── Infinite marquee ────────────────────────────────────────── */
+/*  Infinite marquee  */
 export function Marquee({
   children,
   reverse = false,
@@ -242,7 +242,7 @@ export function Marquee({
   );
 }
 
-/* ── Spotlight pointer tracking ──────────────────────────────── */
+/*  Spotlight pointer tracking  */
 export function trackSpotlight(e: React.PointerEvent<HTMLElement>) {
   const r = e.currentTarget.getBoundingClientRect();
   e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);

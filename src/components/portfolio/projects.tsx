@@ -17,7 +17,7 @@ import { PROJECT_GROUPS, type Project, type ProjectGroup } from "./data";
 import { EASE, SectionLabel, SplitReveal, useMediaQuery } from "./primitives";
 import { FilterPills } from "./stack";
 
-/* ── Atmospheric backdrop shared by visuals ──────────────────── */
+/*  Atmospheric backdrop shared by visuals  */
 function Backdrop({ number }: { number: string }) {
   return (
     <div className="absolute inset-0 overflow-hidden bg-ink" aria-hidden="true">
@@ -42,7 +42,7 @@ function Backdrop({ number }: { number: string }) {
   );
 }
 
-/* ── Visual: framed screenshots, or a generative poster ─────── */
+/*  Visual: framed screenshots, or a generative poster  */
 function ProjectVisual({ project, framed = true }: { project: Project; framed?: boolean }) {
   const t = useTranslations();
   const ref = useRef<HTMLDivElement>(null);
@@ -122,7 +122,7 @@ function ProjectVisual({ project, framed = true }: { project: Project; framed?: 
   );
 }
 
-/* ── One stacked card ────────────────────────────────────────── */
+/*  One stacked card  */
 function ProjectCard({
   project,
   index,
@@ -200,7 +200,7 @@ function ProjectCard({
   );
 }
 
-/* ── Modal ───────────────────────────────────────────────────── */
+/*  Modal  */
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
   const t = useTranslations();
   const [index, setIndex] = useState(0);
@@ -361,7 +361,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   );
 }
 
-/* ── Section ─────────────────────────────────────────────────── */
+/*  Section  */
 export function Projects({ projects }: { projects: Project[] }) {
   const t = useTranslations();
   const [group, setGroup] = useState<ProjectGroup | "All">("All");
