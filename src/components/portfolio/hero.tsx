@@ -117,7 +117,7 @@ export function Hero({ ready, stats, onCopyEmail }: { ready: boolean; stats: Sta
               className="aura -inset-8 bg-celestial/20 blur-3xl"
             />
 
-            {/* Petite étoile/point déco au lieu du badge tournant */}
+            {/* Petit point déco au lieu du badge tournant */}
             <div
               aria-hidden="true"
               className="pointer-events-none absolute -right-3 -top-3 z-20 h-3 w-3 rounded-full bg-gold shadow-[0_0_18px_4px_rgba(79,140,255,0.6)]"
@@ -142,19 +142,6 @@ export function Hero({ ready, stats, onCopyEmail }: { ready: boolean; stats: Sta
               {/* Dégradé très discret, uniquement dans les coins inférieurs */}
               <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-ink/60 via-transparent to-transparent opacity-70" />
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_-10%,rgba(79,140,255,0.18),transparent_55%)] mix-blend-screen" />
-
-              {/* Badge "disponible" discret en bas à gauche */}
-              <div className="absolute bottom-4 left-4 z-10">
-                <span className="glass inline-flex items-center gap-2 rounded-full px-3 py-1.5">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="pulse-ring absolute inset-0 rounded-full bg-emerald-400" />
-                    <span className="relative h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                  </span>
-                  <span className="eyebrow text-[0.55rem] text-ivory-dim">
-                    {t("ui.available")}
-                  </span>
-                </span>
-              </div>
             </div>
 
             {/* Signature déplacée SOUS la photo, plus discrète */}
