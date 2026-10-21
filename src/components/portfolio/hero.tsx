@@ -124,13 +124,13 @@ export function Hero({ ready, stats, onCopyEmail }: { ready: boolean; stats: Sta
             <div className="relative aspect-square overflow-hidden rounded-full border border-line-strong bg-ink-2 shadow-[0_50px_120px_-40px_rgba(127,156,255,0.45)]">
               <motion.div style={{ y: imageY, scale: 1.32, transformOrigin: "50% 78%" }} className="absolute inset-0">
                 <Image
-                    src="/image/profile/jqcDP.png"
-                    alt="O'Nell Luciano Rasamiarison — Full-Stack & AI Developer"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 80vw, 34vw"
-                    className="object-cover object-[50%_30%]"
-                  />
+                  src="/image/profile/jqcDP.png"
+                  alt="O'Nell Luciano Rasamiarison — Full-Stack & AI Developer"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 80vw, 34vw"
+                  className="object-cover object-[50%_60%]"
+                />
               </motion.div>
               <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/5 to-transparent" />
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(230,194,122,0.28),transparent_60%)] mix-blend-screen" />
