@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ──────────────────────────────────────────────────────────────
-   Design tokens — "Celestial" : obsidian, ivory & divine gold
+   Design tokens — "Celestial" : obsidian, ivory & divine blue
    ────────────────────────────────────────────────────────────── */
 :root {
   --ink: #050507;
@@ -12,18 +12,21 @@
   --mute: #8a857c;
   --line: rgba(243, 238, 228, 0.09);
   --line-strong: rgba(243, 238, 228, 0.2);
-  --gold: #e6c27a;
-  --gold-deep: #b8893f;
-  --gold-pale: #fbecc8;
-  --celestial: #7f9cff;
+
+  /* Bleu divin (remplace l'or) */
+  --gold: #7f9cff;              /* bleu principal */
+  --gold-deep: #3f63d9;         /* bleu profond */
+  --gold-pale: #cfe0ff;         /* bleu pâle / ciel */
+
+  --celestial: #7f9cff;         /* conservé */
   --divine: linear-gradient(
     115deg,
-    #fff4d9 0%,
-    #e6c27a 22%,
-    #b8893f 44%,
-    #f7e3b0 62%,
-    #e6c27a 80%,
-    #fff4d9 100%
+    #e8f0ff 0%,
+    #7f9cff 22%,
+    #3f63d9 44%,
+    #a9c3ff 62%,
+    #7f9cff 80%,
+    #e8f0ff 100%
   );
   --ease-divine: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: dark;
@@ -156,11 +159,11 @@ html.has-cursor input {
     conic-gradient(
       from 180deg at 50% 0%,
       transparent 150deg,
-      rgba(230, 194, 122, 0.1) 165deg,
+      rgba(127, 156, 255, 0.10) 165deg,
       transparent 172deg,
-      rgba(251, 236, 200, 0.08) 182deg,
+      rgba(207, 224, 255, 0.08) 182deg,
       transparent 190deg,
-      rgba(230, 194, 122, 0.08) 198deg,
+      rgba(127, 156, 255, 0.08) 198deg,
       transparent 212deg
     );
   filter: blur(18px);
@@ -183,11 +186,11 @@ html.has-cursor input {
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    rgba(230, 194, 122, 0.9) 40deg,
+    rgba(127, 156, 255, 0.9) 40deg,
     transparent 110deg,
-    rgba(127, 156, 255, 0.55) 200deg,
+    rgba(63, 99, 217, 0.55) 200deg,
     transparent 260deg,
-    rgba(251, 236, 200, 0.8) 320deg,
+    rgba(207, 224, 255, 0.8) 320deg,
     transparent 360deg
   );
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
@@ -239,7 +242,7 @@ html.has-cursor input {
   z-index: -1;
   background: radial-gradient(
     480px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(230, 194, 122, 0.1),
+    rgba(127, 156, 255, 0.10),
     transparent 45%
   );
 }
@@ -247,7 +250,7 @@ html.has-cursor input {
   padding: 1px;
   background: radial-gradient(
     340px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(230, 194, 122, 0.75),
+    rgba(127, 156, 255, 0.75),
     transparent 45%
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -286,7 +289,7 @@ html.has-cursor input {
   background: var(--divine);
   background-size: 200% auto;
   color: var(--ink);
-  box-shadow: 0 0 0 1px rgba(251, 236, 200, 0.3) inset, 0 10px 40px -10px rgba(230, 194, 122, 0.55);
+  box-shadow: 0 0 0 1px rgba(207, 224, 255, 0.3) inset, 0 10px 40px -10px rgba(127, 156, 255, 0.55);
   animation: shine 9s linear infinite;
 }
 .btn-divine::after {
@@ -298,7 +301,7 @@ html.has-cursor input {
   transition: transform 900ms var(--ease-divine);
 }
 .btn-divine:hover {
-  box-shadow: 0 0 0 1px rgba(251, 236, 200, 0.5) inset, 0 16px 60px -8px rgba(230, 194, 122, 0.75);
+  box-shadow: 0 0 0 1px rgba(207, 224, 255, 0.5) inset, 0 16px 60px -8px rgba(127, 156, 255, 0.75);
 }
 .btn-divine:hover::after {
   transform: translateX(120%);
@@ -384,7 +387,7 @@ html.has-cursor input {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(90deg, rgba(230, 194, 122, 0.09), rgba(230, 194, 122, 0.02) 60%, transparent);
+  background: linear-gradient(90deg, rgba(127, 156, 255, 0.09), rgba(127, 156, 255, 0.02) 60%, transparent);
   content: "";
   transform: scaleX(0);
   transform-origin: left;
