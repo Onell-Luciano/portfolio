@@ -15,6 +15,7 @@ type Tag = "div" | "span" | "li" | "p" | "figure";
 /**
  * Animation signature du site : le contenu se révèle par masque
  * (clip-path + translateY), 600 ms, cubic-bezier(0.16, 1, 0.3, 1).
+ * Réservée aux titres : le texte courant ne s'anime pas.
  * Avec prefers-reduced-motion, l'état final est appliqué sans mouvement.
  */
 export function RevealMask({
@@ -36,7 +37,9 @@ export function RevealMask({
       className={className}
       initial={{ clipPath: MASK_HIDDEN, y: 20 }}
       whileInView={{ clipPath: MASK_SHOWN, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -8% 0px" }}
+      // Marge positive : le masque part juste avant l'entrée à l'écran,
+      // y compris après un saut d'ancre (plus de lignes laissées vides).
+      viewport={{ once: true, amount: 0, margin: "0px 0px 12% 0px" }}
       transition={reduce ? { duration: 0 } : { duration: 0.6, ease: EASE_SIGNATURE, delay }}
     >
       {children}

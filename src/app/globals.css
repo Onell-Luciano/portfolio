@@ -33,17 +33,30 @@
   --ease-signature: var(--ease-signature);
 }
 
-/* Espacements de la DA */
+/* Espacements de la DA : trois respirations, réduites de moitié sur mobile */
 @utility px-page {
   padding-inline: clamp(1.5rem, 6vw, 8rem);
 }
 
 @utility py-section {
-  padding-block: clamp(6rem, 15vh, 12rem);
+  padding-block: clamp(3.5rem, 8vh, 5rem);
+  @media (width >= 48rem) {
+    padding-block: clamp(5rem, 11vh, 8rem);
+  }
+}
+
+@utility py-section-lg {
+  padding-block: clamp(4.5rem, 10vh, 6rem);
+  @media (width >= 48rem) {
+    padding-block: clamp(7rem, 15vh, 11rem);
+  }
 }
 
 @utility mt-section {
-  margin-top: clamp(6rem, 15vh, 12rem);
+  margin-top: clamp(3.5rem, 8vh, 5rem);
+  @media (width >= 48rem) {
+    margin-top: clamp(5rem, 11vh, 8rem);
+  }
 }
 
 /* Petit libellé éditorial (catégories, méta) */
@@ -114,6 +127,17 @@ body {
   animation: reveal-mask 0.8s var(--ease-signature) both;
 }
 
+/* Le relief du hero apparaît lentement, après le nom */
+@keyframes reveal-relief {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+}
+.reveal-relief {
+  animation: reveal-relief 2.4s var(--ease-signature) 0.5s both;
+}
+
 /* Soulignement typographique qui se dessine depuis la gauche */
 .draw-underline {
   background-image: linear-gradient(currentColor, currentColor);
@@ -122,28 +146,17 @@ body {
   background-repeat: no-repeat;
   transition: background-size 500ms var(--ease-signature), color 200ms;
 }
-.draw-underline:focus-visible {
+.draw-underline:focus-visible,
+.draw-underline[aria-current="location"] {
+  background-size: 100% 1px;
+}
+.group:focus-within .souligne-groupe {
   background-size: 100% 1px;
 }
 @media (hover: hover) {
-  .draw-underline:hover {
+  .draw-underline:hover,
+  .group:hover .souligne-groupe {
     background-size: 100% 1px;
-  }
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Inventaire : la techno survolée passe en terracotta,
-   les autres du groupe s'estompent. Désactivé sur tactile.
-   ────────────────────────────────────────────────────────────── */
-.tech {
-  transition: opacity 150ms ease, color 150ms ease;
-}
-@media (hover: hover) and (pointer: fine) {
-  .tech-list:has(.tech:hover) .tech:not(:hover) {
-    opacity: 0.35;
-  }
-  .tech:hover {
-    color: var(--accent);
   }
 }
 
@@ -152,12 +165,73 @@ body {
   opacity: 0.18;
 }
 
+/* ──────────────────────────────────────────────────────────────
+   Transitions entre pages (View Transitions, via React).
+   Le titre et le visuel d'un projet passent de l'accueil
+   à sa fiche ; le reste de la page se fond.
+   ────────────────────────────────────────────────────────────── */
+::view-transition-group(.morph) {
+  animation-duration: 550ms;
+  animation-timing-function: var(--ease-signature);
+}
+::view-transition-image-pair(.morph) {
+  animation-name: via-blur;
+}
+@keyframes via-blur {
+  30% {
+    filter: blur(2px);
+  }
+}
+::view-transition-old(root) {
+  animation: 180ms ease-out both vt-fade-out;
+}
+::view-transition-new(root) {
+  animation: 320ms ease-in 120ms both vt-fade-in;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+/* Sens de lecture : on entre dans une étude de cas par le bas, on en ressort par le haut */
+:root:active-view-transition-type(nav-forward)::view-transition-new(root) {
+  animation:
+    320ms ease-in 120ms both vt-fade-in,
+    600ms var(--ease-signature) both vt-from-below;
+}
+:root:active-view-transition-type(nav-back)::view-transition-new(root) {
+  animation:
+    320ms ease-in 120ms both vt-fade-in,
+    600ms var(--ease-signature) both vt-from-above;
+}
+@keyframes vt-from-below {
+  from {
+    transform: translateY(24px);
+  }
+}
+@keyframes vt-from-above {
+  from {
+    transform: translateY(-24px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .reveal-css {
+  .reveal-css,
+  .reveal-relief {
     animation: none;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
   *,
   *::before,

@@ -2,8 +2,10 @@
   "nav": {
     "skip": "Aller au contenu",
     "home": "Accueil",
-    "manifeste": "Manifeste",
+    "sections": "Sections",
+    "cas": "Études de cas",
     "index": "Index",
+    "methode": "Méthode",
     "inventaire": "Inventaire",
     "parcours": "Parcours",
     "contact": "Contact",
@@ -11,20 +13,18 @@
     "cv": "CV"
   },
   "hero": {
-    "edition": "Portfolio — Édition {year}",
     "localTime": "Heure locale",
-    "scroll": "défiler"
+    "scroll": "défiler",
+    "map": "Courbes de niveau autour de Fianarantsoa, tous les 50 m"
   },
-  "manifeste": {
-    "label": "Manifeste",
-    "years": "années d'expérience",
-    "projects": "projets",
-    "techs": "technologies",
-    "capabilities": "Domaines"
+  "cas": {
+    "title": "Ce que j'ai construit.",
+    "read": "Lire l'étude de cas"
   },
   "index": {
-    "title": "Index",
-    "intro": "{count} projets, du terrain malgache aux pipelines d'IA. Survolez, puis entrez.",
+    "title": "Tous les projets.",
+    "intro": "{count} projets, du terrain malgache aux pipelines d'IA.",
+    "hint": "Survolez une ligne pour un aperçu.",
     "filter": "Filtrer par domaine",
     "all": "Tous",
     "colNumber": "N°",
@@ -32,24 +32,35 @@
     "colYear": "Année",
     "colDomains": "Domaines"
   },
-  "inventaire": {
-    "title": "Inventaire",
-    "intro": "{count} technologies, {groups} familles.",
-    "legend": "La graisse indique la maîtrise :"
-  },
-  "parcours": {
-    "title": "Parcours",
-    "intro": "Expériences, formations et façon de travailler.",
-    "experience": "Expérience",
-    "education": "Formation",
-    "seeProject": "Voir le projet",
+  "methode": {
+    "title": "Comment je travaille.",
+    "projects": "projets",
+    "experiences": "expériences",
+    "structures": "structures",
+    "since": "première mission",
+    "capabilities": "Domaines",
     "softSkills": "Façon de travailler",
     "languages": "Langues"
   },
+  "inventaire": {
+    "title": "Avec quels outils.",
+    "intro": "{count} technologies, {groups} familles."
+  },
+  "parcours": {
+    "title": "D'où je viens.",
+    "experience": "Expérience",
+    "education": "Formation",
+    "seeProject": "Voir le projet"
+  },
   "contact": {
-    "title": "Contact",
+    "title": "Écrivez-moi.",
     "heading": "Construisons quelque chose de grand.",
     "subheading": "Vous recherchez un développeur passionné, rigoureux et prêt à faire la différence sur des projets d'envergure ?",
+    "role": "Poste recherché",
+    "availability": "Disponibilité",
+    "timezone": "Fuseau",
+    "ahead": "{hours} h d'avance sur Paris",
+    "write": "Écrire un e-mail",
     "copy": "Copier l'adresse",
     "copied": "Adresse copiée",
     "cv": "Télécharger le CV",
@@ -59,23 +70,27 @@
     "designed": "Conçu et développé par",
     "stack": "Stack",
     "type": "Typo",
+    "relief": "Relief : SRTM via Terrarium (AWS Open Data)",
     "top": "Haut de page"
   },
   "projet": {
+    "caseStudy": "Étude de cas N° {n}",
     "back": "Retour à l'index",
     "of": "sur",
-    "year": "Année",
     "period": "Période",
     "context": "Contexte",
-    "category": "Catégorie",
     "domains": "Domaines",
     "stack": "Stack",
+    "role": "Mon rôle",
+    "metrics": "En chiffres",
     "problem": "Problème",
     "gesture": "Geste technique",
     "result": "Résultat",
+    "redo": "Ce que je referais",
     "highlights": "Points clés",
     "visuals": "Visuels",
     "figure": "Fig.",
+    "schema": "Schéma de principe",
     "private": "Code privé — visuels sur demande.",
     "repo": "Code source",
     "demo": "Démo",

@@ -2,8 +2,13 @@
 
 import { motion, useMotionTemplate, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { asLocale, profil } from "@/data/portfolio";
+
+// Position de Fianarantsoa dans public/topographie-fianarantsoa.svg
+// (affichée par `npm run topographie`).
+const REPERE = { x: 62.2, y: 66.6 };
 
 function LocalTime({ locale }: { locale: string }) {
   const [time, setTime] = useState<string | null>(null);
@@ -55,19 +60,41 @@ export function HeroTypographique() {
       ref={ref}
       id="top"
       aria-labelledby="hero-name"
-      className="px-page relative flex min-h-svh flex-col justify-between pb-10 pt-28 md:pt-32"
+      className="px-page relative isolate flex min-h-svh flex-col justify-between overflow-hidden pb-10 pt-28 md:pt-32"
     >
+      {/* Relief de Fianarantsoa : la cartographie comme signature */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[-20vw] top-16 -z-10 aspect-square w-[115vw] opacity-60 sm:right-[-8vw] sm:w-[80vw] lg:right-[-4vw] lg:top-1/2 lg:w-[min(64vw,118svh)] lg:-translate-y-1/2 lg:opacity-100"
+      >
+        <Image
+          src="/topographie-fianarantsoa.svg"
+          alt=""
+          width={960}
+          height={960}
+          unoptimized
+          fetchPriority="low"
+          className="reveal-relief h-full w-full mask-[radial-gradient(closest-side,#000_55%,transparent)]"
+        />
+        <span className="absolute" style={{ left: `${REPERE.x}%`, top: `${REPERE.y}%` }}>
+          <span className="absolute -left-1 -top-1 block h-2 w-2 rounded-full bg-accent" />
+          <span className="absolute -left-3 -top-3 block h-6 w-6 rounded-full border border-accent/50 motion-safe:animate-ping [animation-duration:2.4s]" />
+          <span className="label absolute right-4 top-1 whitespace-nowrap text-ink-soft lg:left-4 lg:right-auto">{profil.coordonnees}</span>
+        </span>
+      </div>
+      <p className="sr-only">{t("map")}</p>
+
       {/* Méta éditoriale */}
-      <div className="label grid gap-y-3 text-ink-soft sm:grid-cols-2 lg:grid-cols-4">
+      <div className="label flex flex-col gap-y-3 text-ink-soft lg:flex-row lg:justify-between lg:gap-x-10">
         <p className="reveal-css" style={reveal(0)}>
-          {t("edition", { year: new Date().getFullYear() })}
-        </p>
-        <p className="reveal-css" style={reveal(80)}>
           {profil.role[locale]} · {profil.discipline[locale]}
         </p>
-        <p className="reveal-css" style={reveal(160)}>
-          {profil.localisation[locale]} — <span className="sr-only">{t("localTime")} </span>
-          <LocalTime locale={locale} /> ({profil.fuseauLabel})
+        <p className="reveal-css" style={reveal(120)}>
+          {profil.localisation[locale]} —{" "}
+          <span className="whitespace-nowrap">
+            <span className="sr-only">{t("localTime")} </span>
+            <LocalTime locale={locale} /> ({profil.fuseauLabel})
+          </span>
         </p>
         <p className="reveal-css text-sage" style={reveal(240)}>
           {profil.disponibilite[locale]}
@@ -103,15 +130,14 @@ export function HeroTypographique() {
 
       {/* Phrase-manifeste + indice de scroll */}
       <div className="flex items-end justify-between gap-8">
-        <p className="reveal-css max-w-184 text-lg leading-snug md:text-xl" style={reveal(700)}>
-          {profil.accroche[locale]}
-          <span className="block text-ink-soft">{profil.statement[locale]}</span>
+        <p className="reveal-css max-w-[38ch] text-lg leading-snug md:text-xl" style={reveal(700)}>
+          {profil.positionnement[locale]}
         </p>
         <a
-          href="#manifeste"
+          href="#cas"
           className="reveal-css shrink-0 font-serif text-lg italic text-ink-soft hover:text-accent-ink"
           style={reveal(850)}
-          aria-label={tn("manifeste")}
+          aria-label={tn("cas")}
         >
           ({t("scroll")}) <span aria-hidden="true">↓</span>
         </a>

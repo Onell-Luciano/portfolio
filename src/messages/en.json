@@ -2,8 +2,10 @@
   "nav": {
     "skip": "Skip to content",
     "home": "Home",
-    "manifeste": "Manifesto",
+    "sections": "Sections",
+    "cas": "Case studies",
     "index": "Index",
+    "methode": "Approach",
     "inventaire": "Inventory",
     "parcours": "Trajectory",
     "contact": "Contact",
@@ -11,20 +13,18 @@
     "cv": "CV"
   },
   "hero": {
-    "edition": "Portfolio — {year} edition",
     "localTime": "Local time",
-    "scroll": "scroll"
+    "scroll": "scroll",
+    "map": "Contour lines around Fianarantsoa, every 50 m"
   },
-  "manifeste": {
-    "label": "Manifesto",
-    "years": "years of experience",
-    "projects": "projects",
-    "techs": "technologies",
-    "capabilities": "Fields"
+  "cas": {
+    "title": "What I've built.",
+    "read": "Read the case study"
   },
   "index": {
-    "title": "Index",
-    "intro": "{count} projects, from Malagasy fields to AI pipelines. Hover, then step in.",
+    "title": "Every project.",
+    "intro": "{count} projects, from Malagasy fields to AI pipelines.",
+    "hint": "Hover a row for a preview.",
     "filter": "Filter by field",
     "all": "All",
     "colNumber": "No.",
@@ -32,24 +32,35 @@
     "colYear": "Year",
     "colDomains": "Fields"
   },
-  "inventaire": {
-    "title": "Inventory",
-    "intro": "{count} technologies, {groups} families.",
-    "legend": "Weight indicates mastery:"
-  },
-  "parcours": {
-    "title": "Trajectory",
-    "intro": "Experience, education and ways of working.",
-    "experience": "Experience",
-    "education": "Education",
-    "seeProject": "See project",
+  "methode": {
+    "title": "How I work.",
+    "projects": "projects",
+    "experiences": "experiences",
+    "structures": "organisations",
+    "since": "first assignment",
+    "capabilities": "Fields",
     "softSkills": "Ways of working",
     "languages": "Languages"
   },
+  "inventaire": {
+    "title": "With which tools.",
+    "intro": "{count} technologies, {groups} families."
+  },
+  "parcours": {
+    "title": "Where I come from.",
+    "experience": "Experience",
+    "education": "Education",
+    "seeProject": "See project"
+  },
   "contact": {
-    "title": "Contact",
+    "title": "Write to me.",
     "heading": "Let's build something extraordinary.",
     "subheading": "Looking for a software engineer who brings deep technical rigor, creativity, and commitment to high-impact projects?",
+    "role": "Looking for",
+    "availability": "Availability",
+    "timezone": "Time zone",
+    "ahead": "{hours} h ahead of Paris",
+    "write": "Send an email",
     "copy": "Copy address",
     "copied": "Address copied",
     "cv": "Download CV",
@@ -59,23 +70,27 @@
     "designed": "Designed and developed by",
     "stack": "Stack",
     "type": "Type",
+    "relief": "Relief: SRTM via Terrarium (AWS Open Data)",
     "top": "Back to top"
   },
   "projet": {
+    "caseStudy": "Case study No. {n}",
     "back": "Back to index",
     "of": "of",
-    "year": "Year",
     "period": "Period",
     "context": "Context",
-    "category": "Category",
     "domains": "Fields",
     "stack": "Stack",
+    "role": "My role",
+    "metrics": "In numbers",
     "problem": "Problem",
     "gesture": "Technical move",
     "result": "Outcome",
+    "redo": "What I'd do differently",
     "highlights": "Key points",
     "visuals": "Visuals",
     "figure": "Fig.",
+    "schema": "Schematic",
     "private": "Private codebase — visuals on request.",
     "repo": "Source code",
     "demo": "Demo",

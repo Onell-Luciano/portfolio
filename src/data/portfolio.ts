@@ -17,9 +17,22 @@ export interface Visuel {
   hauteur: number;
 }
 
+/** Un libellé traduit, ou un nom propre identique dans les deux langues. */
+export type Libelle = string | Texte;
+
+/**
+ * Schéma de principe : les étapes d'un projet, de gauche à droite.
+ * Construit uniquement à partir des descriptions du projet.
+ */
+export interface EtapeSchema {
+  titre: Libelle;
+  elements: Libelle[];
+}
+
 export interface Projet {
   id: string;
-  numero: number; // ordre d'affichage (01, 02...)
+  numero: number; // ordre d'affichage (01, 02...), du plus démonstratif au moins démonstratif
+  vedette?: boolean; // mis en avant en tête de l'accueil (projets avec visuels)
   titre: Texte;
   annee: number;
   periode: Texte;
@@ -33,6 +46,11 @@ export interface Projet {
   resultat: Texte; // 1-2 phrases
   pointsCles: Texte[];
   visuels: Visuel[];
+  schema: EtapeSchema[];
+  // Champs d'étude de cas : affichés seulement s'ils sont renseignés.
+  role?: Texte; // « Mon rôle »
+  metriques?: { valeur: string; label: Texte }[]; // résultats chiffrés
+  aRefaire?: Texte; // « Ce que je referais autrement »
   lienRepo?: string;
   lienDemo?: string;
 }
@@ -77,7 +95,13 @@ export const profil = {
   role: { fr: "Développeur Full-Stack", en: "Full-Stack Developer" } as Texte,
   discipline: { fr: "IA · Data · SIG", en: "AI · Data · GIS" } as Texte,
   localisation: { fr: "Fianarantsoa, Madagascar", en: "Fianarantsoa, Madagascar" } as Texte,
+  coordonnees: "21°27′S · 47°05′E",
   fuseauLabel: "UTC+3",
+  // Phrase de positionnement du hero : ce que je fais, concrètement.
+  positionnement: {
+    fr: "J'assemble web, données et cartographie : applications mobiles hors-ligne, plateformes SIG, pipelines NLP.",
+    en: "I bring web, data and mapping together: offline-first mobile apps, GIS platforms, NLP pipelines.",
+  } as Texte,
   disponibilite: {
     fr: "Disponible — remote & relocalisation",
     en: "Available — remote & relocation",
@@ -109,7 +133,7 @@ export const profil = {
       "schedules that *write themselves*.",
     ],
   } as Record<Locale, string[]>,
-  anneesExperience: "4+",
+  anneesExperience: "4+", // conservé, plus affiché : les chiffres visibles sont calculés depuis le parcours
   ambition: {
     fr: "Je conçois et développe des systèmes modernes qui transforment des idées en produits numériques fiables.",
     en: "I design and build modern systems that turn ideas into dependable digital products.",
@@ -160,10 +184,10 @@ export const domaineLabel: Record<Domaine, Texte> = {
 
 /* ── Projets ──────────────────────────────────────────────────── */
 
-export const projets: Projet[] = [
+export const projets: Projet[] = ([
   {
     id: "bionexxMobile",
-    numero: 1,
+    numero: 4,
     titre: { fr: "Application Mobile Bionexx", en: "Bionexx Mobile Application" },
     annee: 2026,
     periode: { fr: "Depuis avr. 2026 · En cours", en: "Since Apr. 2026 · Ongoing" },
@@ -206,11 +230,35 @@ export const projets: Projet[] = [
       },
     ],
     visuels: [],
+    schema: [
+      {
+        titre: { fr: "Acteurs terrain", en: "Field actors" },
+        elements: [
+          { fr: "Producteurs", en: "Producers" },
+          { fr: "Prestataires", en: "Service providers" },
+          { fr: "Responsables", en: "Managers" },
+          { fr: "Agents de terrain", en: "Field agents" },
+        ],
+      },
+      {
+        titre: { fr: "Application Flutter", en: "Flutter app" },
+        elements: [
+          { fr: "Interface", en: "User interface" },
+          { fr: "Logique métier", en: "Business logic" },
+          { fr: "Achats & transactions", en: "Purchases & transactions" },
+        ],
+      },
+      {
+        titre: { fr: "Stockage local", en: "Local storage" },
+        elements: ["SQLite", { fr: "Hors-ligne d'abord", en: "Offline-first" }],
+      },
+    ],
   },
   {
     id: "webMapping",
-    numero: 2,
-    titre: { fr: "Web Mapping & Weather Platform", en: "Web Mapping & Weather Platform" },
+    numero: 1,
+    vedette: true,
+    titre: { fr: "Cartographie web & plateforme météo", en: "Web Mapping & Weather Platform" },
     annee: 2026,
     periode: { fr: "Depuis avr. 2026 · En cours", en: "Since Apr. 2026 · Ongoing" },
     contexte: { fr: "BIONEXX · Fianarantsoa", en: "BIONEXX · Fianarantsoa" },
@@ -271,11 +319,38 @@ export const projets: Projet[] = [
         hauteur: 944,
       },
     ],
+    schema: [
+      {
+        titre: { fr: "Sources", en: "Sources" },
+        elements: [
+          { fr: "Données multi-filières Bionexx", en: "Bionexx multi-sector data" },
+          "OpenStreetMap",
+          "OpenWeatherMap",
+          "OpenRouteService",
+        ],
+      },
+      {
+        titre: { fr: "Traitement spatial", en: "Spatial processing" },
+        elements: ["PostGIS", { fr: "Requêtes spatiales", en: "Spatial queries" }],
+      },
+      {
+        titre: { fr: "Application Next.js", en: "Next.js app" },
+        elements: [
+          { fr: "Carte Leaflet multi-couches", en: "Multi-layer Leaflet map" },
+          { fr: "Centre météo", en: "Weather center" },
+        ],
+      },
+      {
+        titre: { fr: "Usage", en: "Use" },
+        elements: [{ fr: "Analyse agricole multi-filière", en: "Multi-sector agricultural analysis" }],
+      },
+    ],
   },
   {
     id: "construction",
-    numero: 3,
-    titre: { fr: "Construction Planning System", en: "Construction Planning System" },
+    numero: 2,
+    vedette: true,
+    titre: { fr: "Système de planification de chantier", en: "Construction Planning System" },
     annee: 2025,
     periode: { fr: "Sept. 2025 – Déc. 2025", en: "Sep. 2025 – Dec. 2025" },
     contexte: { fr: "TITAN Construction · Fianarantsoa", en: "TITAN Construction · Fianarantsoa" },
@@ -336,11 +411,32 @@ export const projets: Projet[] = [
         hauteur: 297,
       },
     ],
+    schema: [
+      {
+        titre: { fr: "Entrée", en: "Input" },
+        elements: [
+          { fr: "Tâches du chantier", en: "Site tasks" },
+          { fr: "Contraintes entre tâches", en: "Task constraints" },
+        ],
+      },
+      {
+        titre: { fr: "API FastAPI", en: "FastAPI backend" },
+        elements: [{ fr: "Ordonnancement sous contraintes", en: "Constraint-based scheduling" }, "Python", "PostgreSQL"],
+      },
+      {
+        titre: { fr: "Tableau de bord React", en: "React dashboard" },
+        elements: [
+          { fr: "Timeline Gantt dynamique", en: "Dynamic Gantt timeline" },
+          { fr: "Tâches en temps réel", en: "Real-time tasks" },
+        ],
+      },
+    ],
   },
   {
     id: "nlp",
-    numero: 4,
-    titre: { fr: "Enhanced NLP with LLM", en: "Enhanced NLP with LLM" },
+    numero: 3,
+    vedette: true,
+    titre: { fr: "NLP augmenté par LLM", en: "Enhanced NLP with LLM" },
     annee: 2025,
     periode: { fr: "Juin 2025 – Déc. 2025", en: "Jun. 2025 – Dec. 2025" },
     contexte: { fr: "IDEA Academy · En ligne", en: "IDEA Academy · Online" },
@@ -401,6 +497,31 @@ export const projets: Projet[] = [
         hauteur: 448,
       },
     ],
+    schema: [
+      {
+        titre: { fr: "Entrée", en: "Input" },
+        elements: [{ fr: "Retours étudiants en texte libre", en: "Free-text student feedback" }],
+      },
+      {
+        titre: { fr: "Pipeline hybride", en: "Hybrid pipeline" },
+        elements: ["BERT", { fr: "Modèles statistiques", en: "Statistical models" }, "LLM"],
+      },
+      {
+        titre: { fr: "Analyse", en: "Analysis" },
+        elements: [
+          { fr: "Sentiments", en: "Sentiment" },
+          { fr: "Thématiques", en: "Topics" },
+          { fr: "Classification", en: "Classification" },
+        ],
+      },
+      {
+        titre: { fr: "Restitution", en: "Output" },
+        elements: [
+          { fr: "Dashboard interactif", en: "Interactive dashboard" },
+          { fr: "Reporting décisionnel", en: "Decision reporting" },
+        ],
+      },
+    ],
   },
   {
     id: "currency",
@@ -450,11 +571,29 @@ export const projets: Projet[] = [
       },
     ],
     visuels: [],
+    schema: [
+      {
+        titre: { fr: "Utilisateur", en: "User" },
+        elements: [{ fr: "Connexion sécurisée", en: "Secure sign-in" }],
+      },
+      {
+        titre: "Next.js · TypeScript",
+        elements: [
+          "NextAuth.js",
+          { fr: "Graphiques Recharts", en: "Recharts charts" },
+          { fr: "Alertes & notifications", en: "Alerts & notifications" },
+        ],
+      },
+      {
+        titre: { fr: "Données", en: "Data" },
+        elements: [{ fr: "ORM Prisma", en: "Prisma ORM" }, "PostgreSQL"],
+      },
+    ],
   },
   {
     id: "stock",
     numero: 6,
-    titre: { fr: "Intelligent Stock Management", en: "Intelligent Stock Management" },
+    titre: { fr: "Gestion de stock intelligente", en: "Intelligent Stock Management" },
     annee: 2026,
     periode: { fr: "Avr. 2026 – Mai 2026", en: "Apr. 2026 – May 2026" },
     contexte: {
@@ -499,6 +638,25 @@ export const projets: Projet[] = [
       },
     ],
     visuels: [],
+    schema: [
+      {
+        titre: { fr: "Entrée", en: "Input" },
+        elements: [{ fr: "Données de stock", en: "Stock data" }],
+      },
+      {
+        titre: { fr: "Modèle de Wilson", en: "Wilson model" },
+        elements: ["EOQ", "Python"],
+      },
+      {
+        titre: { fr: "Interface Streamlit", en: "Streamlit interface" },
+        elements: [
+          { fr: "Quantité économique de commande", en: "Economic order quantity" },
+          { fr: "Seuils de réapprovisionnement", en: "Reorder points" },
+          { fr: "Coûts d'acquisition", en: "Acquisition costs" },
+          { fr: "Indicateurs décisionnels", en: "Decision indicators" },
+        ],
+      },
+    ],
   },
   {
     id: "transaction",
@@ -548,6 +706,24 @@ export const projets: Projet[] = [
       },
     ],
     visuels: [],
+    schema: [
+      {
+        titre: { fr: "Client", en: "Client" },
+        elements: [{ fr: "Requêtes REST", en: "REST requests" }],
+      },
+      {
+        titre: { fr: "Backend Spring Boot", en: "Spring Boot backend" },
+        elements: [
+          "Spring Security",
+          { fr: "Validation des données", en: "Data validation" },
+          { fr: "Utilisateurs · comptes · opérations", en: "Users · accounts · operations" },
+        ],
+      },
+      {
+        titre: { fr: "Persistance", en: "Persistence" },
+        elements: ["JPA / Hibernate", "PostgreSQL", { fr: "Cohérence transactionnelle", en: "Transactional consistency" }],
+      },
+    ],
   },
   {
     id: "cci",
@@ -588,6 +764,23 @@ export const projets: Projet[] = [
       },
     ],
     visuels: [],
+    schema: [
+      {
+        titre: { fr: "Données", en: "Data" },
+        elements: ["GeoJSON", "PostgreSQL · PostGIS"],
+      },
+      {
+        titre: { fr: "API backend", en: "Backend API" },
+        elements: ["Node.js"],
+      },
+      {
+        titre: { fr: "Cartes Leaflet.js", en: "Leaflet.js maps" },
+        elements: [
+          { fr: "Affichage optimisé", en: "Optimized display" },
+          { fr: "Navigation fluide", en: "Smooth navigation" },
+        ],
+      },
+    ],
   },
   {
     id: "data",
@@ -622,8 +815,29 @@ export const projets: Projet[] = [
       { fr: "Dashboards interactifs d'aide à la décision", en: "Interactive decision-making dashboards" },
     ],
     visuels: [],
+    schema: [
+      {
+        titre: { fr: "Entrée", en: "Input" },
+        elements: [{ fr: "Données brutes hétérogènes", en: "Raw heterogeneous data" }],
+      },
+      {
+        titre: "Python",
+        elements: [
+          { fr: "Classification", en: "Classification" },
+          { fr: "Nettoyage automatisé", en: "Automated cleaning" },
+        ],
+      },
+      {
+        titre: "Power BI",
+        elements: ["Power Query", "DAX", { fr: "ML low-code", en: "Low-code ML" }],
+      },
+      {
+        titre: { fr: "Restitution", en: "Output" },
+        elements: [{ fr: "Dashboards d'aide à la décision", en: "Decision-support dashboards" }],
+      },
+    ],
   },
-];
+] satisfies Projet[]).sort((a, b) => a.numero - b.numero);
 
 /* ── Technologies ─────────────────────────────────────────────── */
 
@@ -916,6 +1130,16 @@ export const formations: Formation[] = [
 /* ── Helpers ──────────────────────────────────────────────────── */
 
 export const nombreTechnos = technologies.reduce((n, g) => n + g.items.length, 0);
+
+// Chiffres affichés : toujours calculés depuis le parcours, donc toujours vrais.
+export const nombreStructures = new Set(experiences.map((e) => e.structure.fr.split(" · ")[0])).size;
+export const premiereAnnee = Math.min(
+  ...experiences.flatMap((e) => (e.periode.fr.match(/\d{4}/g) ?? []).map(Number)),
+);
+
+export function libelle(l: Libelle, locale: Locale) {
+  return typeof l === "string" ? l : l[locale];
+}
 
 export function pad(n: number) {
   return String(n).padStart(2, "0");
