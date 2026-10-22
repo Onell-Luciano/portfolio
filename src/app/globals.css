@@ -1,455 +1,167 @@
 @import "tailwindcss";
 
 /* ──────────────────────────────────────────────────────────────
-   Design tokens — "Celestial" : obsidian, ivory & divine blue
+   Piste C — Typographie monumentale + vide maîtrisé
+   Mode ivoire. Les contrastes sont calculés pour WCAG AA :
+   - ink-soft  / paper  ≈ 6.0:1
+   - accent-ink / paper ≈ 5.3:1 (petit texte)
+   - accent    / paper  ≈ 3.9:1 (grands titres uniquement)
+   - sage      / paper  ≈ 6.7:1
    ────────────────────────────────────────────────────────────── */
 :root {
-  --ink: #050507;
-  --ink-2: #0a0a0e;
-  --ink-3: #111117;
-  --ivory: #f3eee4;
-  --ivory-dim: #c8c2b6;
-  --mute: #8a857c;
-  --line: rgba(243, 238, 228, 0.09);
-  --line-strong: rgba(243, 238, 228, 0.2);
-
-  /* Bleu divin (remplace l'or) */
---gold: #4f8cff;         /* bleu plus saturé */
---gold-deep: #1e3a8a;    /* bleu nuit */
---gold-pale: #bcd4ff;    /* bleu glacier */
-
-  --celestial: #7f9cff;         /* conservé */
---divine: linear-gradient(
-  115deg,
-  #dbe7ff 0%,
-  #4f8cff 22%,
-  #1e3a8a 44%,
-  #8fb3ff 62%,
-  #4f8cff 80%,
-  #dbe7ff 100%
-);
-  --ease-divine: cubic-bezier(0.22, 1, 0.36, 1);
-  color-scheme: dark;
+  --paper: #f4f1ea;
+  --ink: #0a0a0b;
+  --ink-soft: #5e5b55;
+  --accent: #c8552f;
+  --accent-ink: #a8431f;
+  --sage: #3d5a50;
+  --rule: rgba(10, 10, 11, 0.14);
+  --ease-signature: cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: light;
 }
 
 @theme inline {
+  --color-paper: var(--paper);
   --color-ink: var(--ink);
-  --color-ink-2: var(--ink-2);
-  --color-ink-3: var(--ink-3);
-  --color-ivory: var(--ivory);
-  --color-ivory-dim: var(--ivory-dim);
-  --color-mute: var(--mute);
-  --color-line: var(--line);
-  --color-line-strong: var(--line-strong);
-  --color-gold: var(--gold);
-  --color-gold-deep: var(--gold-deep);
-  --color-gold-pale: var(--gold-pale);
-  --color-celestial: var(--celestial);
-  --color-background: var(--ink);
-  --color-foreground: var(--ivory);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-instrument-serif);
+  --color-ink-soft: var(--ink-soft);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-sage: var(--sage);
+  --color-rule: var(--rule);
+  --font-serif: var(--font-fraunces), "Times New Roman", serif;
+  --font-sans: var(--font-inter-tight), system-ui, sans-serif;
+  --ease-signature: var(--ease-signature);
+}
+
+/* Espacements de la DA */
+@utility px-page {
+  padding-inline: clamp(1.5rem, 6vw, 8rem);
+}
+
+@utility py-section {
+  padding-block: clamp(6rem, 15vh, 12rem);
+}
+
+@utility mt-section {
+  margin-top: clamp(6rem, 15vh, 12rem);
+}
+
+/* Petit libellé éditorial (catégories, méta) */
+@utility label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-feature-settings: "tnum" 1;
 }
 
 /* ──────────────────────────────────────────────────────────────
    Base
    ────────────────────────────────────────────────────────────── */
 html {
-  background: var(--ink);
+  background: var(--paper);
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: 6rem;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  min-height: 100vh;
-  background: var(--ink);
-  color: var(--ivory);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
-  overflow-x: hidden;
+  min-height: 100svh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-}
-
-/* Film grain — gives the black real depth */
-body::after {
-  position: fixed;
-  inset: -50%;
-  z-index: 90;
-  width: 200%;
-  height: 200%;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
-  content: "";
-  opacity: 0.07;
-  pointer-events: none;
-  animation: grain 1.2s steps(6) infinite;
+  overflow-x: clip;
 }
 
 ::selection {
-  background: var(--gold);
-  color: var(--ink);
+  background: var(--accent);
+  color: var(--paper);
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--ink);
-}
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(var(--gold), var(--gold-deep));
-  border-radius: 99px;
-}
-
+/* Focus visible sur tous les éléments interactifs */
 :focus-visible {
-  outline: 1.5px solid var(--gold);
+  outline: 2px solid var(--accent-ink);
   outline-offset: 4px;
-  border-radius: 4px;
 }
 
-/* Hide native cursor when the custom one is active */
-html.has-cursor,
-html.has-cursor * {
-  cursor: none !important;
-}
-html.has-cursor input {
-  cursor: text !important;
+.font-serif {
+  font-optical-sizing: auto;
 }
 
 /* ──────────────────────────────────────────────────────────────
-   Typography
+   Animation signature — version CSS pour le hero.
+   Elle joue dès le premier rendu, sans attendre l'hydratation
+   (meilleur LCP), avec la même courbe que <RevealMask />.
    ────────────────────────────────────────────────────────────── */
-.text-divine {
-  background: var(--divine);
-  background-size: 220% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: shine 9s linear infinite;
-}
-
-.text-outline {
-  color: transparent;
-  -webkit-text-stroke: 1px var(--line-strong);
-}
-
-.eyebrow {
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-}
-
-.display-serif {
-  font-family: var(--font-instrument-serif), serif;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 0.95;
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Atmosphere
-   ────────────────────────────────────────────────────────────── */
-.god-rays {
-  position: absolute;
-  inset: -20% -10% auto;
-  height: 120vh;
-  background:
-    conic-gradient(
-      from 180deg at 50% 0%,
-      transparent 150deg,
-      rgba(127, 156, 255, 0.10) 165deg,
-      transparent 172deg,
-      rgba(207, 224, 255, 0.08) 182deg,
-      transparent 190deg,
-      rgba(127, 156, 255, 0.08) 198deg,
-      transparent 212deg
-    );
-  filter: blur(18px);
-  pointer-events: none;
-  mask-image: linear-gradient(to bottom, black 20%, transparent 85%);
-  animation: rays 14s ease-in-out infinite alternate;
-}
-
-.aura {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(110px);
-  pointer-events: none;
-}
-
-/* Rotating halo behind the portrait */
-.halo {
-  position: absolute;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    rgba(127, 156, 255, 0.9) 40deg,
-    transparent 110deg,
-    rgba(63, 99, 217, 0.55) 200deg,
-    transparent 260deg,
-    rgba(207, 224, 255, 0.8) 320deg,
-    transparent 360deg
-  );
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
-  animation: spin 16s linear infinite;
-}
-
-.orbit {
-  position: absolute;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.arch {
-  border-radius: 999px 999px 1.75rem 1.75rem;
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Surfaces
-   ────────────────────────────────────────────────────────────── */
-.hairline {
-  border-color: var(--line);
-}
-
-.glass {
-  background: rgba(10, 10, 14, 0.55);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-}
-
-/* Cursor-tracked light — set --mx / --my from JS */
-.spotlight {
-  position: relative;
-  isolation: isolate;
-}
-.spotlight::before,
-.spotlight::after {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  content: "";
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 500ms var(--ease-divine);
-}
-.spotlight::before {
-  z-index: -1;
-  background: radial-gradient(
-    480px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(127, 156, 255, 0.10),
-    transparent 45%
-  );
-}
-.spotlight::after {
-  padding: 1px;
-  background: radial-gradient(
-    340px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(127, 156, 255, 0.75),
-    transparent 45%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-}
-.spotlight:hover::before,
-.spotlight:hover::after {
-  opacity: 1;
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Buttons
-   ────────────────────────────────────────────────────────────── */
-.btn-divine,
-.btn-ghost {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7rem;
-  overflow: hidden;
-  border-radius: 999px;
-  padding: 1rem 1.7rem;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  transition: color 450ms var(--ease-divine), border-color 450ms var(--ease-divine),
-    box-shadow 450ms var(--ease-divine);
-}
-
-.btn-divine {
-  background: var(--divine);
-  background-size: 200% auto;
-  color: var(--ink);
-  box-shadow: 0 0 0 1px rgba(207, 224, 255, 0.3) inset, 0 10px 40px -10px rgba(127, 156, 255, 0.55);
-  animation: shine 9s linear infinite;
-}
-.btn-divine::after {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.65) 50%, transparent 70%);
-  content: "";
-  transform: translateX(-120%);
-  transition: transform 900ms var(--ease-divine);
-}
-.btn-divine:hover {
-  box-shadow: 0 0 0 1px rgba(207, 224, 255, 0.5) inset, 0 16px 60px -8px rgba(127, 156, 255, 0.75);
-}
-.btn-divine:hover::after {
-  transform: translateX(120%);
-}
-
-.btn-ghost {
-  border: 1px solid var(--line-strong);
-  color: var(--ivory);
-}
-.btn-ghost::before {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  background: var(--ivory);
-  content: "";
-  transform: translateY(101%);
-  transition: transform 550ms var(--ease-divine);
-}
-.btn-ghost {
-  isolation: isolate;
-}
-.btn-ghost:hover {
-  border-color: var(--ivory);
-  color: var(--ink);
-}
-.btn-ghost:hover::before {
-  transform: translateY(0);
-}
-
-/* Underline link */
-.link-line {
-  position: relative;
-}
-.link-line::after {
-  position: absolute;
-  left: 0;
-  bottom: -3px;
-  width: 100%;
-  height: 1px;
-  background: currentColor;
-  content: "";
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 500ms var(--ease-divine);
-}
-.link-line:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Marquee
-   ────────────────────────────────────────────────────────────── */
-.marquee {
-  display: flex;
-  overflow: hidden;
-  user-select: none;
-  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-}
-.marquee-track {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  min-width: 100%;
-  animation: marquee 38s linear infinite;
-}
-.marquee-reverse .marquee-track {
-  animation-direction: reverse;
-}
-
-/* Rotating circular badge */
-.spin-slow {
-  animation: spin 22s linear infinite;
-}
-
-/* Education row sweep */
-.row-sweep {
-  position: relative;
-  isolation: isolate;
-}
-.row-sweep::before {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(90deg, rgba(127, 156, 255, 0.09), rgba(127, 156, 255, 0.02) 60%, transparent);
-  content: "";
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 700ms var(--ease-divine);
-}
-.row-sweep:hover::before {
-  transform: scaleX(1);
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Keyframes
-   ────────────────────────────────────────────────────────────── */
-@keyframes shine {
-  to {
-    background-position: 220% center;
-  }
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes marquee {
-  to {
-    transform: translateX(-100%);
-  }
-}
-@keyframes rays {
+@keyframes reveal-mask {
   from {
-    opacity: 0.65;
-    transform: rotate(-3deg) scale(1);
+    clip-path: inset(100% -8% -30% -8%);
+    transform: translateY(20px);
   }
   to {
-    opacity: 1;
-    transform: rotate(3deg) scale(1.06);
+    clip-path: inset(-20% -8% -30% -8%);
+    transform: none;
   }
 }
-@keyframes grain {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-6%, 4%); }
-  40% { transform: translate(5%, -7%); }
-  60% { transform: translate(-3%, 8%); }
-  80% { transform: translate(7%, -2%); }
-  100% { transform: translate(0, 0); }
+
+.reveal-css {
+  display: block;
+  animation: reveal-mask 0.8s var(--ease-signature) both;
 }
-@keyframes pulse-ring {
-  0% { transform: scale(1); opacity: 0.7; }
-  100% { transform: scale(2.6); opacity: 0; }
+
+/* Soulignement typographique qui se dessine depuis la gauche */
+.draw-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 500ms var(--ease-signature), color 200ms;
 }
-.pulse-ring {
-  animation: pulse-ring 1.8s var(--ease-divine) infinite;
+.draw-underline:focus-visible {
+  background-size: 100% 1px;
+}
+@media (hover: hover) {
+  .draw-underline:hover {
+    background-size: 100% 1px;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Inventaire : la techno survolée passe en terracotta,
+   les autres du groupe s'estompent. Désactivé sur tactile.
+   ────────────────────────────────────────────────────────────── */
+.tech {
+  transition: opacity 150ms ease, color 150ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .tech-list:has(.tech:hover) .tech:not(:hover) {
+    opacity: 0.35;
+  }
+  .tech:hover {
+    color: var(--accent);
+  }
+}
+
+/* Index : lignes estompées par le filtre */
+.is-dimmed {
+  opacity: 0.18;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
+  .reveal-css {
+    animation: none;
+  }
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }

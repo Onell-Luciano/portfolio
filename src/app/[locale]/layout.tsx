@@ -1,58 +1,79 @@
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import type { Metadata, Viewport } from "next";
+import { Fraunces, Inter_Tight } from "next/font/google";
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getMessages, setRequestLocale } from "next-intl/server";
+import { profil } from "@/data/portfolio";
 import { routing } from "@/i18n/routing";
+import "../globals.css";
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  axes: ["SOFT", "opsz"],
+  display: "swap",
+});
+
+const interTight = Inter_Tight({
+  variable: "--font-inter-tight",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const SITE_URL = "https://onell-luciano.vercel.app";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
+export const viewport: Viewport = {
+  themeColor: "#F4F1EA",
+};
 
-  if (locale === "fr") {
-    return {
-      title: "O'Nell Luciano Rasamiarison — Développeur Full-Stack | IA · Data · SIG",
-      description:
-        "Développeur full-stack d'excellence spécialisé dans les applications web modernes, les systèmes intelligents (IA & NLP), la data et les solutions géospatiales (SIG). Disponible pour opportunités Remote & Relocalisation.",
-      alternates: {
-        languages: {
-          en: "/en",
-          fr: "/fr",
-        },
-      },
-      openGraph: {
-        title: "O'Nell Luciano Rasamiarison — Développeur Full-Stack",
-        description: "Portfolio de développeur full-stack, spécialiste IA, Data et SIG.",
-        url: "https://onell-luciano.vercel.app/fr",
-        siteName: "O'Nell Luciano Rasamiarison Portfolio",
-        locale: "fr_FR",
-        type: "website",
-      },
-    };
-  }
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const fr = locale === "fr";
+
+  const title = fr
+    ? `${profil.nom} — Développeur Full-Stack | IA · Data · SIG`
+    : `${profil.nom} — Full-Stack Developer | AI · Data · GIS`;
+  const description = fr
+    ? "Développeur full-stack spécialisé dans les applications web modernes, les systèmes intelligents (IA & NLP), la data et les solutions géospatiales (SIG). Disponible pour opportunités Remote & Relocalisation."
+    : "Full-stack software developer engineering high-performance web systems, intelligent AI/NLP models, data pipelines, and interactive geospatial platforms for global opportunities.";
 
   return {
-    title: "O'Nell Luciano Rasamiarison — Full-Stack Developer | AI · Data · GIS",
-    description:
-      "Full-stack software developer engineering high-performance web systems, intelligent AI/NLP models, data pipelines, and interactive geospatial platforms for global opportunities.",
+    metadataBase: new URL(SITE_URL),
+    title: { default: title, template: `%s — ${profil.nom}` },
+    description,
+    authors: [{ name: profil.nom }],
+    keywords: [
+      profil.nom,
+      "Full-Stack Developer",
+      "Software Engineer",
+      "AI Developer",
+      "GIS Developer",
+      "PostGIS",
+      "Next.js",
+      "React",
+      "Python",
+      "FastAPI",
+      "PyTorch",
+      "Madagascar",
+      "Remote Developer",
+    ],
     alternates: {
-      languages: {
-        en: "/en",
-        fr: "/fr",
-      },
+      canonical: `/${locale}`,
+      languages: { en: "/en", fr: "/fr" },
     },
     openGraph: {
-      title: "O'Nell Luciano Rasamiarison — Full-Stack Developer",
-      description: "Portfolio of Full-Stack Developer, AI, Data & GIS Specialist.",
-      url: "https://onell-luciano.vercel.app/en",
-      siteName: "O'Nell Luciano Rasamiarison Portfolio",
-      locale: "en_US",
+      title: fr ? `${profil.nom} — Développeur Full-Stack` : `${profil.nom} — Full-Stack Developer`,
+      description: fr
+        ? "Portfolio de développeur full-stack, spécialiste IA, Data et SIG."
+        : "Portfolio of Full-Stack Developer, AI, Data & GIS Specialist.",
+      url: `${SITE_URL}/${locale}`,
+      siteName: `${profil.nom} Portfolio`,
+      locale: fr ? "fr_FR" : "en_US",
       type: "website",
     },
   };
@@ -66,18 +87,16 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
 
-  if (!routing.locales.includes(locale as "en" | "fr")) {
-    notFound();
-  }
+  setRequestLocale(locale);
+  const messages = await getMessages();
 
-  const messages = await getMessages({ locale });
-
-  // JSON-LD Structured Schema for Search Engines and Recruiters
+  // Données structurées pour les moteurs de recherche et les recruteurs
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: "O'Nell Luciano Rasamiarison",
+    name: profil.nom,
     jobTitle: "Full-Stack Developer & Software Engineer",
     knowsAbout: [
       "Full-Stack Web Development",
@@ -94,19 +113,16 @@ export default async function LocaleLayout({
       addressLocality: "Fianarantsoa",
       addressCountry: "Madagascar",
     },
-    email: "rasamiarisonluciano@gmail.com",
-    sameAs: ["https://github.com/ONell-Luciano"],
+    email: profil.email,
+    sameAs: [profil.github],
   };
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <div lang={locale} className="min-h-full bg-background text-foreground">
-        {children}
-      </div>
-    </NextIntlClientProvider>
+    <html lang={locale} className={`${fraunces.variable} ${interTight.variable}`}>
+      <body>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+      </body>
+    </html>
   );
 }
