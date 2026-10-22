@@ -2,13 +2,11 @@
 
 import { motion, useMotionTemplate, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { asLocale, profil } from "@/data/portfolio";
-
-// Position de Fianarantsoa dans public/topographie-fianarantsoa.svg
-// (affichée par `npm run topographie`).
-const REPERE = { x: 62.2, y: 66.6 };
+import { TOPO_REPERE as REPERE } from "@/data/topographie";
+import { useEstClient } from "@/lib/use-fine-pointer";
+import { Relief } from "./relief";
 
 function LocalTime({ locale }: { locale: string }) {
   const [time, setTime] = useState<string | null>(null);
@@ -36,6 +34,7 @@ export function HeroTypographique() {
   const locale = asLocale(useLocale());
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
+  const estClient = useEstClient();
 
   // Au défilement, le nom s'épaissit et s'adoucit (axes wght + SOFT de Fraunces),
   // et ses trois lignes s'écartent à des vitesses différentes.
@@ -67,19 +66,22 @@ export function HeroTypographique() {
         aria-hidden="true"
         className="pointer-events-none absolute right-[-20vw] top-16 -z-10 aspect-square w-[115vw] opacity-60 sm:right-[-8vw] sm:w-[80vw] lg:right-[-4vw] lg:top-1/2 lg:w-[min(64vw,118svh)] lg:-translate-y-1/2 lg:opacity-100"
       >
-        <Image
-          src="/topographie-fianarantsoa.svg"
-          alt=""
-          width={960}
-          height={960}
-          unoptimized
-          fetchPriority="low"
-          className="reveal-relief h-full w-full mask-[radial-gradient(closest-side,#000_55%,transparent)]"
-        />
+        {/* Les courbes se tracent une fois la page prête (1,5 s, en cascade) :
+            décor absent du HTML, il ne retarde pas le premier affichage. */}
+        {estClient && (
+          <Relief
+            contexte="hero"
+            className="h-full w-full text-carte-trait mask-[radial-gradient(closest-side,#000_55%,transparent)]"
+            duree={1.5}
+            delai={0.2}
+          />
+        )}
         <span className="absolute" style={{ left: `${REPERE.x}%`, top: `${REPERE.y}%` }}>
           <span className="absolute -left-1 -top-1 block h-2 w-2 rounded-full bg-accent" />
           <span className="absolute -left-3 -top-3 block h-6 w-6 rounded-full border border-accent/50 motion-safe:animate-ping [animation-duration:2.4s]" />
-          <span className="label absolute right-4 top-1 whitespace-nowrap text-ink-soft lg:left-4 lg:right-auto">{profil.coordonnees}</span>
+          <span className="coord absolute right-4 top-1 hidden whitespace-nowrap uppercase text-ink-soft sm:block lg:left-4 lg:right-auto">
+            {profil.localisation[locale].split(",")[0]}
+          </span>
         </span>
       </div>
       <p className="sr-only">{t("map")}</p>
@@ -127,6 +129,13 @@ export function HeroTypographique() {
           </motion.span>
         ))}
       </h1>
+      <p
+        className="coord reveal-css -mt-6 mb-12 text-[0.75rem] uppercase tracking-[0.08em] text-ink-soft md:-mt-4"
+        style={reveal(640)}
+      >
+        <span aria-hidden="true" className="mr-2 text-accent">⌖</span>
+        {profil.coordonnees} · {profil.localisation[locale]}
+      </p>
 
       {/* Phrase-manifeste + indice de scroll */}
       <div className="flex items-end justify-between gap-8">

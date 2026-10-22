@@ -22,7 +22,7 @@
     "read": "Lire l'étude de cas"
   },
   "index": {
-    "title": "Tous les projets.",
+    "title": "L’atlas des projets.",
     "intro": "{count} projets, du terrain malgache aux pipelines d'IA.",
     "hint": "Survolez une ligne pour un aperçu.",
     "filter": "Filtrer par domaine",
@@ -44,7 +44,9 @@
   },
   "inventaire": {
     "title": "Avec quels outils.",
-    "intro": "{count} technologies, {groups} familles."
+    "intro": "{count} technologies, {groups} familles.",
+    "legende": "Légende — inventaire",
+    "resume": "{count} technologies · {groups} familles"
   },
   "parcours": {
     "title": "D'où je viens.",
@@ -100,5 +102,24 @@
   "notFound": {
     "title": "Page introuvable.",
     "back": "Retour à l'accueil"
+  },
+  "carte": {
+    "legende": "Légende",
+    "tous": "Tous",
+    "filtre": "Filtrer la carte et la liste par domaine",
+    "points": "Projets placés sur la carte",
+    "description": "Carte des {count} projets : de gauche à droite, le temps ; de haut en bas, le domaine principal. Un itinéraire en pointillés les relie dans l’ordre chronologique. La liste complète suit la carte.",
+    "resume": "{projets} projets · {domaines} domaines · {debut}–{fin}",
+    "axes": "Longitude : le temps · Latitude : le domaine",
+    "temps": "Temps",
+    "cartouche": "Atlas des projets",
+    "planche": "Pl. 01",
+    "situation": "Situation",
+    "voir": "Voir la fiche",
+    "fermer": "Fermer l’aperçu",
+    "versListe": "Voir la liste des projets",
+    "liste": "Tous les projets",
+    "indice": "Survolez un point pour l’aperçu, cliquez pour ouvrir la fiche.",
+    "indiceTactile": "Touchez un point pour l’aperçu."
   }
 }

@@ -11,7 +11,7 @@ import { InventaireTechnos } from "@/components/editorial/inventaire-technos";
 import { Methode } from "@/components/editorial/methode";
 import { Parcours } from "@/components/editorial/parcours";
 import { SectionHeading } from "@/components/editorial/section-heading";
-import { asLocale, nombreTechnos, profil, projets, technologies } from "@/data/portfolio";
+import { asLocale, profil, projets } from "@/data/portfolio";
 
 export default function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = use(params);
@@ -49,7 +49,7 @@ function Accueil() {
           </div>
         </section>
 
-        <section id="index" aria-labelledby="index-title" className="px-page py-section">
+        <section id="index" aria-labelledby="index-title" className="px-page py-carte">
           <SectionHeading
             id="index-title"
             numero="02"
@@ -75,12 +75,7 @@ function Accueil() {
             numero="04"
             label={t("nav.inventaire")}
             title={t("inventaire.title")}
-            intro={
-              <>
-                <p>{profil.statement[l]}</p>
-                <p className="mt-2">{t("inventaire.intro", { count: nombreTechnos, groups: technologies.length })}</p>
-              </>
-            }
+            intro={profil.statement[l]}
           />
           <div className="mt-12 md:mt-16">
             <InventaireTechnos />

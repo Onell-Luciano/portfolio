@@ -17,7 +17,7 @@ export function SchemaPrincipe({
 }) {
   if (compact) {
     return (
-      <div className="flex h-full w-full items-center gap-[3%] bg-paper p-[6%] ring-1 ring-ink/15">
+      <div className="carte-grille-fond flex h-full w-full items-center gap-[3%] bg-carte-fond p-[6%] ring-1 ring-ink/15 [--grille-pas:12px]">
         {etapes.map((etape, i) => (
           <div key={i} className="flex min-w-0 flex-1 items-center gap-[3%]">
             <div className="min-w-0 flex-1 border border-ink/25 bg-paper px-2 py-2.5">
@@ -36,10 +36,10 @@ export function SchemaPrincipe({
   }
 
   return (
-    <ol className="grid gap-3 md:auto-cols-fr md:grid-flow-col md:gap-0">
+    <ol className="carte-grille-fond grid gap-3 bg-carte-fond p-3 ring-1 ring-carte-trait/15 [--grille-pas:20px] md:auto-cols-fr md:grid-flow-col md:gap-0 md:p-6">
       {etapes.map((etape, i) => (
         <li key={i} className="relative flex flex-col md:flex-row">
-          <div className="flex-1 border border-ink/20 p-5 md:p-6">
+          <div className="flex-1 border border-ink/20 bg-paper p-5 md:p-6">
             <p className="label text-sage">{pad(i + 1)}</p>
             <p className="mt-3 font-serif text-xl leading-tight md:text-2xl">{libelle(etape.titre, locale)}</p>
             <ul className="mt-4 space-y-1.5 text-sm text-ink-soft">

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter_Tight } from "next/font/google";
+import { Fraunces, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
@@ -18,6 +18,14 @@ const fraunces = Fraunces({
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// Coordonnées, numéros et légendes de carte (Piste A)
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -118,7 +126,7 @@ export default async function LocaleLayout({
   };
 
   return (
-    <html lang={locale} className={`${fraunces.variable} ${interTight.variable}`}>
+    <html lang={locale} className={`${fraunces.variable} ${interTight.variable} ${jetbrainsMono.variable}`}>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>

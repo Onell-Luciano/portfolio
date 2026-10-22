@@ -18,6 +18,14 @@
   --rule: rgba(10, 10, 11, 0.14);
   --ease-signature: cubic-bezier(0.16, 1, 0.3, 1);
   color-scheme: light;
+
+  /* Piste A — Cartographie vivante (ajouts) */
+  --carte-fond: #efeae0;
+  --carte-trait: #0a0a0b;
+  --carte-accent: #c8552f;
+  --carte-secondaire: #3d5a50;
+  --carte-grille: rgba(10, 10, 11, 0.08);
+  --space-carte: clamp(4rem, 10vh, 8rem);
 }
 
 @theme inline {
@@ -30,7 +38,26 @@
   --color-rule: var(--rule);
   --font-serif: var(--font-fraunces), "Times New Roman", serif;
   --font-sans: var(--font-inter-tight), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", monospace;
+  --color-carte-fond: var(--carte-fond);
+  --color-carte-trait: var(--carte-trait);
+  --color-carte-accent: var(--carte-accent);
+  --color-carte-secondaire: var(--carte-secondaire);
+  --color-carte-grille: var(--carte-grille);
   --ease-signature: var(--ease-signature);
+}
+
+/* Coordonnées, numéros, légendes de carte : JetBrains Mono, petit corps */
+@utility coord {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+@utility py-carte {
+  padding-block: var(--space-carte);
 }
 
 /* Espacements de la DA : trois respirations, réduites de moitié sur mobile */
@@ -160,6 +187,140 @@ body {
   }
 }
 
+/* ──────────────────────────────────────────────────────────────
+   Piste A — Cartographie vivante
+   ────────────────────────────────────────────────────────────── */
+@keyframes trace {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes point-appear {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Relief : chaque courbe se dessine, en cascade de 45 ms.
+   L'épaisseur est en unités du dessin, compensée selon sa taille à l'écran
+   pour rester proche d'un pixel. */
+.relief path {
+  stroke-width: var(--relief-trait, 0.9);
+  stroke-opacity: 0.22;
+  stroke-dasharray: 1000;
+  animation: trace var(--relief-duree, 1.5s) var(--ease-signature) calc(var(--relief-delai, 0s) + var(--i, 0) * 45ms)
+    both paused;
+}
+.relief path.maitresse {
+  stroke-width: calc(var(--relief-trait, 0.9) * 1.35);
+  stroke-opacity: 0.4;
+}
+.relief-joue path {
+  animation-play-state: running;
+}
+.relief-hero {
+  --relief-trait: 1.9;
+  @media (width >= 40rem) {
+    --relief-trait: 1.25;
+  }
+  @media (width >= 64rem) {
+    --relief-trait: 0.95;
+  }
+}
+.relief-carte {
+  --relief-trait: 2.2;
+  @media (width >= 48rem) {
+    --relief-trait: 0.8;
+  }
+}
+
+/* Grille de coordonnées : 20 × 20 cases (pas réglable via --grille-pas) */
+.carte-grille-fond {
+  background-image:
+    linear-gradient(to right, var(--carte-grille) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--carte-grille) 1px, transparent 1px);
+  background-size: var(--grille-pas, 5%) var(--grille-pas, 5%);
+}
+
+/* Papier topographique : fond chaud et grain très discret */
+.carte-papier {
+  background-color: var(--carte-fond);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-blend-mode: multiply;
+}
+
+/* Atlas : tout est en CSS et attend la classe .carte-vue (entrée dans l'écran).
+   L'itinéraire se dessine, les points et leurs étiquettes apparaissent
+   quand le tracé les atteint (délai fourni en style). */
+.carte .trace-itineraire {
+  stroke-dasharray: 1000;
+  animation: trace var(--duree, 2.4s) ease-in-out var(--debut, 0.45s) both paused;
+}
+.point-carte {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: point-appear 0.6s var(--ease-signature) var(--delai, 0s) both paused;
+}
+.etiquette-carte {
+  animation: vt-fade-in 0.4s ease var(--delai, 0s) both paused;
+}
+.carte-vue .trace-itineraire,
+.carte-vue .point-carte,
+.carte-vue .etiquette-carte {
+  animation-play-state: running;
+}
+/* Point survolé ou ouvert : pastille agrandie, halo qui se resserre */
+.pastille-carte,
+.halo-carte {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 200ms var(--ease-signature),
+    opacity 300ms var(--ease-signature);
+}
+.halo-carte {
+  opacity: 0;
+  transform: scale(0.4);
+}
+.est-actif .pastille-carte {
+  transform: scale(1.6);
+}
+.est-actif .halo-carte {
+  opacity: 1;
+  transform: none;
+}
+
+/* Inventaire en légende : la techno survolée passe en terracotta,
+   les autres de la famille s'estompent. Désactivé sur tactile. */
+.tech {
+  transition: opacity 150ms ease, color 150ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .tech-list:has(.tech:hover) .tech:not(:hover) {
+    opacity: 0.35;
+  }
+  .tech:hover {
+    color: var(--carte-accent);
+  }
+}
+
+/* Légende de domaines : défile horizontalement sur mobile, sans barre visible */
+.defilement-discret {
+  scrollbar-width: none;
+}
+.defilement-discret::-webkit-scrollbar {
+  display: none;
+}
+
 /* Index : lignes estompées par le filtre */
 .is-dimmed {
   opacity: 0.18;
@@ -226,6 +387,17 @@ body {
   }
   .reveal-css,
   .reveal-relief {
+    animation: none;
+  }
+  /* Carte : pas de dessin ni d'échelonnement, seulement l'opacité */
+  .point-carte,
+  .etiquette-carte {
+    animation: vt-fade-in 0.3s ease both paused;
+  }
+  .carte .trace-itineraire {
+    animation: none;
+  }
+  .relief path {
     animation: none;
   }
   ::view-transition-group(*),

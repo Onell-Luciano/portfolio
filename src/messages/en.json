@@ -22,7 +22,7 @@
     "read": "Read the case study"
   },
   "index": {
-    "title": "Every project.",
+    "title": "An atlas of the work.",
     "intro": "{count} projects, from Malagasy fields to AI pipelines.",
     "hint": "Hover a row for a preview.",
     "filter": "Filter by field",
@@ -44,7 +44,9 @@
   },
   "inventaire": {
     "title": "With which tools.",
-    "intro": "{count} technologies, {groups} families."
+    "intro": "{count} technologies, {groups} families.",
+    "legende": "Legend — inventory",
+    "resume": "{count} technologies · {groups} families"
   },
   "parcours": {
     "title": "Where I come from.",
@@ -100,5 +102,24 @@
   "notFound": {
     "title": "Page not found.",
     "back": "Back to home"
+  },
+  "carte": {
+    "legende": "Legend",
+    "tous": "All",
+    "filtre": "Filter the map and the list by field",
+    "points": "Projects placed on the map",
+    "description": "Map of the {count} projects: left to right, time; top to bottom, the main field. A dotted route links them in chronological order. The full list follows the map.",
+    "resume": "{projets} projects · {domaines} fields · {debut}–{fin}",
+    "axes": "Longitude: time · Latitude: field",
+    "temps": "Time",
+    "cartouche": "Atlas of the work",
+    "planche": "Pl. 01",
+    "situation": "Location",
+    "voir": "Open the case study",
+    "fermer": "Close the preview",
+    "versListe": "Go to the project list",
+    "liste": "Every project",
+    "indice": "Hover a point for a preview, click to open the case study.",
+    "indiceTactile": "Tap a point for a preview."
   }
 }

@@ -151,3 +151,19 @@ await writeFile(SORTIE, svg);
 console.log(
   `${chemins.length} courbes (${seuils[0]}–${seuils.at(-1)} m) · ${(svg.length / 1024).toFixed(0)} Ko · repère Fianarantsoa : ${(repere.x / taille * 100).toFixed(1)} % / ${(repere.y / taille * 100).toFixed(1)} %`,
 );
+
+// Même relief en module TypeScript : les courbes peuvent ainsi s'animer en ligne (hero, carte).
+const module_ = `// Généré par \`npm run topographie\` — ne pas modifier à la main.
+// Courbes de niveau autour de Fianarantsoa, équidistance ${EQUIDISTANCE} m (${seuils[0]}–${seuils.at(-1)} m).
+// Données : Terrarium (Mapzen / AWS Open Data, SRTM).
+
+export const TOPO_TAILLE = ${taille};
+
+/** Position de Fianarantsoa, en pourcentage du carré. */
+export const TOPO_REPERE = { x: ${(repere.x / taille * 100).toFixed(1)}, y: ${(repere.y / taille * 100).toFixed(1)} };
+
+export const TOPO_COURBES: { d: string; maitresse: boolean }[] = ${JSON.stringify(
+  chemins.filter((p) => p.d),
+)};
+`;
+await writeFile(new URL("../src/data/topographie.ts", import.meta.url), module_);

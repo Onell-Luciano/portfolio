@@ -33,6 +33,8 @@ export interface Projet {
   id: string;
   numero: number; // ordre d'affichage (01, 02...), du plus démonstratif au moins démonstratif
   vedette?: boolean; // mis en avant en tête de l'accueil (projets avec visuels)
+  // Position sur l'atlas des projets, en % : x suit le temps (2024 → 2026), y le domaine principal.
+  coordonnee?: { x: number; y: number };
   titre: Texte;
   annee: number;
   periode: Texte;
@@ -182,12 +184,22 @@ export const domaineLabel: Record<Domaine, Texte> = {
   Mobile: { fr: "Mobile", en: "Mobile" },
 };
 
+/** Teinte de chaque domaine sur l'atlas (points et légende). */
+export const domainesCouleurs: Record<Domaine, string> = {
+  "Full-Stack": "#C8552F", // terracotta
+  IA: "#3D5A50", // sauge
+  GIS: "#B8860B", // ocre
+  Data: "#4A5568", // ardoise
+  Mobile: "#6B4E71", // aubergine
+};
+
 /* ── Projets ──────────────────────────────────────────────────── */
 
 export const projets: Projet[] = ([
   {
     id: "bionexxMobile",
     numero: 4,
+    coordonnee: { x: 88, y: 86 },
     titre: { fr: "Application Mobile Bionexx", en: "Bionexx Mobile Application" },
     annee: 2026,
     periode: { fr: "Depuis avr. 2026 · En cours", en: "Since Apr. 2026 · Ongoing" },
@@ -257,6 +269,7 @@ export const projets: Projet[] = ([
   {
     id: "webMapping",
     numero: 1,
+    coordonnee: { x: 83, y: 72 },
     vedette: true,
     titre: { fr: "Cartographie web & plateforme météo", en: "Web Mapping & Weather Platform" },
     annee: 2026,
@@ -349,6 +362,7 @@ export const projets: Projet[] = ([
   {
     id: "construction",
     numero: 2,
+    coordonnee: { x: 64, y: 55 },
     vedette: true,
     titre: { fr: "Système de planification de chantier", en: "Construction Planning System" },
     annee: 2025,
@@ -435,6 +449,7 @@ export const projets: Projet[] = ([
   {
     id: "nlp",
     numero: 3,
+    coordonnee: { x: 53, y: 20 },
     vedette: true,
     titre: { fr: "NLP augmenté par LLM", en: "Enhanced NLP with LLM" },
     annee: 2025,
@@ -526,6 +541,7 @@ export const projets: Projet[] = ([
   {
     id: "currency",
     numero: 5,
+    coordonnee: { x: 40, y: 59 },
     titre: { fr: "Currency Track", en: "Currency Track" },
     annee: 2025,
     periode: { fr: "Mai 2025 – Juin 2025", en: "May 2025 – Jun. 2025" },
@@ -593,6 +609,7 @@ export const projets: Projet[] = ([
   {
     id: "stock",
     numero: 6,
+    coordonnee: { x: 78, y: 37 },
     titre: { fr: "Gestion de stock intelligente", en: "Intelligent Stock Management" },
     annee: 2026,
     periode: { fr: "Avr. 2026 – Mai 2026", en: "Apr. 2026 – May 2026" },
@@ -661,6 +678,7 @@ export const projets: Projet[] = ([
   {
     id: "transaction",
     numero: 7,
+    coordonnee: { x: 30, y: 54 },
     titre: { fr: "Plateforme web de transactions en ligne", en: "Online Transaction Web Platform" },
     annee: 2025,
     periode: { fr: "Avr. 2025 – Mai 2025", en: "Apr. 2025 – May 2025" },
@@ -728,6 +746,7 @@ export const projets: Projet[] = ([
   {
     id: "cci",
     numero: 8,
+    coordonnee: { x: 13, y: 72 },
     titre: { fr: "Application SIG de la CCI", en: "CCI GIS Application" },
     annee: 2024,
     periode: { fr: "Sept. 2024 – Nov. 2024", en: "Sep. 2024 – Nov. 2024" },
@@ -785,6 +804,7 @@ export const projets: Projet[] = ([
   {
     id: "data",
     numero: 9,
+    coordonnee: { x: 49, y: 38 },
     titre: { fr: "Classification et nettoyage de données", en: "Data Classification & Cleaning" },
     annee: 2025,
     periode: { fr: "Juin 2025 – Août 2025", en: "Jun. 2025 – Aug. 2025" },
