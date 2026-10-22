@@ -173,7 +173,7 @@ export default async function ProjetPage({ params }: Props) {
             </p>
 
             {projet.metriques && projet.metriques.length > 0 && (
-              <dl aria-label={t("metrics")} className="mt-14 grid grid-cols-2 gap-8 border-t border-rule pt-8 sm:grid-cols-3">
+              <dl aria-label={t("metrics")} className="mt-14 grid grid-cols-2 gap-8 border-t border-rule pt-8 lg:grid-cols-4">
                 {projet.metriques.map((m) => (
                   <div key={m.label.en} className="flex flex-col">
                     <dt className="label order-2 mt-2 text-ink-soft">{m.label[l]}</dt>
@@ -190,17 +190,10 @@ export default async function ProjetPage({ params }: Props) {
               ))}
               {projet.aRefaire && <Bloc label={t("redo")} texte={projet.aRefaire[l]} />}
 
-              <section className="grid gap-y-3 border-t border-rule pt-8 md:grid-cols-8 md:gap-x-8">
-                <h2 className="label text-sage md:col-span-2">{t("highlights")}</h2>
-                <ol className="space-y-4 md:col-span-6">
-                  {projet.pointsCles.map((p, i) => (
-                    <li key={p.en} className="grid max-w-[65ch] grid-cols-[2rem_1fr] text-ink-soft">
-                      <span className="label pt-1 tabular-nums text-sage">{pad(i + 1)}</span>
-                      <span>{p[l]}</span>
-                    </li>
-                  ))}
-                </ol>
-              </section>
+              {projet.fonctionnalites && projet.fonctionnalites.length > 0 && (
+                <Liste label={t("features")} items={projet.fonctionnalites.map((f) => f[l])} />
+              )}
+              <Liste label={t("highlights")} items={projet.pointsCles.map((p) => p[l])} />
 
               <div className="label flex flex-wrap gap-x-10 gap-y-4 border-t border-rule pt-8">
                 {projet.lienRepo && (
@@ -259,6 +252,22 @@ export default async function ProjetPage({ params }: Props) {
       </main>
       <Colophon />
     </>
+  );
+}
+
+function Liste({ label, items }: { label: string; items: string[] }) {
+  return (
+    <section className="grid gap-y-3 border-t border-rule pt-8 md:grid-cols-8 md:gap-x-8">
+      <h2 className="label text-sage md:col-span-2">{label}</h2>
+      <ol className="space-y-4 md:col-span-6">
+        {items.map((texte, i) => (
+          <li key={i} className="grid max-w-[65ch] grid-cols-[2rem_1fr] text-ink-soft">
+            <span className="label pt-1 tabular-nums text-sage">{pad(i + 1)}</span>
+            <span>{texte}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
   );
 }
 

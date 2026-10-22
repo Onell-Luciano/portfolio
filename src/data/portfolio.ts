@@ -53,6 +53,7 @@ export interface Projet {
   role?: Texte; // « Mon rôle »
   metriques?: { valeur: string; label: Texte }[]; // résultats chiffrés
   aRefaire?: Texte; // « Ce que je referais autrement »
+  fonctionnalites?: Texte[]; // liste détaillée, affichée sur la fiche si renseignée
   lienRepo?: string;
   lienDemo?: string;
 }
@@ -197,8 +198,378 @@ export const domainesCouleurs: Record<Domaine, string> = {
 
 export const projets: Projet[] = ([
   {
+    id: "agrivision",
+    numero: 1,
+    coordonnee: { x: 96, y: 72 },
+    vedette: true,
+    titre: { fr: "AgriVision", en: "AgriVision" },
+    annee: 2026,
+    periode: { fr: "Depuis oct. 2026 · En cours", en: "Since Oct. 2026 · Ongoing" },
+    contexte: { fr: "TANJAKAI Madagascar", en: "TANJAKAI Madagascar" },
+    categorie: { fr: "SIG · IA · Biosécurité agricole", en: "GIS · AI · Agricultural biosecurity" },
+    domaines: ["GIS", "IA", "Full-Stack"],
+    stack: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "Tailwind CSS 4",
+      "TanStack Query",
+      "Zustand",
+      "Leaflet",
+      "Recharts",
+      "Framer Motion",
+      "Express 5",
+      "Zod",
+      "Swagger",
+      "Prisma",
+      "PostgreSQL / PostGIS",
+      "JWT",
+      "Computer vision",
+    ],
+    description: {
+      fr: "Plateforme de biosécurité agricole pour Madagascar : une application web de détection précoce et de suivi des maladies des cultures. Les techniciens diagnostiquent une plante à partir d'une photo grâce à un modèle d'IA, les foyers sont cartographiés en temps réel et les décideurs pilotent alertes, protocoles de traitement et impact économique depuis un tableau de bord unique.",
+      en: "An agricultural biosecurity platform for Madagascar: a web application for early detection and monitoring of crop diseases. Technicians diagnose a plant from a photo with an AI model, outbreaks are mapped in real time, and decision-makers manage alerts, treatment protocols and economic impact from a single dashboard.",
+    },
+    probleme: {
+      fr: "Le réseau agricole malgache — coopératives, techniciens de terrain, agronomes et décideurs du ministère — a besoin de trois choses que l'on trouve rarement ensemble : le diagnostic par IA sur le terrain, la cartographie des risques et l'aide à la décision.",
+      en: "Madagascar's agricultural network — cooperatives, field technicians, agronomists and ministry decision-makers — needs three things rarely found together: AI diagnosis in the field, risk mapping and decision support.",
+    },
+    gesteTechnique: {
+      fr: "Un frontend Next.js 16 / React 19 en TypeScript, une API REST Express 5 organisée en modules selon une architecture en couches (domaine, application, infrastructure, présentation), PostgreSQL et PostGIS via Prisma pour les requêtes spatiales, et un service d'inférence IA séparé, appelé par l'API.",
+      en: "A Next.js 16 / React 19 front end in TypeScript, an Express 5 REST API organised in modules following a layered architecture (domain, application, infrastructure, presentation), PostgreSQL and PostGIS through Prisma for spatial queries, and a separate AI inference service called by the API.",
+    },
+    resultat: {
+      fr: "Une plateforme de surveillance épidémiologique des cultures qui relie le diagnostic photo par IA, la carte des foyers en temps réel et le pilotage des alertes, des protocoles de traitement et de l'impact économique.",
+      en: "A crop epidemiological surveillance platform that ties together AI photo diagnosis, a real-time outbreak map, and the management of alerts, treatment protocols and economic impact.",
+    },
+    role: {
+      fr: "Développement full-stack : intégration frontend–backend, modules API, design system, RBAC et traçabilité.",
+      en: "Full-stack development: frontend–backend integration, API modules, design system, RBAC and audit trail.",
+    },
+    fonctionnalites: [
+      {
+        fr: "Diagnostic photo par IA : une photo de feuille suffit. Un modèle de vision identifie la pathologie et donne un indice de confiance. En dessous d'un seuil de fiabilité, une vérification par un technicien est demandée. Les analyses sont historisées et alimentent un jeu de données d'entraînement.",
+        en: "AI photo diagnosis: a single leaf photo is enough. A vision model identifies the disease and gives a confidence score. Below a reliability threshold, a technician is asked to verify. Analyses are logged and feed a training dataset.",
+      },
+      {
+        fr: "Carte épidémiologique : les zones agricoles sont représentées par leurs vraies géométries (PostGIS) et colorées selon le niveau de risque. Une frise temporelle montre l'évolution sur plusieurs semaines.",
+        en: "Epidemiological map: farming areas are drawn with their real geometries (PostGIS) and coloured by risk level. A timeline shows how things evolve over several weeks.",
+      },
+      {
+        fr: "Alertes phytosanitaires : priorisation, prise en charge, résolution et historique complet de chaque intervention.",
+        en: "Plant-health alerts: prioritisation, assignment, resolution and a full history of every intervention.",
+      },
+      {
+        fr: "Fiches de traitement : protocoles validés par des agronomes, versionnés, avec leurs étapes de traitement.",
+        en: "Treatment sheets: protocols validated by agronomists, versioned, with their treatment steps.",
+      },
+      {
+        fr: "Analytique : impact économique estimé (pertes, surfaces et producteurs touchés) et étude territoriale (sols, biodiversité, ressources, zones voisines).",
+        en: "Analytics: estimated economic impact (losses, affected areas and producers) and territorial study (soils, biodiversity, resources, neighbouring areas).",
+      },
+      {
+        fr: "Gouvernance : contrôle d'accès par rôles (RBAC) à six niveaux, jusqu'au super administrateur ; matrice de permissions modifiable ; journal d'audit de toutes les actions (qui, quoi, quand, d'où), avec les secrets expurgés et un export CSV.",
+        en: "Governance: six-level role-based access control (RBAC), up to super administrator; an editable permission matrix; an audit log of every action (who, what, when, from where), with secrets redacted and CSV export.",
+      },
+    ],
+    pointsCles: [
+      {
+        fr: "Frontend : Next.js 16, React 19, TypeScript, Tailwind CSS 4 ; TanStack Query pour le cache des données, Zustand pour l'état ; Leaflet pour la cartographie, Recharts pour les graphiques, Framer Motion pour les animations.",
+        en: "Front end: Next.js 16, React 19, TypeScript, Tailwind CSS 4; TanStack Query for data caching, Zustand for state; Leaflet for mapping, Recharts for charts, Framer Motion for animation.",
+      },
+      {
+        fr: "Design system « Aurora Glass » : verre dépoli, fond animé, thèmes clair et sombre de même qualité, respect des préférences d'accessibilité (réduction des animations).",
+        en: "“Aurora Glass” design system: frosted glass, animated background, light and dark themes of equal quality, and respect for accessibility preferences (reduced motion).",
+      },
+      {
+        fr: "Backend : API REST Express 5 en TypeScript, organisée en modules suivant une architecture en couches (domaine, application, infrastructure, présentation).",
+        en: "Back end: Express 5 REST API in TypeScript, organised in modules following a layered architecture (domain, application, infrastructure, presentation).",
+      },
+      {
+        fr: "Validation systématique des entrées avec Zod et documentation Swagger.",
+        en: "Systematic input validation with Zod and Swagger documentation.",
+      },
+      {
+        fr: "Données : PostgreSQL et PostGIS via Prisma, avec des requêtes spatiales (centroïdes, surfaces, voisinages).",
+        en: "Data: PostgreSQL and PostGIS through Prisma, with spatial queries (centroids, areas, neighbourhoods).",
+      },
+      {
+        fr: "Règles métier garanties côté serveur, par exemple une seule fiche validée par pathologie et un seul modèle déployé par cible.",
+        en: "Business rules enforced on the server, for example a single validated sheet per disease and a single deployed model per target.",
+      },
+      {
+        fr: "Sécurité : jetons JWT de courte durée avec rotation du jeton de rafraîchissement, mots de passe hachés avec scrypt et limitation du nombre de tentatives de connexion.",
+        en: "Security: short-lived JWTs with refresh-token rotation, passwords hashed with scrypt, and login rate limiting.",
+      },
+      {
+        fr: "Permissions relues en base à chaque requête, pour qu'une révocation prenne effet immédiatement.",
+        en: "Permissions re-read from the database on every request, so that a revocation takes effect immediately.",
+      },
+      {
+        fr: "IA : service d'inférence séparé, appelé par l'API.",
+        en: "AI: a separate inference service, called by the API.",
+      },
+    ],
+    visuels: [
+      {
+        src: "/projets/agrivision/agrivision0.png",
+        alt: {
+          fr: "Page d'accueil d'AgriVision, avec un aperçu illustratif du tableau de bord national",
+          en: "AgriVision home page, with an illustrative preview of the national dashboard",
+        },
+        largeur: 1362,
+        hauteur: 628,
+      },
+      {
+        src: "/projets/agrivision/agrivision1.png",
+        alt: {
+          fr: "Fonctionnement en trois temps : observer, analyser, agir",
+          en: "How it works in three steps: observe, analyse, act",
+        },
+        largeur: 1359,
+        hauteur: 623,
+      },
+      {
+        src: "/projets/agrivision/agrivision2.png",
+        alt: {
+          fr: "Accès à l'espace sécurisé de la plateforme",
+          en: "Access to the platform's secure area",
+        },
+        largeur: 1345,
+        hauteur: 629,
+      },
+    ],
+    schema: [
+      {
+        titre: { fr: "Observer", en: "Observe" },
+        elements: [
+          { fr: "Photo de feuille sur le terrain", en: "Leaf photo in the field" },
+          { fr: "Techniciens · coopératives", en: "Technicians · cooperatives" },
+        ],
+      },
+      {
+        titre: { fr: "Analyser", en: "Analyse" },
+        elements: [
+          { fr: "Service d'inférence IA", en: "AI inference service" },
+          { fr: "Indice de confiance", en: "Confidence score" },
+          { fr: "Vérification sous le seuil", en: "Review below threshold" },
+        ],
+      },
+      {
+        titre: { fr: "Cartographier", en: "Map" },
+        elements: [
+          "PostgreSQL · PostGIS",
+          { fr: "Niveau de risque par zone", en: "Risk level per area" },
+          { fr: "Frise temporelle", en: "Timeline" },
+        ],
+      },
+      {
+        titre: { fr: "Agir", en: "Act" },
+        elements: [
+          { fr: "Alertes phytosanitaires", en: "Plant-health alerts" },
+          { fr: "Fiches de traitement", en: "Treatment sheets" },
+          { fr: "Impact économique", en: "Economic impact" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "routeMada",
+    numero: 2,
+    coordonnee: { x: 93, y: 55 },
+    vedette: true,
+    titre: { fr: "RouteMada Live", en: "RouteMada Live" },
+    annee: 2026,
+    periode: { fr: "Sept. 2026 – Oct. 2026", en: "Sep. 2026 – Oct. 2026" },
+    contexte: {
+      fr: "École Nationale d'Informatique Tanambao · Fianarantsoa",
+      en: "École Nationale d'Informatique Tanambao · Fianarantsoa",
+    },
+    categorie: { fr: "Full-Stack · Temps réel · Java", en: "Full-Stack · Real-time · Java" },
+    domaines: ["Full-Stack"],
+    stack: ["Java 25", "Jakarta Servlet 6", "JAX-WS", "JAXB", "Maven", "Jetty 12 / Tomcat 10", "Tailwind CSS", "JavaScript", "Leaflet"],
+    description: {
+      fr: "Plateforme de réservation de taxis-brousse à Madagascar en Java 25 / Jakarta EE, sans framework. Le web, les guichets (sockets TCP) et les partenaires (SOAP) vendent les mêmes sièges en temps réel, sans double vente, grâce à un dépôt partagé thread-safe et des verrous de sièges avec expiration.",
+      en: "A taxi-brousse booking platform for Madagascar, built in Java 25 / Jakarta EE without a framework. The web, ticket offices (TCP sockets) and partners (SOAP) sell the same seats in real time, with no double booking, thanks to a shared thread-safe repository and expiring seat locks.",
+    },
+    probleme: {
+      fr: "Trois canaux vendent les mêmes sièges en même temps : les voyageurs en ligne, les guichets d'agence au comptoir et les partenaires externes par service web. Il faut empêcher la double vente d'un siège.",
+      en: "Three channels sell the same seats at the same time: travellers online, agency ticket offices at the counter and external partners through a web service. A seat must never be sold twice.",
+    },
+    gesteTechnique: {
+      fr: "Les trois canaux tournent dans une seule JVM — API REST en servlets Jakarta, serveur socket TCP pour les guichets, service SOAP (JAX-WS) pour les partenaires — et partagent un dépôt en mémoire thread-safe, source de vérité. Un siège suit le cycle DISPONIBLE → VERROUILLÉ → RÉSERVÉ, et seul le titulaire du verrou peut confirmer la réservation.",
+      en: "The three channels run in a single JVM — a REST API built with Jakarta servlets, a TCP socket server for ticket offices, a SOAP service (JAX-WS) for partners — and share a thread-safe in-memory repository as the source of truth. A seat follows the AVAILABLE → LOCKED → BOOKED cycle, and only the lock holder can confirm the booking.",
+    },
+    resultat: {
+      fr: "Une réservation faite sur le web ou par SOAP est diffusée aussitôt à tous les guichets connectés, comme si un autre guichet l'avait faite : les trois canaux vendent les mêmes sièges en temps réel, sans double vente.",
+      en: "A booking made on the web or through SOAP is instantly broadcast to every connected ticket office, as if another office had made it: the three channels sell the same seats in real time, with no double booking.",
+    },
+    fonctionnalites: [
+      {
+        fr: "Recherche de trajets par ville, date et nombre de voyageurs, avec des filtres (VIP, direct, horaires, budget, compagnie), un tri et un calendrier des prix sur 7 jours.",
+        en: "Trip search by city, date and number of travellers, with filters (VIP, direct, departure times, budget, company), sorting and a 7-day price calendar.",
+      },
+      {
+        fr: "Plan des sièges en temps réel : la sélection bloque les sièges 10 minutes, avec un compte à rebours. Les sièges pris par un guichet ou un partenaire apparaissent en direct.",
+        en: "Real-time seat map: selecting seats holds them for 10 minutes, with a countdown. Seats taken by a ticket office or a partner appear live.",
+      },
+      {
+        fr: "Paiement simulé par MVola, Orange Money, Airtel Money ou carte bancaire. Le numéro doit correspondre à l'opérateur, un plafond s'applique et les cas de refus (solde insuffisant, carte refusée) sont gérés.",
+        en: "Simulated payment by MVola, Orange Money, Airtel Money or bank card. The number must match the operator, a ceiling applies, and rejections (insufficient balance, declined card) are handled.",
+      },
+      {
+        fr: "Tarification calculée par le serveur : −25 % pour les enfants, supplément pour les sièges cabine, frais carte de 2 %, codes promo avec conditions (minimum d'achat, expiration, départs de nuit).",
+        en: "Server-side pricing: −25% for children, a surcharge for cabin seats, a 2% card fee, and promo codes with conditions (minimum spend, expiry, night departures).",
+      },
+      {
+        fr: "Billet électronique avec QR code, ajout à l'agenda (.ics) et partage.",
+        en: "E-ticket with QR code, add-to-calendar (.ics) and sharing.",
+      },
+      {
+        fr: "Espace « Mes billets » : historique et annulation avec aperçu du remboursement (90 %, 50 % ou 0 % selon le délai avant le départ).",
+        en: "“My tickets” area: history and cancellation with a refund preview (90%, 50% or 0% depending on the time left before departure).",
+      },
+      {
+        fr: "Suivi GPS simulé du véhicule sur une carte (Leaflet / OpenStreetMap), avec un lien de suivi partageable.",
+        en: "Simulated GPS tracking of the vehicle on a map (Leaflet / OpenStreetMap), with a shareable tracking link.",
+      },
+      {
+        fr: "Back-office guichet : indicateurs du jour, occupation des départs, vente au comptoir, blocage de sièges et contrôle d'embarquement.",
+        en: "Ticket-office back office: daily indicators, departure occupancy, counter sales, seat holds and boarding control.",
+      },
+      {
+        fr: "Comptes utilisateurs (voyageur et agent) et avis vérifiés sur les compagnies.",
+        en: "User accounts (traveller and agent) and verified reviews of the companies.",
+      },
+    ],
+    pointsCles: [
+      {
+        fr: "Concurrence : ConcurrentHashMap, sections synchronized et verrous de sièges avec expiration (DISPONIBLE → VERROUILLÉ → RÉSERVÉ) ; seul le titulaire du verrou peut confirmer.",
+        en: "Concurrency: ConcurrentHashMap, synchronized sections and expiring seat locks (AVAILABLE → LOCKED → BOOKED); only the lock holder can confirm.",
+      },
+      {
+        fr: "Sockets Java : serveur TCP multi-thread (ServerSocket, ExecutorService), un thread par guichet, diffusion des mises à jour via CopyOnWriteArrayList ; protocole texte HELLO, ETAT, VERROUILLER, CONFIRMER, LIBERER.",
+        en: "Java sockets: multi-threaded TCP server (ServerSocket, ExecutorService), one thread per ticket office, updates broadcast via CopyOnWriteArrayList; text protocol HELLO, ETAT, VERROUILLER, CONFIRMER, LIBERER.",
+      },
+      {
+        fr: "Service web SOAP (JAX-WS) avec WSDL publié et exception métier typée, qui réutilise exactement les mêmes règles que le web.",
+        en: "SOAP web service (JAX-WS) with a published WSDL and a typed business exception, reusing exactly the same rules as the web.",
+      },
+      {
+        fr: "XML / JAXB : export et import du catalogue des départs.",
+        en: "XML / JAXB: export and import of the departure catalogue.",
+      },
+      {
+        fr: "API REST JSON de plus de 30 endpoints en servlets Jakarta, avec des erreurs uniformes ({erreur, message}) et les bons codes HTTP (400, 401, 402, 403, 404, 409).",
+        en: "JSON REST API with 30+ endpoints written as Jakarta servlets, with uniform errors ({erreur, message}) and the right HTTP codes (400, 401, 402, 403, 404, 409).",
+      },
+      {
+        fr: "Sécurité : mots de passe hachés en SHA-256 avec sel aléatoire, et contrôle d'accès par rôle (voyageur / agent).",
+        en: "Security: passwords hashed with SHA-256 and a random salt, and role-based access control (traveller / agent).",
+      },
+      {
+        fr: "Règles horaires évaluées dans le fuseau Indian/Antananarivo (clôture des ventes 15 min avant le départ, annulation, embarquement), avec une horloge remplaçable pour les démonstrations.",
+        en: "Time rules evaluated in the Indian/Antananarivo time zone (sales close 15 min before departure, cancellation, boarding), with a replaceable clock for demos.",
+      },
+      {
+        fr: "Front-end : 10 pages en HTML, Tailwind CSS et JavaScript vanilla, construites à partir de maquettes Google Stitch et reliées à l'API par fetch().",
+        en: "Front end: 10 pages in HTML, Tailwind CSS and vanilla JavaScript, built from Google Stitch mock-ups and wired to the API with fetch().",
+      },
+    ],
+    metriques: [
+      { valeur: "57", label: { fr: "classes Java (≈ 3 100 lignes)", en: "Java classes (≈ 3,100 lines)" } },
+      { valeur: "≈ 5 000", label: { fr: "lignes de JavaScript", en: "lines of JavaScript" } },
+      { valeur: "10", label: { fr: "écrans", en: "screens" } },
+      { valeur: "3", label: { fr: "canaux de vente synchronisés", en: "synchronised sales channels" } },
+    ],
+    aRefaire: {
+      fr: "C'est un projet de démonstration : les données sont en mémoire, sans base de données, et le paiement est simulé, sans vraie passerelle Mobile Money. Pistes d'évolution : persistance en base (JPA / PostgreSQL), WebSocket côté navigateur (le plan des sièges se rafraîchit aujourd'hui toutes les 4 s), tests automatisés et hachage des mots de passe avec bcrypt ou Argon2.",
+      en: "This is a demonstration project: data lives in memory, with no database, and payment is simulated, with no real Mobile Money gateway. Next steps: database persistence (JPA / PostgreSQL), WebSocket in the browser (the seat map currently refreshes every 4 s), automated tests, and password hashing with bcrypt or Argon2.",
+    },
+    visuels: [
+      {
+        src: "/projets/route-mada/route-mada0.png",
+        alt: { fr: "Accueil : recherche de trajets en taxi-brousse", en: "Home page: taxi-brousse trip search" },
+        largeur: 1252,
+        hauteur: 621,
+      },
+      {
+        src: "/projets/route-mada/route-mada2.png",
+        alt: {
+          fr: "Plan des sièges en temps réel, synchronisé avec le guichet",
+          en: "Real-time seat map, synced with the ticket office",
+        },
+        largeur: 1009,
+        hauteur: 570,
+      },
+      {
+        src: "/projets/route-mada/route-mada1.png",
+        alt: { fr: "Résultats de recherche avec filtres et tri", en: "Search results with filters and sorting" },
+        largeur: 1034,
+        hauteur: 630,
+      },
+      {
+        src: "/projets/route-mada/route-mada3.png",
+        alt: { fr: "Récapitulatif de la réservation et coordonnées du passager", en: "Booking summary and passenger details" },
+        largeur: 1010,
+        hauteur: 630,
+      },
+      {
+        src: "/projets/route-mada/route-mada4.png",
+        alt: { fr: "Validation du paiement MVola simulé", en: "Simulated MVola payment confirmation" },
+        largeur: 385,
+        hauteur: 444,
+      },
+      {
+        src: "/projets/route-mada/route-mada5.png",
+        alt: { fr: "Billet électronique confirmé avec QR code", en: "Confirmed e-ticket with QR code" },
+        largeur: 1010,
+        hauteur: 630,
+      },
+      {
+        src: "/projets/route-mada/route-mada00.png",
+        alt: {
+          fr: "Suivi GPS du véhicule sur une carte OpenStreetMap",
+          en: "Vehicle GPS tracking on an OpenStreetMap map",
+        },
+        largeur: 1258,
+        hauteur: 635,
+      },
+    ],
+    schema: [
+      {
+        titre: { fr: "Canaux de vente", en: "Sales channels" },
+        elements: [
+          { fr: "Voyageurs (navigateur)", en: "Travellers (browser)" },
+          { fr: "Guichets d'agence", en: "Ticket offices" },
+          { fr: "Partenaires externes", en: "External partners" },
+        ],
+      },
+      {
+        titre: { fr: "Points d'entrée", en: "Entry points" },
+        elements: ["API REST (Servlets)", { fr: "Socket TCP · port 5000", en: "TCP socket · port 5000" }, "SOAP (JAX-WS)"],
+      },
+      {
+        titre: { fr: "Couche service métier", en: "Business service layer" },
+        elements: [
+          { fr: "Tarification", en: "Pricing" },
+          { fr: "Règles horaires", en: "Time rules" },
+          { fr: "Contrôle d'accès par rôle", en: "Role-based access" },
+        ],
+      },
+      {
+        titre: { fr: "Dépôt partagé thread-safe", en: "Shared thread-safe repository" },
+        elements: [
+          { fr: "Trajets", en: "Trips" },
+          { fr: "Sièges & verrous", en: "Seats & locks" },
+          { fr: "Réservations", en: "Bookings" },
+        ],
+      },
+    ],
+  },
+  {
     id: "bionexxMobile",
-    numero: 4,
+    numero: 6,
     coordonnee: { x: 88, y: 86 },
     titre: { fr: "Application Mobile Bionexx", en: "Bionexx Mobile Application" },
     annee: 2026,
@@ -268,7 +639,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "webMapping",
-    numero: 1,
+    numero: 3,
     coordonnee: { x: 83, y: 72 },
     vedette: true,
     titre: { fr: "Cartographie web & plateforme météo", en: "Web Mapping & Weather Platform" },
@@ -361,7 +732,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "construction",
-    numero: 2,
+    numero: 4,
     coordonnee: { x: 64, y: 55 },
     vedette: true,
     titre: { fr: "Système de planification de chantier", en: "Construction Planning System" },
@@ -448,7 +819,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "nlp",
-    numero: 3,
+    numero: 5,
     coordonnee: { x: 53, y: 20 },
     vedette: true,
     titre: { fr: "NLP augmenté par LLM", en: "Enhanced NLP with LLM" },
@@ -540,7 +911,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "currency",
-    numero: 5,
+    numero: 7,
     coordonnee: { x: 40, y: 59 },
     titre: { fr: "Currency Track", en: "Currency Track" },
     annee: 2025,
@@ -608,7 +979,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "stock",
-    numero: 6,
+    numero: 8,
     coordonnee: { x: 78, y: 37 },
     titre: { fr: "Gestion de stock intelligente", en: "Intelligent Stock Management" },
     annee: 2026,
@@ -677,7 +1048,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "transaction",
-    numero: 7,
+    numero: 9,
     coordonnee: { x: 30, y: 54 },
     titre: { fr: "Plateforme web de transactions en ligne", en: "Online Transaction Web Platform" },
     annee: 2025,
@@ -745,7 +1116,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "cci",
-    numero: 8,
+    numero: 10,
     coordonnee: { x: 13, y: 72 },
     titre: { fr: "Application SIG de la CCI", en: "CCI GIS Application" },
     annee: 2024,
@@ -803,7 +1174,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "data",
-    numero: 9,
+    numero: 11,
     coordonnee: { x: 49, y: 38 },
     titre: { fr: "Classification et nettoyage de données", en: "Data Classification & Cleaning" },
     annee: 2025,
@@ -899,6 +1270,18 @@ export const technologies: GroupeTechno[] = [
       "GeoJSON",
       "OpenWeatherMap API",
       "OpenRouteService API",
+      "Jakarta EE (Servlets)",
+      "JAX-WS / SOAP",
+      "JAXB",
+      "Maven",
+      "Jetty / Tomcat",
+      "Tailwind CSS",
+      "TanStack Query",
+      "Zustand",
+      "Zod",
+      "Swagger / OpenAPI",
+      "Framer Motion",
+      "JWT",
     ],
   },
 ];
@@ -943,6 +1326,40 @@ export const niveauLabel: Record<Niveau, Texte> = {
 /* ── Parcours ─────────────────────────────────────────────────── */
 
 export const experiences: Experience[] = [
+  {
+    id: "agrivision",
+    periode: { fr: "Depuis oct. 2026 · En cours", en: "Since Oct. 2026 · Ongoing" },
+    structure: { fr: "TANJAKAI Madagascar", en: "TANJAKAI Madagascar" },
+    role: {
+      fr: "AgriVision · Plateforme de biosécurité agricole",
+      en: "AgriVision · Agricultural biosecurity platform",
+    },
+    description: {
+      fr: "Projet d'équipe : plateforme web de détection précoce et de suivi des maladies des cultures (diagnostic photo par IA, carte épidémiologique PostGIS, alertes et aide à la décision). Développement full-stack : intégration frontend–backend, modules API, design system, RBAC et traçabilité.",
+      en: "Team project: a web platform for early detection and monitoring of crop diseases (AI photo diagnosis, PostGIS epidemiological map, alerts and decision support). Full-stack development: frontend–backend integration, API modules, design system, RBAC and audit trail.",
+    },
+    stack: ["Next.js", "TypeScript", "Express", "Prisma", "PostGIS"],
+    enCours: true,
+    projets: ["agrivision"],
+  },
+  {
+    id: "routeMada",
+    periode: { fr: "Sept. 2026 – Oct. 2026", en: "Sep. 2026 – Oct. 2026" },
+    structure: {
+      fr: "École Nationale d'Informatique Tanambao · Fianarantsoa",
+      en: "École Nationale d'Informatique Tanambao · Fianarantsoa",
+    },
+    role: {
+      fr: "RouteMada Live · Réservation de taxis-brousse en temps réel",
+      en: "RouteMada Live · Real-time taxi-brousse booking",
+    },
+    description: {
+      fr: "Projet académique du module Java avancé : plateforme de réservation en Java 25 / Jakarta EE, sans Spring, où le web, les guichets (sockets TCP) et les partenaires (SOAP) vendent les mêmes sièges en temps réel, sans double vente.",
+      en: "Academic project for the advanced Java module: a booking platform in Java 25 / Jakarta EE, without Spring, where the web, ticket offices (TCP sockets) and partners (SOAP) sell the same seats in real time, with no double booking.",
+    },
+    stack: ["Java 25", "Jakarta EE", "JAX-WS", "Sockets TCP", "Tailwind CSS"],
+    projets: ["routeMada"],
+  },
   {
     id: "bionexx",
     periode: { fr: "Depuis avr. 2026 · En cours", en: "Since Apr. 2026 · Ongoing" },
