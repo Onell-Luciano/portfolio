@@ -40,6 +40,7 @@ export async function carteOG({ surtitre, titre, pied }: { surtitre: string; tit
           style={{
             display: "flex",
             flexWrap: "wrap",
+            columnGap: corps * 0.24,
             fontFamily: "Fraunces",
             fontSize: corps,
             lineHeight: 0.95,
@@ -47,8 +48,13 @@ export async function carteOG({ surtitre, titre, pied }: { surtitre: string; tit
             maxWidth: 1040,
           }}
         >
-          {titre}
-          <span style={{ color: "#c8552f" }}>.</span>
+          {/* Un mot par bloc : le point final reste collé au dernier mot */}
+          {titre.split(" ").map((mot, i, mots) => (
+            <span key={i} style={{ display: "flex" }}>
+              {mot}
+              {i === mots.length - 1 && <span style={{ color: "#c8552f" }}>.</span>}
+            </span>
+          ))}
         </div>
         <div
           style={{

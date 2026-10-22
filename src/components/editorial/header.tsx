@@ -84,8 +84,11 @@ export function Header({ entete }: { entete?: string }) {
               {profil.initiales}
             </Link>
             {titreCourant && (
-              <span key={titreCourant} className={`label reveal-css hidden truncate text-ink-soft sm:block lg:hidden ${entete ? "xl:block" : ""}`}>
-                {titreCourant}
+              // Deux niveaux : .reveal-css impose display:block, la visibilité se règle sur le parent.
+              <span className={`hidden min-w-0 sm:block lg:hidden ${entete ? "xl:block" : ""}`}>
+                <span key={titreCourant} className="label reveal-css truncate text-ink-soft">
+                  {titreCourant}
+                </span>
               </span>
             )}
           </p>
