@@ -185,13 +185,16 @@ export const domaineLabel: Record<Domaine, Texte> = {
   Mobile: { fr: "Mobile", en: "Mobile" },
 };
 
-/** Teinte de chaque domaine sur l'atlas (points et légende). */
+/**
+ * Teinte de chaque domaine sur l'atlas (points et légende).
+ * Les valeurs vivent dans globals.css (--dom-*) : une par thème, clair et sombre.
+ */
 export const domainesCouleurs: Record<Domaine, string> = {
-  "Full-Stack": "#C8552F", // terracotta
-  IA: "#3D5A50", // sauge
-  GIS: "#B8860B", // ocre
-  Data: "#4A5568", // ardoise
-  Mobile: "#6B4E71", // aubergine
+  "Full-Stack": "var(--dom-full-stack)", // terracotta
+  IA: "var(--dom-ia)", // sauge
+  GIS: "var(--dom-gis)", // ocre
+  Data: "var(--dom-data)", // ardoise
+  Mobile: "var(--dom-mobile)", // aubergine
 };
 
 /* ── Projets ──────────────────────────────────────────────────── */

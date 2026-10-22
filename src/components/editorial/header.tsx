@@ -2,14 +2,17 @@
 
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { profil } from "@/data/portfolio";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { ProfilAltitude } from "./profil-altitude";
 import { EASE_SIGNATURE } from "./reveal-mask";
+import { ThemeToggle } from "./theme-toggle";
 
 export const SECTIONS = ["cas", "index", "methode", "inventaire", "parcours", "contact"] as const;
 export type Section = (typeof SECTIONS)[number];
+const AUCUNE_SECTION: readonly Section[] = []; // stable : pas de nouveau tableau à chaque rendu
 
 /** Section la plus proche du milieu de l'écran (accueil uniquement). */
 function useSectionCourante(actif: boolean) {
@@ -56,6 +59,17 @@ export function Header({ entete }: { entete?: string }) {
   const accueil = pathname === "/";
   const courante = useSectionCourante(accueil);
 
+  // Hauteur de la rangée principale : c'est elle qui se masque, pas le profil.
+  const rangeeRef = useRef<HTMLDivElement>(null);
+  const [hauteurMasquee, setHauteurMasquee] = useState(68);
+  useEffect(() => {
+    const el = rangeeRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([e]) => setHauteurMasquee(e.borderBoxSize[0]?.blockSize ?? e.contentRect.height));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   useMotionValueEvent(scrollY, "change", (y) => {
     const previous = scrollY.getPrevious() ?? 0;
     setHidden(y > 160 && y > previous);
@@ -73,12 +87,13 @@ export function Header({ entete }: { entete?: string }) {
       </a>
 
       <motion.header
-        animate={{ y: hidden ? "-100%" : "0%" }}
+        // Masqué, l'en-tête laisse dépasser son profil d'altitude : la progression reste visible.
+        animate={{ y: hidden ? -hauteurMasquee : 0 }}
         transition={{ duration: 0.5, ease: EASE_SIGNATURE }}
         onFocusCapture={() => setHidden(false)}
         className="fixed inset-x-0 top-0 z-50 bg-paper/90 backdrop-blur-sm"
       >
-        <div className="px-page flex items-baseline justify-between gap-6 py-5">
+        <div ref={rangeeRef} className="px-page flex items-baseline justify-between gap-6 py-5">
           <p className="flex min-w-0 items-baseline gap-4">
             <Link href="/" className="font-serif text-lg italic tracking-tight" aria-label={`${profil.nom} — ${t("home")}`}>
               {profil.initiales}
@@ -128,6 +143,8 @@ export function Header({ entete }: { entete?: string }) {
                     href={pathname}
                     locale={l}
                     lang={l}
+                    // Pas de préchargement : inutile ici, et sur une page 404 la requête boucle en redirections.
+                    prefetch={false}
                     aria-current={l === locale ? "true" : undefined}
                     className={l === locale ? "text-ink underline underline-offset-4" : "text-ink-soft hover:text-ink"}
                   >
@@ -136,9 +153,10 @@ export function Header({ entete }: { entete?: string }) {
                 </span>
               ))}
             </span>
+            <ThemeToggle />
           </div>
         </div>
-        <div className="mx-[clamp(1.5rem,6vw,8rem)] h-px bg-rule" aria-hidden="true" />
+        <ProfilAltitude sections={accueil ? SECTIONS : AUCUNE_SECTION} />
       </motion.header>
     </>
   );

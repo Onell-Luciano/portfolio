@@ -151,7 +151,7 @@ export function IndexProjetsListe({ locale, filtre }: { locale: Locale; filtre: 
             transition={{ duration: 0.2 }}
             className={`w-[clamp(18rem,26vw,28rem)] transition-transform duration-500 ease-signature ${ANCRAGE_CLASSES[ancrage]}`}
           >
-            <div className="relative aspect-16/10 shadow-[0_24px_60px_-30px_rgba(10,10,11,0.45)]">
+            <div className="relative aspect-16/10 shadow-[0_24px_60px_-30px_var(--ombre)]">
               {projets.map((p) => (
                 <motion.div
                   key={p.id}

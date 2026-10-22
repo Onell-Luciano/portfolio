@@ -1,12 +1,18 @@
 @import "tailwindcss";
 
 /* ──────────────────────────────────────────────────────────────
-   Piste C — Typographie monumentale + vide maîtrisé
-   Mode ivoire. Les contrastes sont calculés pour WCAG AA :
-   - ink-soft  / paper  ≈ 6.0:1
-   - accent-ink / paper ≈ 5.3:1 (petit texte)
-   - accent    / paper  ≈ 3.9:1 (grands titres uniquement)
-   - sage      / paper  ≈ 6.7:1
+   Deux thèmes, mêmes rôles de couleur.
+   Le thème suit la préférence du système, sauf choix explicite
+   du visiteur (data-theme sur <html>, posé avant le premier rendu).
+   Contrastes WCAG AA vérifiés dans les deux thèmes :
+
+                     clair (ivoire)   sombre (encre de nuit)
+   ink       / paper     19.0:1           15.3:1
+   ink-soft  / paper      6.0:1            7.2:1
+   accent-ink/ paper      5.3:1            8.2:1   (petit texte)
+   accent    / paper      3.9:1            6.3:1   (grands titres)
+   sage      / paper      6.7:1            8.4:1
+   domaines  / carte     ≥ 3.6:1          ≥ 5.9:1  (points de carte)
    ────────────────────────────────────────────────────────────── */
 :root {
   --paper: #f4f1ea;
@@ -26,6 +32,82 @@
   --carte-secondaire: #3d5a50;
   --carte-grille: rgba(10, 10, 11, 0.08);
   --space-carte: clamp(4rem, 10vh, 8rem);
+
+  /* Teintes des domaines (points, légende, parallèles) */
+  --dom-full-stack: #c8552f;
+  --dom-ia: #3d5a50;
+  --dom-gis: #9a6c0a;
+  --dom-data: #4a5568;
+  --dom-mobile: #6b4e71;
+
+  /* Détails qui changent de nature d'un thème à l'autre */
+  --ombre: rgba(10, 10, 11, 0.45);
+  --relief-opacite: 0.22;
+  --relief-opacite-maitresse: 0.4;
+  --image-filtre: none;
+  --bruit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --bruit-mode: multiply;
+  --tampon-mode: multiply; /* encre absorbée par le papier */
+}
+
+/* Thème sombre : « encre de nuit », un noir chaud plutôt qu'un gris neutre.
+   Le bloc est écrit deux fois : préférence système (sans choix explicite),
+   puis choix explicite du visiteur. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12110f;
+    --ink: #ece7dc;
+    --ink-soft: #a49f94;
+    --accent: #e2774f;
+    --accent-ink: #ef9472;
+    --sage: #8fb5a6;
+    --rule: rgba(236, 231, 220, 0.14);
+    color-scheme: dark;
+    --carte-fond: #1a1815;
+    --carte-trait: #ece7dc;
+    --carte-accent: #e2774f;
+    --carte-secondaire: #8fb5a6;
+    --carte-grille: rgba(236, 231, 220, 0.07);
+    --dom-full-stack: #e2774f;
+    --dom-ia: #6fae95;
+    --dom-gis: #d6a93a;
+    --dom-data: #97a6c0;
+    --dom-mobile: #b896c0;
+    --ombre: rgba(0, 0, 0, 0.75);
+    --relief-opacite: 0.15;
+    --relief-opacite-maitresse: 0.3;
+    --image-filtre: brightness(0.9) contrast(1.04);
+    --bruit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --bruit-mode: screen;
+    --tampon-mode: normal;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12110f;
+  --ink: #ece7dc;
+  --ink-soft: #a49f94;
+  --accent: #e2774f;
+  --accent-ink: #ef9472;
+  --sage: #8fb5a6;
+  --rule: rgba(236, 231, 220, 0.14);
+  color-scheme: dark;
+  --carte-fond: #1a1815;
+  --carte-trait: #ece7dc;
+  --carte-accent: #e2774f;
+  --carte-secondaire: #8fb5a6;
+  --carte-grille: rgba(236, 231, 220, 0.07);
+  --dom-full-stack: #e2774f;
+  --dom-ia: #6fae95;
+  --dom-gis: #d6a93a;
+  --dom-data: #97a6c0;
+  --dom-mobile: #b896c0;
+  --ombre: rgba(0, 0, 0, 0.75);
+  --relief-opacite: 0.15;
+  --relief-opacite-maitresse: 0.3;
+  --image-filtre: brightness(0.9) contrast(1.04);
+  --bruit: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --bruit-mode: screen;
+  --tampon-mode: normal;
 }
 
 @theme inline {
@@ -123,6 +205,104 @@ body {
   color: var(--paper);
 }
 
+/* Captures de projets : légèrement atténuées en thème sombre pour ne pas éblouir */
+main img:not([src$=".svg"]) {
+  filter: var(--image-filtre);
+}
+
+/* Bascule de thème : un horizon. En clair le soleil est levé ; au passage
+   en sombre il se couche derrière la ligne, puis la lune se lève (et l'inverse).
+   Réglé en CSS : juste dès le premier rendu, sans attendre le JavaScript. */
+.astre {
+  transform-box: view-box;
+  transition: transform 750ms var(--ease-signature);
+}
+.astre-soleil {
+  transition-delay: 220ms; /* se lève après le coucher de la lune */
+}
+.astre-lune {
+  transform: translateY(15px);
+  transition-delay: 0ms;
+}
+:root[data-theme="dark"] .astre-soleil {
+  transform: translateY(15px);
+  transition-delay: 0ms;
+}
+:root[data-theme="dark"] .astre-lune {
+  transform: none;
+  transition-delay: 220ms;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .astre-soleil {
+    transform: translateY(15px);
+  }
+  :root:not([data-theme]) .astre-lune {
+    transform: none;
+  }
+}
+
+/* Tampon postal : il s'abat légèrement penché, tient un instant, puis s'efface.
+   Durée calée sur le retour du libellé « Copier l'adresse » (2,4 s). */
+.tampon {
+  transform-origin: 27% 50%;
+  mix-blend-mode: var(--tampon-mode);
+  animation: tampon 2.4s var(--ease-signature) both;
+}
+@keyframes tampon {
+  0% {
+    opacity: 0;
+    transform: scale(1.55) rotate(-3deg);
+  }
+  9% {
+    opacity: 0.92;
+    transform: scale(0.95) rotate(-12deg);
+  }
+  15% {
+    transform: scale(1) rotate(-11deg);
+  }
+  80% {
+    opacity: 0.88;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1) rotate(-11deg);
+  }
+}
+@keyframes tampon-doux {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  10%,
+  80% {
+    opacity: 0.88;
+  }
+}
+
+/* Curseur de géomètre : le réticule remplace le curseur, sauf sur les liens */
+[data-reticule="actif"] {
+  cursor: none;
+}
+[data-reticule="actif"] :is(a, button) {
+  cursor: pointer;
+}
+
+/* Changement de thème : le nouveau thème s'étend en cercle depuis le bouton */
+html.vt-theme::view-transition-old(root) {
+  animation: none;
+}
+html.vt-theme::view-transition-new(root) {
+  animation: theme-cercle 650ms var(--ease-signature) both;
+}
+@keyframes theme-cercle {
+  from {
+    clip-path: circle(0 at var(--vt-x, 100%) var(--vt-y, 0));
+  }
+  to {
+    clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 100%) var(--vt-y, 0));
+  }
+}
+
 /* Focus visible sur tous les éléments interactifs */
 :focus-visible {
   outline: 2px solid var(--accent-ink);
@@ -215,14 +395,14 @@ body {
    pour rester proche d'un pixel. */
 .relief path {
   stroke-width: var(--relief-trait, 0.9);
-  stroke-opacity: 0.22;
+  stroke-opacity: var(--relief-opacite);
   stroke-dasharray: 1000;
   animation: trace var(--relief-duree, 1.5s) var(--ease-signature) calc(var(--relief-delai, 0s) + var(--i, 0) * 45ms)
     both paused;
 }
 .relief path.maitresse {
   stroke-width: calc(var(--relief-trait, 0.9) * 1.35);
-  stroke-opacity: 0.4;
+  stroke-opacity: var(--relief-opacite-maitresse);
 }
 .relief-joue path {
   animation-play-state: running;
@@ -254,8 +434,8 @@ body {
 /* Papier topographique : fond chaud et grain très discret */
 .carte-papier {
   background-color: var(--carte-fond);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .03 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-blend-mode: multiply;
+  background-image: var(--bruit);
+  background-blend-mode: var(--bruit-mode);
 }
 
 /* Atlas : tout est en CSS et attend la classe .carte-vue (entrée dans l'écran).
@@ -388,6 +568,14 @@ body {
   .reveal-css,
   .reveal-relief {
     animation: none;
+  }
+  /* Soleil et lune changent de place sans glisser ; le tampon apparaît et s'efface sur place */
+  .astre {
+    transition: none;
+  }
+  .tampon {
+    animation: tampon-doux 2.4s ease both;
+    transform: rotate(-11deg);
   }
   /* Carte : pas de dessin ni d'échelonnement, seulement l'opacité */
   .point-carte,

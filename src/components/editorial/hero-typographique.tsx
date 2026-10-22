@@ -5,8 +5,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { asLocale, profil } from "@/data/portfolio";
 import { TOPO_REPERE as REPERE } from "@/data/topographie";
+import { coordonneesRelief, formaterCoordonnees } from "@/lib/geo";
 import { useEstClient } from "@/lib/use-fine-pointer";
 import { Relief } from "./relief";
+import { Reticule } from "./reticule";
 
 function LocalTime({ locale }: { locale: string }) {
   const [time, setTime] = useState<string | null>(null);
@@ -33,6 +35,18 @@ export function HeroTypographique() {
   const tn = useTranslations("nav");
   const locale = asLocale(useLocale());
   const ref = useRef<HTMLElement>(null);
+  const reliefRef = useRef<HTMLDivElement>(null);
+
+  // Le réticule ne s'affiche que sur la partie visible du relief (disque du masque radial).
+  const coordonneesSousCurseur = (cx: number, cy: number) => {
+    const r = reliefRef.current?.getBoundingClientRect();
+    if (!r) return null;
+    const fx = (cx - r.left) / r.width;
+    const fy = (cy - r.top) / r.height;
+    if (Math.hypot(fx - 0.5, fy - 0.5) > 0.46) return null;
+    const { lat, lon } = coordonneesRelief(fx, fy);
+    return formaterCoordonnees(lat, lon, locale);
+  };
   const reduce = useReducedMotion();
   const estClient = useEstClient();
 
@@ -61,8 +75,12 @@ export function HeroTypographique() {
       aria-labelledby="hero-name"
       className="px-page relative isolate flex min-h-svh flex-col justify-between overflow-hidden pb-10 pt-28 md:pt-32"
     >
+      {/* Curseur de géomètre : coordonnées réelles du point survolé sur le relief */}
+      <Reticule cible={ref} libelle={coordonneesSousCurseur} />
+
       {/* Relief de Fianarantsoa : la cartographie comme signature */}
       <div
+        ref={reliefRef}
         aria-hidden="true"
         className="pointer-events-none absolute right-[-20vw] top-16 -z-10 aspect-square w-[115vw] opacity-60 sm:right-[-8vw] sm:w-[80vw] lg:right-[-4vw] lg:top-1/2 lg:w-[min(64vw,118svh)] lg:-translate-y-1/2 lg:opacity-100"
       >

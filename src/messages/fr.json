@@ -10,7 +10,10 @@
     "parcours": "Parcours",
     "contact": "Contact",
     "language": "Langue",
-    "cv": "CV"
+    "cv": "CV",
+    "themeSombre": "Thème sombre",
+    "themeVersSombre": "Passer au thème sombre",
+    "themeVersClair": "Passer au thème clair"
   },
   "hero": {
     "localTime": "Heure locale",
@@ -66,7 +69,8 @@
     "copy": "Copier l'adresse",
     "copied": "Adresse copiée",
     "cv": "Télécharger le CV",
-    "github": "GitHub"
+    "github": "GitHub",
+    "tampon": "Copié"
   },
   "colophon": {
     "designed": "Conçu et développé par",

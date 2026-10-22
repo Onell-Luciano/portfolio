@@ -2,8 +2,9 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { asLocale, profil } from "@/data/portfolio";
+import { asLocale, profil, type Locale } from "@/data/portfolio";
 import { RevealMask } from "./reveal-mask";
+import { TamponPostal } from "./tampon-postal";
 
 /** Décalage UTC d'un fuseau, en heures (« GMT+3 » → 3), heure d'été comprise. */
 function decalage(timeZone: string) {
@@ -27,10 +28,22 @@ function EcartParis() {
   return <> — {t("ahead", { hours: heures })}</>;
 }
 
+/** Textes du cachet postal : « COPIÉ · FIANARANTSOA · 2026 · » en couronne, date du jour au centre. */
+function cachet(locale: Locale, mot: string) {
+  const maintenant = new Date();
+  const ville = profil.localisation[locale].split(",")[0];
+  return {
+    couronne: `${mot} · ${ville} · ${maintenant.getFullYear()} · `.toUpperCase(),
+    jour: new Intl.DateTimeFormat(locale, { day: "2-digit" }).format(maintenant),
+    mois: new Intl.DateTimeFormat(locale, { month: "short" }).format(maintenant).replace(".", "").toUpperCase(),
+  };
+}
+
 export function Contact() {
   const t = useTranslations("contact");
   const locale = asLocale(useLocale());
   const [copie, setCopie] = useState(false);
+  const [coups, setCoups] = useState(0); // un nouveau coup de tampon à chaque copie
   const timer = useRef<number | undefined>(undefined);
   const [local, domaine] = profil.email.split("@");
 
@@ -40,6 +53,7 @@ export function Contact() {
     try {
       await navigator.clipboard.writeText(profil.email);
       setCopie(true);
+      setCoups((n) => n + 1);
       window.clearTimeout(timer.current);
       timer.current = window.setTimeout(() => setCopie(false), 2400);
     } catch {
@@ -95,9 +109,12 @@ export function Contact() {
       </a>
 
       <div className="label mt-14 flex flex-wrap gap-x-10 gap-y-4 text-ink-soft">
-        <button type="button" onClick={copier} className="draw-underline pb-0.5 uppercase hover:text-accent-ink">
-          {copie ? t("copied") : t("copy")}
-        </button>
+        <span className="relative inline-flex">
+          <button type="button" onClick={copier} className="draw-underline pb-0.5 uppercase hover:text-accent-ink">
+            {copie ? t("copied") : t("copy")}
+          </button>
+          {copie && <TamponPostal key={coups} {...cachet(locale, t("tampon"))} />}
+        </span>
         <a href={profil.github} target="_blank" rel="noreferrer" className="draw-underline pb-0.5 hover:text-accent-ink">
           {t("github")} ↗
         </a>

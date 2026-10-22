@@ -152,6 +152,25 @@ console.log(
   `${chemins.length} courbes (${seuils[0]}–${seuils.at(-1)} m) · ${(svg.length / 1024).toFixed(0)} Ko · repère Fianarantsoa : ${(repere.x / taille * 100).toFixed(1)} % / ${(repere.y / taille * 100).toFixed(1)} %`,
 );
 
+// Profil d'altitude réel : la ligne est-ouest qui passe par Fianarantsoa,
+// moyennée sur une bande de 5 px (bruit du MNT), un point par cellule.
+const ligne = Math.round(c.y - ty0 * 256);
+const profil = Array.from({ length: w }, (_, i) => {
+  let s = 0;
+  let n = 0;
+  for (let dy = -2; dy <= 2; dy++) {
+    for (let dx = 0; dx < REDUCTION; dx++) {
+      s += altitudes[(ligne + dy) * cote + i * REDUCTION + dx];
+      n++;
+    }
+  }
+  return s / n;
+});
+const profilLisse = profil.map((_, i) => {
+  const voisins = profil.slice(Math.max(0, i - 2), i + 3);
+  return Math.round(voisins.reduce((a, b) => a + b, 0) / voisins.length);
+});
+
 // Même relief en module TypeScript : les courbes peuvent ainsi s'animer en ligne (hero, carte).
 const module_ = `// Généré par \`npm run topographie\` — ne pas modifier à la main.
 // Courbes de niveau autour de Fianarantsoa, équidistance ${EQUIDISTANCE} m (${seuils[0]}–${seuils.at(-1)} m).
@@ -165,5 +184,11 @@ export const TOPO_REPERE = { x: ${(repere.x / taille * 100).toFixed(1)}, y: ${(r
 export const TOPO_COURBES: { d: string; maitresse: boolean }[] = ${JSON.stringify(
   chemins.filter((p) => p.d),
 )};
+
+/** Géoréférencement du carré : tuiles Web Mercator (zoom, première tuile, nombre de tuiles par côté). */
+export const TOPO_TUILES = { zoom: ${ZOOM}, x0: ${tx0}, y0: ${ty0}, cote: ${2 * RAYON + 1} };
+
+/** Profil d'altitude réel (m), d'ouest en est, à la latitude de Fianarantsoa. */
+export const TOPO_PROFIL = { min: ${Math.min(...profilLisse)}, max: ${Math.max(...profilLisse)}, points: ${JSON.stringify(profilLisse)} };
 `;
 await writeFile(new URL("../src/data/topographie.ts", import.meta.url), module_);

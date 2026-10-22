@@ -5,6 +5,8 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { profil } from "@/data/portfolio";
 import { routing } from "@/i18n/routing";
+import { ThemeInit } from "@/components/editorial/theme-init";
+import { FOND_THEME, SCRIPT_THEME } from "@/lib/theme";
 import "../globals.css";
 
 const fraunces = Fraunces({
@@ -35,8 +37,12 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+// Barre du navigateur mobile : une couleur par thème (ajustée en direct par la bascule)
 export const viewport: Viewport = {
-  themeColor: "#F4F1EA",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: FOND_THEME.light },
+    { media: "(prefers-color-scheme: dark)", color: FOND_THEME.dark },
+  ],
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -126,9 +132,20 @@ export default async function LocaleLayout({
   };
 
   return (
-    <html lang={locale} className={`${fraunces.variable} ${interTight.variable} ${jetbrainsMono.variable}`}>
+    // data-theme est posé par le script avant l'hydratation : React ne doit pas le signaler.
+    <html
+      lang={locale}
+      className={`${fraunces.variable} ${interTight.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/* Thème posé pendant la lecture du HTML, avant le premier rendu :
+            aucun flash du mauvais thème (next/script le différerait). */}
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_THEME }} />
+      </head>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <ThemeInit />
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
       </body>
     </html>

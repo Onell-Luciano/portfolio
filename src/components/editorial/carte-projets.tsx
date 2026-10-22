@@ -13,6 +13,7 @@ import { Link } from "@/i18n/navigation";
 import { useEchelleSvg } from "@/lib/use-echelle-svg";
 import { useEstClient, useFinePointer, useMediaQuery } from "@/lib/use-fine-pointer";
 import { Relief } from "./relief";
+import { Reticule } from "./reticule";
 import { EASE_SIGNATURE } from "./reveal-mask";
 import { SchemaPrincipe } from "./schema-principe";
 
@@ -162,6 +163,18 @@ export function CarteProjets({ locale, filtre }: { locale: Locale; filtre: Domai
   };
 
   const enLumiere = (id: string) => actif === id || feuille?.id === id;
+
+  // Curseur de géomètre : la longitude se lit en années, la latitude en domaines.
+  const lieuSousCurseur = (cx: number, cy: number) => {
+    const r = cadreRef.current?.getBoundingClientRect();
+    if (!r) return null;
+    const x = ((cx - r.left) / r.width) * 100;
+    const y = ((cy - r.top) / r.height) * 100;
+    const bande = BORNES.findIndex((b, k) => k < BORNES.length - 1 && x >= b && x < BORNES[k + 1]);
+    if (bande < 0 || PARALLELES.length === 0) return null;
+    const domaine = PARALLELES.reduce((a, b) => (Math.abs(b.y - y) < Math.abs(a.y - y) ? b : a)).domaine;
+    return `${ANNEES[bande]} · ${domaineLabel[domaine][locale]}`;
+  };
   const estompe = (p: Projet) => filtre !== null && !p.domaines.includes(filtre);
 
   return (
@@ -280,6 +293,8 @@ export function CarteProjets({ locale, filtre }: { locale: Locale; filtre: Domai
               );
             })}
           </ComposableMap>
+
+          <Reticule cible={cadreRef} libelle={lieuSousCurseur} />
 
           {/* Années, au-dessus de chaque bande */}
           <ul aria-hidden="true">
