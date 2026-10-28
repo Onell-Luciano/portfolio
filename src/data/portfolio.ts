@@ -1,8 +1,8 @@
-/* ──────────────────────────────────────────────────────────────
+/* 
    Source unique de vérité du portfolio.
    Tout le contenu (projets, technos, parcours, formation, profil)
    vit ici, en français et en anglais.
-   ────────────────────────────────────────────────────────────── */
+    */
 
 export type Locale = "fr" | "en";
 export type Texte = Record<Locale, string>;
@@ -83,7 +83,7 @@ export interface Formation {
   type: Texte;
 }
 
-/* ── Profil ───────────────────────────────────────────────────── */
+/*  Profil  */
 
 export const profil = {
   nom: "O’Nell Luciano Rasamiarison",
@@ -197,7 +197,7 @@ export const domainesCouleurs: Record<Domaine, string> = {
   Mobile: "var(--dom-mobile)", // aubergine
 };
 
-/* ── Projets ──────────────────────────────────────────────────── */
+/*  Projets  */
 
 export const projets: Projet[] = ([
   {
@@ -1163,7 +1163,7 @@ export const projets: Projet[] = ([
   },
 ] satisfies Projet[]).sort((a, b) => a.numero - b.numero);
 
-/* ── Technologies ─────────────────────────────────────────────── */
+/*  Technologies  */
 
 export const technologies: GroupeTechno[] = [
   {
@@ -1256,7 +1256,7 @@ export const niveauLabel: Record<Niveau, Texte> = {
   intermediate: { fr: "Intermédiaire", en: "Intermediate" },
 };
 
-/* ── Parcours ─────────────────────────────────────────────────── */
+/*  Parcours  */
 
 export const experiences: Experience[] = [
   {
@@ -1419,7 +1419,7 @@ export const experiences: Experience[] = [
   },
 ];
 
-/* ── Formation ────────────────────────────────────────────────── */
+/*  Formation  */
 
 export const formations: Formation[] = [
   {
@@ -1497,7 +1497,7 @@ export const formations: Formation[] = [
   },
 ];
 
-/* ── Helpers ──────────────────────────────────────────────────── */
+/*  Helpers  */
 
 export const nombreTechnos = technologies.reduce((n, g) => n + g.items.length, 0);
 
