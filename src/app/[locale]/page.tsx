@@ -10,6 +10,7 @@ import { IndexProjets } from "@/components/editorial/index-projets";
 import { InventaireTechnos } from "@/components/editorial/inventaire-technos";
 import { Methode } from "@/components/editorial/methode";
 import { Parcours } from "@/components/editorial/parcours";
+import { PortraitProfil } from "@/components/editorial/portrait-profil";
 import { SectionHeading } from "@/components/editorial/section-heading";
 import { asLocale, profil, projets } from "@/data/portfolio";
 
@@ -21,8 +22,8 @@ export default function HomePage({ params }: { params: Promise<{ locale: string 
 }
 
 /**
- * Ordre de lecture pensé pour 30 secondes : le travail d'abord
- * (études de cas, index), puis la méthode, les outils, le parcours.
+ * Ordre de lecture pensé pour 30 secondes : le portrait, puis le travail
+ * (études de cas, index), la méthode, les outils et le parcours.
  * Les phrases d'accroche d'origine sont réparties une par section.
  */
 function Accueil() {
@@ -34,6 +35,7 @@ function Accueil() {
       <Header />
       <main id="contenu">
         <HeroTypographique />
+        <PortraitProfil />
 
         <section id="cas" aria-labelledby="cas-title" className="px-page py-section-lg">
           <SectionHeading

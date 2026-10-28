@@ -20,6 +20,12 @@
     "scroll": "défiler",
     "map": "Courbes de niveau autour de Fianarantsoa, tous les 50 m"
   },
+  "profile": {
+    "eyebrow": "Le profil",
+    "title": "Derrière les lignes de code.",
+    "portraitAlt": "Portrait de {name}",
+    "caption": "Fianarantsoa · Madagascar"
+  },
   "cas": {
     "title": "Ce que j'ai construit.",
     "read": "Lire l'étude de cas"

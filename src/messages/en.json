@@ -20,6 +20,12 @@
     "scroll": "scroll",
     "map": "Contour lines around Fianarantsoa, every 50 m"
   },
+  "profile": {
+    "eyebrow": "The person",
+    "title": "Beyond the lines of code.",
+    "portraitAlt": "Portrait of {name}",
+    "caption": "Fianarantsoa · Madagascar"
+  },
   "cas": {
     "title": "What I've built.",
     "read": "Read the case study"
