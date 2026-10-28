@@ -844,7 +844,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "currency",
-    numero: 7,
+    numero: 6,
     coordonnee: { x: 40, y: 59 },
     titre: { fr: "Currency Track", en: "Currency Track" },
     annee: 2025,
@@ -912,7 +912,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "stock",
-    numero: 8,
+    numero: 7,
     coordonnee: { x: 78, y: 37 },
     titre: { fr: "Gestion de stock intelligente", en: "Intelligent Stock Management" },
     annee: 2026,
@@ -981,7 +981,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "transaction",
-    numero: 9,
+    numero: 8,
     coordonnee: { x: 30, y: 54 },
     titre: { fr: "Plateforme web de transactions en ligne", en: "Online Transaction Web Platform" },
     annee: 2025,
@@ -1049,7 +1049,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "cci",
-    numero: 10,
+    numero: 9,
     coordonnee: { x: 13, y: 72 },
     titre: { fr: "Application SIG de la CCI", en: "CCI GIS Application" },
     annee: 2024,
@@ -1107,7 +1107,7 @@ export const projets: Projet[] = ([
   },
   {
     id: "data",
-    numero: 11,
+    numero: 10,
     coordonnee: { x: 49, y: 38 },
     titre: { fr: "Classification et nettoyage de données", en: "Data Classification & Cleaning" },
     annee: 2025,
