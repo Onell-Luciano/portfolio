@@ -228,6 +228,8 @@ export const projets: Projet[] = ([
       "PostgreSQL / PostGIS",
       "JWT",
       "Computer vision",
+      "Flutter",
+      "SQLite",
     ],
     description: {
       fr: "Plateforme de biosécurité agricole pour Madagascar : une application web de détection précoce et de suivi des maladies des cultures. Les techniciens diagnostiquent une plante à partir d'une photo grâce à un modèle d'IA, les foyers sont cartographiés en temps réel et les décideurs pilotent alertes, protocoles de traitement et impact économique depuis un tableau de bord unique.",
