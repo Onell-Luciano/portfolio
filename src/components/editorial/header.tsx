@@ -1,11 +1,12 @@
 "use client";
 
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type RefObject } from "react";
 import { profil } from "@/data/portfolio";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { useMediaQuery } from "@/lib/use-fine-pointer";
 import { ProfilAltitude } from "./profil-altitude";
 import { EASE_SIGNATURE } from "./reveal-mask";
 import { ThemeToggle } from "./theme-toggle";
@@ -45,6 +46,19 @@ function useSectionCourante(actif: boolean) {
   return courante;
 }
 
+/** Hauteur rendue d'un élément, suivie au redimensionnement. */
+function useHauteur(ref: RefObject<HTMLElement | null>, defaut: number) {
+  const [hauteur, setHauteur] = useState(defaut);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([e]) => setHauteur(e.borderBoxSize[0]?.blockSize ?? e.contentRect.height));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [ref]);
+  return hauteur;
+}
+
 /**
  * En-tête discret : disparaît en descendant, revient en remontant.
  * Il porte un titre courant, comme en presse : la section en cours,
@@ -61,14 +75,34 @@ export function Header({ entete }: { entete?: string }) {
 
   // Hauteur de la rangée principale : c'est elle qui se masque, pas le profil.
   const rangeeRef = useRef<HTMLDivElement>(null);
-  const [hauteurMasquee, setHauteurMasquee] = useState(68);
+  const hauteurMasquee = useHauteur(rangeeRef, 68);
+  const enteteRef = useRef<HTMLElement>(null);
+  const hauteurEntete = useHauteur(enteteRef, 72);
+
+  // Menu des sections sur petit écran (sous lg, la nav en ligne est masquée).
+  const reduce = useReducedMotion();
+  const menuId = `menu-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+  const boutonMenuRef = useRef<HTMLButtonElement>(null);
+  const [menuOuvert, setMenuOuvert] = useState(false);
+  const large = useMediaQuery("(min-width: 64rem)");
+  const menuVisible = menuOuvert && !large;
+
   useEffect(() => {
-    const el = rangeeRef.current;
-    if (!el) return;
-    const observer = new ResizeObserver(([e]) => setHauteurMasquee(e.borderBoxSize[0]?.blockSize ?? e.contentRect.height));
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+    if (!menuVisible) return;
+    const racine = document.documentElement;
+    const overflow = racine.style.overflow;
+    racine.style.overflow = "hidden"; // la page ne défile plus sous le menu
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setMenuOuvert(false);
+      boutonMenuRef.current?.focus();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      racine.style.overflow = overflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuVisible]);
 
   useMotionValueEvent(scrollY, "change", (y) => {
     const previous = scrollY.getPrevious() ?? 0;
@@ -87,8 +121,9 @@ export function Header({ entete }: { entete?: string }) {
       </a>
 
       <motion.header
+        ref={enteteRef}
         // Masqué, l'en-tête laisse dépasser son profil d'altitude : la progression reste visible.
-        animate={{ y: hidden ? -hauteurMasquee : 0 }}
+        animate={{ y: hidden && !menuVisible ? -hauteurMasquee : 0 }}
         transition={{ duration: 0.5, ease: EASE_SIGNATURE }}
         onFocusCapture={() => setHidden(false)}
         className="fixed inset-x-0 top-0 z-50 bg-paper/90 backdrop-blur-sm"
@@ -125,9 +160,6 @@ export function Header({ entete }: { entete?: string }) {
           </nav>
 
           <div className="label flex shrink-0 items-baseline gap-5">
-            <Link href={{ pathname: "/", hash: "contact" }} className="draw-underline pb-0.5 lg:hidden">
-              {t("contact")}
-            </Link>
             <a href={profil.cv} download={profil.cvNomFichier} className="draw-underline pb-0.5 hover:text-accent-ink">
               {t("cv")}
             </a>
@@ -154,10 +186,67 @@ export function Header({ entete }: { entete?: string }) {
               ))}
             </span>
             <ThemeToggle />
+            <button
+              ref={boutonMenuRef}
+              type="button"
+              onClick={() => setMenuOuvert((o) => !o)}
+              aria-expanded={menuVisible}
+              aria-controls={menuId}
+              aria-label={menuVisible ? t("menuFermer") : t("menu")}
+              className="-my-2 -mr-2 grid size-9 shrink-0 self-center place-items-center text-ink lg:hidden"
+            >
+              {/* Trois barres, qui se croisent en ✕ à l'ouverture */}
+              <span aria-hidden="true" className="relative block h-3.5 w-5">
+                {[
+                  menuVisible ? "rotate-45" : "-translate-y-[6px]",
+                  menuVisible ? "opacity-0" : "",
+                  menuVisible ? "-rotate-45" : "translate-y-[6px]",
+                ].map((etat, i) => (
+                  <span
+                    key={i}
+                    className={`absolute inset-x-0 top-1/2 -mt-[0.7px] h-[1.4px] bg-current transition duration-300 ease-signature ${etat}`}
+                  />
+                ))}
+              </span>
+            </button>
           </div>
         </div>
         <ProfilAltitude sections={accueil ? SECTIONS : AUCUNE_SECTION} />
       </motion.header>
+
+      {/* Hors de l'en-tête : son flou d'arrière-plan piégerait le positionnement fixe. */}
+      <AnimatePresence>
+        {menuVisible && (
+          <motion.nav
+            id={menuId}
+            aria-label={t("sections")}
+            initial={{ opacity: 0, y: reduce ? 0 : -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: reduce ? 0 : -12 }}
+            transition={{ duration: reduce ? 0 : 0.35, ease: EASE_SIGNATURE }}
+            className="px-page fixed inset-0 z-40 overflow-y-auto bg-paper pb-10 lg:hidden"
+            style={{ paddingTop: hauteurEntete }}
+          >
+            <ul className="border-t border-rule">
+              {SECTIONS.map((id, i) => (
+                <li key={id} className="border-b border-rule">
+                  <Link
+                    href={{ pathname: "/", hash: id }}
+                    onClick={() => setMenuOuvert(false)}
+                    aria-current={courante === id ? "location" : undefined}
+                    className={`flex items-baseline gap-5 py-4 transition-colors hover:text-accent-ink ${
+                      courante === id ? "text-accent-ink" : ""
+                    }`}
+                  >
+                    <span className="coord text-ink-soft">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-serif text-3xl leading-tight tracking-tight">{t(id)}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </>
   );
 }
