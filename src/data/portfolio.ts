@@ -210,7 +210,7 @@ export const projets: Projet[] = ([
     periode: { fr: "Depuis oct. 2026 · En cours", en: "Since Oct. 2026 · Ongoing" },
     contexte: { fr: "TANJAKAI Madagascar", en: "TANJAKAI Madagascar" },
     categorie: { fr: "SIG · IA · Biosécurité agricole", en: "GIS · AI · Agricultural biosecurity" },
-    domaines: ["GIS", "IA", "Full-Stack"],
+    domaines: ["GIS", "IA", "Full-Stack", "Mobile"],
     stack: [
       "Next.js 16",
       "React 19",
