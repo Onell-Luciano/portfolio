@@ -248,8 +248,8 @@ export const projets: Projet[] = ([
       en: "A crop epidemiological surveillance platform that ties together AI photo diagnosis, a real-time outbreak map, and the management of alerts, treatment protocols and economic impact.",
     },
     role: {
-      fr: "Développement full-stack : intégration frontend–backend, modules API, design system, RBAC et traçabilité.",
-      en: "Full-stack development: frontend–backend integration, API modules, design system, RBAC and audit trail.",
+      fr: "Développement full-stack : intégration frontend–backend, modules API, design system, RBAC et traçabilité ; développement de l'application mobile et entraînement des modèles d'IA.",
+      en: "Full-stack development: frontend–backend integration, API modules, design system, RBAC and audit trail; mobile app development and AI model training.",
     },
     fonctionnalites: [
       {
